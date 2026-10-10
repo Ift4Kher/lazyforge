@@ -36,8 +36,8 @@ export function Hero() {
   }, [heroData.videoUrl]);
 
   return (
-    <section className="relative overflow-hidden bg-black min-h-[90vh] lg:min-h-screen flex items-center border-b border-brand-border">
-      {/* 100% Raw, Pristine, Crystal-Clear Fullscreen Video (Zero Overlays, Zero Blur, Zero Darkening) */}
+    <section className="relative overflow-hidden bg-black h-[460px] sm:h-[500px] lg:h-[540px] flex items-center border-b border-brand-border">
+      {/* 100% Crystal-Clear Video Background Fitted to Height */}
       <div className="absolute inset-0 z-0">
         <video
           ref={videoRef}
@@ -47,28 +47,27 @@ export function Hero() {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover opacity-100"
+          className="w-full h-full object-cover object-center opacity-100"
           style={{
             filter: 'none',
             WebkitFilter: 'none',
-            imageRendering: 'crisp-edges',
           }}
         />
       </div>
 
-      {/* Floating Glassmorphic Content Card - Localized Blur Only Under The Text, Leaving Video 100% Crystal Clear */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
-        <div className="max-w-xl bg-brand-dark/75 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6">
+      {/* Compact, Well-Fitted Glassmorphic Content Card */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div className="max-w-lg bg-brand-dark/80 backdrop-blur-xl border border-white/10 rounded-2xl p-5 sm:p-7 shadow-2xl space-y-4">
           {/* Brand Badge */}
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-brand-surface/90 border border-brand-accent/50 shadow-glow-sm">
-            <Sparkles className="w-4 h-4 text-brand-accentLight" />
-            <span className="text-xs font-mono tracking-wider text-slate-100 uppercase font-semibold">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-surface/90 border border-brand-accent/50 shadow-glow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-brand-accentLight" />
+            <span className="text-[11px] font-mono tracking-wider text-slate-100 uppercase font-semibold">
               Bangladesh's Leading Robotics Lab
             </span>
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
             {heroData.heading.split(' ')[0]}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accentLight via-purple-300 to-brand-neonCyan">
               {heroData.heading.split(' ').slice(1, 3).join(' ')}
@@ -77,36 +76,36 @@ export function Hero() {
           </h1>
 
           {/* Supporting Description */}
-          <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
             {heroData.subtitle}
           </p>
 
           {/* Call to Actions */}
-          <div className="flex flex-wrap gap-4 pt-2">
+          <div className="flex flex-wrap gap-3 pt-1">
             <Link
               to={heroData.primaryCtaLink}
-              className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-brand-accent text-white hover:bg-brand-accentHover shadow-glow-md hover:scale-105 transition-all group"
+              className="inline-flex items-center space-x-1.5 px-5 py-2.5 rounded-xl font-bold text-xs bg-brand-accent text-white hover:bg-brand-accentHover shadow-glow-sm hover:scale-105 transition-all group"
             >
               <span>{heroData.primaryCtaText}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               to={heroData.secondaryCtaLink}
-              className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-brand-surface border border-brand-border hover:border-brand-accentLight text-slate-100 hover:text-white hover:scale-105 transition-all shadow-silver-card"
+              className="inline-flex items-center space-x-1.5 px-5 py-2.5 rounded-xl font-bold text-xs bg-brand-surface border border-brand-border hover:border-brand-accentLight text-slate-100 hover:text-white hover:scale-105 transition-all shadow-silver-card"
             >
-              <Zap className="w-4 h-4 text-brand-accentLight" />
+              <Zap className="w-3.5 h-3.5 text-brand-accentLight" />
               <span>{heroData.secondaryCtaText}</span>
             </Link>
           </div>
 
           {/* Trust and Delivery Assurance */}
-          <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-300 font-medium border-t border-white/10">
-            <div className="flex items-center space-x-2">
+          <div className="pt-2 flex flex-wrap items-center gap-4 text-[11px] text-slate-300 font-medium border-t border-white/10">
+            <div className="flex items-center space-x-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
               <span>In Stock & Ready to Dispatch</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-brand-accentLight" />
+            <div className="flex items-center space-x-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-brand-accentLight" />
               <span>Cash on Delivery (All 64 Districts)</span>
             </div>
           </div>
