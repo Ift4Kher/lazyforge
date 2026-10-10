@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
 
 export function Hero() {
   const { hero } = useSettings();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false); // Default unmuted when visitor clicks play
-  const [hasStarted, setHasStarted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true); // Browsers require initial muted for instant autoplay
   const [videoError, setVideoError] = useState(false);
   const videoRef = useRef(null);
 
@@ -21,30 +20,36 @@ export function Hero() {
     primaryCtaLink: '/products',
     secondaryCtaText: 'View 3D Models',
     secondaryCtaLink: '/campaigns/robot-mascot',
-    soundNotice: 'Sound enabled on click — click Play to experience full audio',
   };
 
-  // Explicit user interaction initiates sound-enabled playback
-  const handlePlayWithSound = () => {
+  // Safe playback helper supporting both browser Promise and legacy/jsdom environments
+  const safePlay = () => {
     if (!videoRef.current) return;
-    videoRef.current.muted = false;
-    setIsMuted(false);
-    videoRef.current
-      .play()
-      .then(() => {
+    try {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined && typeof playPromise.then === 'function') {
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch((err) => {
+            console.warn('Autoplay prevented:', err);
+            setIsPlaying(false);
+          });
+      } else {
         setIsPlaying(true);
-        setHasStarted(true);
-      })
-      .catch((err) => {
-        console.warn('Playback with audio blocked by browser policy, attempting muted fallback:', err);
-        videoRef.current.muted = true;
-        setIsMuted(true);
-        videoRef.current.play().then(() => {
-          setIsPlaying(true);
-          setHasStarted(true);
-        });
-      });
+      }
+    } catch (err) {
+      console.warn('Play call error:', err);
+      setIsPlaying(false);
+    }
   };
+
+  // Attempt autoplay immediately on mount
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      safePlay();
+    }
+  }, [heroData.videoUrl]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -52,7 +57,7 @@ export function Hero() {
       videoRef.current.pause();
       setIsPlaying(false);
     } else {
-      videoRef.current.play().then(() => setIsPlaying(true));
+      safePlay();
     }
   };
 
@@ -61,43 +66,22 @@ export function Hero() {
     const nextMuted = !isMuted;
     videoRef.current.muted = nextMuted;
     setIsMuted(nextMuted);
+    if (!isPlaying) {
+      safePlay();
+    }
   };
 
   return (
-    <section className="relative overflow-hidden bg-brand-dark min-h-[580px] lg:min-h-[680px] flex items-center border-b border-brand-border">
-      {/* Background Media Layer */}
-      <div className="absolute inset-0 z-0">
-        {heroData.mediaType === 'video' && !videoError ? (
-          <div className="relative w-full h-full">
-            <video
-              ref={videoRef}
-              src={heroData.videoUrl}
-              poster={heroData.posterUrl}
-              loop
-              playsInline
-              onError={() => setVideoError(true)}
-              className="w-full h-full object-cover opacity-60 filter brightness-90"
-            />
-            {/* Ambient vignette and gradients */}
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-brand-dark/60" />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/70 to-transparent" />
-          </div>
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-brand-surface via-brand-dark to-brand-surfaceLight opacity-80">
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-brand-dark/50" />
-          </div>
-        )}
-      </div>
+    <section className="relative overflow-hidden bg-brand-dark min-h-[580px] lg:min-h-[660px] flex items-center border-b border-brand-border py-12 lg:py-20">
+      {/* Ambient background glows */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-accent/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+      <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-brand-neonCyan/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      {/* Decorative Glow Spheres */}
-      <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-brand-accent/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
-      <div className="absolute bottom-10 right-10 w-72 h-72 bg-brand-neonCyan/10 rounded-full blur-2xl pointer-events-none"></div>
-
-      {/* Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Text and CTAs */}
-          <div className="lg:col-span-7 space-y-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          
+          {/* Left Column: Heading, Subtitle & Primary Actions */}
+          <div className="lg:col-span-6 space-y-6">
             {/* Brand Badge */}
             <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-brand-surface border border-brand-accent/40 shadow-glow-sm">
               <Sparkles className="w-4 h-4 text-brand-accentLight" />
@@ -116,7 +100,7 @@ export function Hero() {
             </h1>
 
             {/* Supporting Description */}
-            <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-300 max-w-xl leading-relaxed">
               {heroData.subtitle}
             </p>
 
@@ -137,73 +121,89 @@ export function Hero() {
               </Link>
             </div>
 
-            {/* Notice */}
-            <p className="text-xs text-slate-400 font-mono flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>{heroData.soundNotice}</span>
-            </p>
+            {/* Trust and Delivery Assurance */}
+            <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-slate-400">
+              <div className="flex items-center space-x-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span className="text-slate-300 font-medium">In Stock & Ready to Dispatch</span>
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <ShieldCheck className="w-4 h-4 text-brand-accentLight" />
+                <span className="text-slate-300 font-medium">Cash on Delivery Available</span>
+              </div>
+            </div>
           </div>
 
-          {/* Interactive Hero Media Controls Box */}
-          {heroData.mediaType === 'video' && !videoError && (
-            <div className="lg:col-span-5 flex flex-col items-center justify-center">
-              <div className="relative w-full max-w-sm rounded-2xl bg-brand-surface/80 border border-brand-border p-4 shadow-silver-card backdrop-blur-md">
-                <div className="flex items-center justify-between pb-3 border-b border-brand-border text-xs text-slate-300 font-mono">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-brand-accent animate-ping"></span>
-                    MASCOT HERO VIDEO
-                  </span>
-                  <span className="text-brand-accentLight">{isPlaying ? 'PLAYING WITH AUDIO' : 'READY TO PLAY'}</span>
+          {/* Right Column: Fully Crystal Clear Hero Video Showcase */}
+          <div className="lg:col-span-6 flex items-center justify-center">
+            <div className="relative w-full rounded-3xl p-1 bg-gradient-to-br from-brand-accent/50 via-brand-surface to-brand-neonCyan/40 shadow-[0_0_50px_rgba(139,92,246,0.35)] transition-all">
+              
+              {/* Video Player Card */}
+              <div className="relative rounded-[22px] overflow-hidden bg-black aspect-video flex items-center justify-center group">
+                {!videoError ? (
+                  <video
+                    ref={videoRef}
+                    src={heroData.videoUrl}
+                    poster={heroData.posterUrl}
+                    autoPlay
+                    loop
+                    playsInline
+                    onError={() => setVideoError(true)}
+                    className="w-full h-full object-cover rounded-[22px] opacity-100 filter-none"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-brand-surface">
+                    <Sparkles className="w-12 h-12 text-brand-accentLight mb-2" />
+                    <p className="text-sm font-semibold text-white">LazyForge Robotic Mascot</p>
+                    <p className="text-xs text-slate-400 mt-1">High-Precision Gadgets & Hardware</p>
+                  </div>
+                )}
+
+                {/* Top Corner Live Mascot Indicator */}
+                <div className="absolute top-3.5 left-3.5 z-20 flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-dark/80 backdrop-blur-md border border-brand-accent/40 text-[11px] font-mono text-slate-200">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span className="font-semibold tracking-wide">LAZYFORGE MASCOT</span>
                 </div>
 
-                <div className="my-6 flex flex-col items-center justify-center text-center space-y-4">
-                  {!hasStarted ? (
-                    <button
-                      onClick={handlePlayWithSound}
-                      className="w-20 h-20 rounded-full bg-brand-accent text-white flex items-center justify-center shadow-glow-lg hover:scale-105 active:scale-95 transition-all group"
-                      aria-label="Play Hero Video with Audio"
-                    >
-                      <Play className="w-8 h-8 fill-white ml-1 group-hover:scale-110 transition-transform" />
-                    </button>
-                  ) : (
-                    <div className="flex items-center space-x-4">
-                      <button
-                        onClick={togglePlay}
-                        className="w-14 h-14 rounded-full bg-brand-surfaceLight border border-brand-border text-white flex items-center justify-center hover:border-brand-accent transition-all"
-                        aria-label={isPlaying ? 'Pause Video' : 'Play Video'}
-                      >
-                        {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5 fill-white" />}
-                      </button>
-                      <button
-                        onClick={toggleMute}
-                        className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all ${
-                          isMuted
-                            ? 'bg-red-500/20 border-red-500 text-red-400'
-                            : 'bg-brand-accent/20 border-brand-accent text-brand-accentLight'
-                        }`}
-                        aria-label={isMuted ? 'Unmute Audio' : 'Mute Audio'}
-                      >
-                        {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
-                      </button>
-                    </div>
-                  )}
+                {/* Bottom Video Floating Controls Bar */}
+                <div className="absolute bottom-3.5 left-3.5 right-3.5 z-20 flex items-center justify-between pointer-events-auto">
+                  {/* Play/Pause Button */}
+                  <button
+                    onClick={togglePlay}
+                    className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-brand-dark/85 backdrop-blur-md border border-brand-border text-slate-200 hover:text-white hover:border-brand-accent transition-all text-xs shadow-lg"
+                    aria-label={isPlaying ? 'Pause video' : 'Play video'}
+                  >
+                    {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                    <span className="font-medium text-[11px]">{isPlaying ? 'Pause' : 'Play'}</span>
+                  </button>
 
-                  <p className="text-xs text-slate-300">
-                    {!hasStarted
-                      ? 'Click the button above to play the hero brand video with sound.'
-                      : isMuted
-                      ? 'Audio is currently muted. Click speaker icon to unmute.'
-                      : 'Audio is active. Enjoy the LazyForge robot mascot intro.'}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-brand-border flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                  <span>848x478 H.264</span>
-                  <span>Sound-Enabled</span>
+                  {/* Sound Unmute / Mute Toggle Pill */}
+                  <button
+                    onClick={toggleMute}
+                    className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-full backdrop-blur-md border transition-all text-xs font-semibold shadow-lg ${
+                      isMuted
+                        ? 'bg-brand-accent text-white border-brand-accentLight hover:bg-brand-accentHover shadow-glow-sm'
+                        : 'bg-brand-dark/85 text-emerald-300 border-emerald-400/50 hover:bg-brand-dark'
+                    }`}
+                    aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
+                  >
+                    {isMuted ? (
+                      <>
+                        <VolumeX className="w-4 h-4" />
+                        <span>Sound Off — Click to Unmute</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-4 h-4 text-emerald-400" />
+                        <span>Sound Playing</span>
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
-          )}
+          </div>
+
         </div>
       </div>
     </section>

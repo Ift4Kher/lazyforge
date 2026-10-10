@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom';
 
+// Mock HTMLMediaElement methods in jsdom
+window.HTMLMediaElement.prototype.play = () => Promise.resolve();
+window.HTMLMediaElement.prototype.pause = () => {};
+
 // Mock global fetch for jsdom unit tests
 global.fetch = async (url, options = {}) => {
   const urlStr = String(url);
@@ -40,7 +44,7 @@ global.fetch = async (url, options = {}) => {
       ok: true,
       json: async () => ({
         success: true,
-        user: null, // anonymous guest by default in unit tests
+        user: null,
       }),
     };
   }
