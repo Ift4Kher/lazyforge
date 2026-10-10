@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-brand-dark: #0A0D14;
+    --color-brand-surface: #121722;
+    --color-brand-surfaceLight: #1E2536;
+    --color-brand-card: #151C2A;
+    --color-brand-border: #2A3449;
+    --color-brand-accent: #8B5CF6;
+  }
+
+  body {
+    background-color: #0A0D14;
+    color: #F1F5F9;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Custom Sleek Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A0D14;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2A3449;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8B5CF6;
+  }
+}
+
+@layer utilities {
+  .bg-glass {
+    background: rgba(18, 23, 34, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .border-glow {
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
+  }
+}
