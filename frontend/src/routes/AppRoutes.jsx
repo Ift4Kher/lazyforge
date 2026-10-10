@@ -8,12 +8,12 @@ import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
 
 function NotFoundPage() {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
-      <div className="w-16 h-16 rounded-2xl bg-brand-surface border border-brand-accent/40 flex items-center justify-center text-brand-accentLight text-2xl font-mono mb-4 shadow-glow-sm">
+    <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 bg-white">
+      <div className="w-16 h-16 rounded-2xl bg-brand-softGray border border-brand-accent/40 flex items-center justify-center text-brand-accent text-2xl font-mono mb-4 shadow-sm">
         404
       </div>
-      <h1 className="text-2xl font-extrabold text-white">Circuit Not Found</h1>
-      <p className="text-xs text-slate-400 mt-2 max-w-sm">
+      <h1 className="text-2xl font-extrabold text-brand-graphite">Circuit Not Found</h1>
+      <p className="text-xs text-brand-muted mt-2 max-w-sm">
         The requested robotics artifact or storefront destination does not exist or has been relocated.
       </p>
       <Link
@@ -28,9 +28,9 @@ function NotFoundPage() {
 
 function PlaceholderPage({ title, description }) {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center space-y-3">
-      <h1 className="text-3xl font-extrabold text-white">{title}</h1>
-      <p className="text-sm text-slate-400 max-w-xl mx-auto">{description}</p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center space-y-3 bg-white">
+      <h1 className="text-3xl font-extrabold text-brand-graphite">{title}</h1>
+      <p className="text-sm text-brand-muted max-w-xl mx-auto">{description}</p>
     </div>
   );
 }

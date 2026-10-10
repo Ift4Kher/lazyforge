@@ -53,13 +53,13 @@ export function Hero() {
         }}
       />
 
-      {/* Floating Content Over Fullscreen Video */}
+      {/* Floating Content Over Fullscreen Video with Brand Violet & Clean White Styling */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
         <div className="max-w-xl space-y-5">
           {/* Brand Badge */}
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-brand-surface/85 backdrop-blur-md border border-brand-accent/50 shadow-glow-sm">
-            <Sparkles className="w-4 h-4 text-brand-accentLight" />
-            <span className="text-xs font-mono tracking-wider text-slate-100 uppercase font-semibold">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-brand-accent/30 shadow-md">
+            <Sparkles className="w-4 h-4 text-brand-accent" />
+            <span className="text-xs font-mono tracking-wider text-brand-accent uppercase font-bold">
               Bangladesh's Leading Robotics Lab
             </span>
           </div>
@@ -67,14 +67,14 @@ export function Hero() {
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
             {heroData.heading.split(' ')[0]}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accentLight via-purple-300 to-brand-neonCyan">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-indigo-200 to-sky-200">
               {heroData.heading.split(' ').slice(1, 3).join(' ')}
             </span>{' '}
             {heroData.heading.split(' ').slice(3).join(' ')}
           </h1>
 
           {/* Supporting Description */}
-          <p className="text-sm sm:text-base lg:text-lg text-slate-100 leading-relaxed max-w-lg drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-100 leading-relaxed max-w-lg drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] font-medium">
             {heroData.subtitle}
           </p>
 
@@ -82,28 +82,28 @@ export function Hero() {
           <div className="flex flex-wrap gap-4 pt-2">
             <Link
               to={heroData.primaryCtaLink}
-              className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-brand-accent text-white hover:bg-brand-accentHover shadow-glow-md hover:scale-105 transition-all group"
+              className="inline-flex items-center space-x-2 px-7 py-3.5 rounded-xl font-bold text-sm bg-brand-accent text-white hover:bg-brand-accentHover shadow-glow-sm hover:scale-105 transition-all group"
             >
               <span>{heroData.primaryCtaText}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               to={heroData.secondaryCtaLink}
-              className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-brand-surface/90 backdrop-blur-md border border-brand-border hover:border-brand-accentLight text-slate-100 hover:text-white hover:scale-105 transition-all shadow-silver-card"
+              className="inline-flex items-center space-x-2 px-7 py-3.5 rounded-xl font-bold text-sm bg-white/95 backdrop-blur-md border border-white text-brand-graphite hover:text-brand-accent hover:border-brand-accent hover:scale-105 transition-all shadow-md"
             >
-              <Zap className="w-4 h-4 text-brand-accentLight" />
+              <Zap className="w-4 h-4 text-brand-accent" />
               <span>{heroData.secondaryCtaText}</span>
             </Link>
           </div>
 
           {/* Trust and Delivery Assurance */}
-          <div className="pt-2 flex flex-wrap items-center gap-5 text-xs text-slate-200 font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-            <div className="flex items-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-semibold">
+            <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/60 text-brand-graphite shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
               <span>In Stock & Ready to Dispatch</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-brand-accentLight" />
+            <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/60 text-brand-graphite shadow-sm">
+              <ShieldCheck className="w-4 h-4 text-brand-accent" />
               <span>Cash on Delivery (All 64 Districts)</span>
             </div>
           </div>

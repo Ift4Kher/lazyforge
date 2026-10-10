@@ -4,51 +4,45 @@
 
 @layer base {
   :root {
-    --color-brand-dark: #0A0D14;
-    --color-brand-surface: #121722;
-    --color-brand-surfaceLight: #1E2536;
-    --color-brand-card: #151C2A;
-    --color-brand-border: #2A3449;
-    --color-brand-accent: #8B5CF6;
+    --color-page-bg: #FFFFFF;
+    --color-section-bg: #F5F6F8;
+    --color-primary-text: #17191F;
+    --color-primary-action: #6558D3;
+    --color-border: #E4E7EC;
   }
 
   body {
-    background-color: #0A0D14;
-    color: #F1F5F9;
+    background-color: #FFFFFF;
+    color: #17191F;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
   }
 
-  /* Custom Sleek Scrollbar */
+  /* Sleek Minimalist Scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: #0A0D14;
+    background: #F5F6F8;
   }
   ::-webkit-scrollbar-thumb {
-    background: #2A3449;
+    background: #D0D5DD;
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #8B5CF6;
+    background: #6558D3;
   }
 }
 
 @layer utilities {
-  .bg-glass {
-    background: rgba(18, 23, 34, 0.75);
+  .bg-glass-white {
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
-  .border-glow {
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
-  }
-
-  .text-glow {
-    text-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
+  .shadow-soft {
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
   }
 }

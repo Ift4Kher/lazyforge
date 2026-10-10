@@ -5,7 +5,7 @@ import { Footer } from '../components/common/Footer';
 
 export function StorefrontLayout() {
   return (
-    <div className="flex flex-col min-h-screen bg-brand-dark text-slate-100">
+    <div className="flex flex-col min-h-screen bg-white text-brand-graphite">
       <Navbar />
       <main className="flex-1">
         <Outlet />
