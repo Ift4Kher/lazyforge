@@ -36,42 +36,28 @@ export function Hero() {
   }, [heroData.videoUrl]);
 
   return (
-    <section className="relative overflow-hidden bg-black min-h-[calc(100vh-4.5rem)] h-[calc(100vh-4.5rem)] w-full flex items-center border-b border-brand-border">
-      {/* Full-Screen Video Canvas: Fitted Video + Ambient Edge Extension */}
-      <div className="absolute inset-0 z-0 bg-black flex items-center justify-center overflow-hidden">
-        {/* Ambient video glow behind edges to create a seamless full-screen canvas */}
-        <video
-          src={heroData.videoUrl}
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-35 scale-110 pointer-events-none"
-        />
+    <section className="relative overflow-hidden bg-black min-h-screen w-full flex items-center border-b border-brand-border">
+      {/* Full-Screen Edge-to-Edge Crystal-Clear Autoplaying Video */}
+      <video
+        ref={videoRef}
+        src={heroData.videoUrl}
+        poster={heroData.posterUrl}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover object-center z-0"
+        style={{
+          filter: 'none',
+          WebkitFilter: 'none',
+        }}
+      />
 
-        {/* Main Crystal-Clear Video - Fitted (object-contain) with Zero Cropping */}
-        <video
-          ref={videoRef}
-          src={heroData.videoUrl}
-          poster={heroData.posterUrl}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="relative z-10 w-full h-full object-contain"
-          style={{
-            filter: 'none',
-            WebkitFilter: 'none',
-          }}
-        />
-      </div>
-
-      {/* Floating Content Over Fullscreen Hero */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+      {/* Floating Content Over Fullscreen Video */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
         <div className="max-w-xl space-y-5">
           {/* Brand Badge */}
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-brand-surface/80 backdrop-blur-md border border-brand-accent/50 shadow-glow-sm">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-brand-surface/85 backdrop-blur-md border border-brand-accent/50 shadow-glow-sm">
             <Sparkles className="w-4 h-4 text-brand-accentLight" />
             <span className="text-xs font-mono tracking-wider text-slate-100 uppercase font-semibold">
               Bangladesh's Leading Robotics Lab
