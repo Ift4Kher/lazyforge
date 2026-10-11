@@ -5,6 +5,8 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { HomePage } from '../pages/storefront/HomePage';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
+import { ProductListPage } from '../pages/storefront/ProductListPage';
+import { ProductDetailPage } from '../pages/storefront/ProductDetailPage';
 
 function NotFoundPage() {
   return (
@@ -42,15 +44,9 @@ export function AppRoutes() {
       <Route element={<StorefrontLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/products"
-          element={
-            <PlaceholderPage
-              title="Robotics & Gadgets Catalog"
-              description="Browse the complete collection of microcontrollers, 3D printed artifacts, and kits."
-            />
-          }
-        />
+        <Route path="/products" element={<ProductListPage />} />
+        <Route path="/products/:slug" element={<ProductDetailPage />} />
+        <Route path="/categories" element={<ProductListPage />} />
         <Route
           path="/campaigns/robot-mascot"
           element={
