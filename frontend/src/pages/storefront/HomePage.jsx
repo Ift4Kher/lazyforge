@@ -64,31 +64,53 @@ export function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.slice(0, 4).map((cat) => {
             const Icon = getCategoryIcon(cat.slug);
+            const fallbackImage = 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80';
+            const imageUrl = cat.image_url || fallbackImage;
+
             return (
               <Link
                 key={cat.id || cat.slug}
                 to={`/products?category=${cat.slug}`}
-                className="group relative rounded-2xl bg-brand-softGray border border-brand-border p-6 hover:border-[#8B5CF6]/50 hover:bg-white hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between"
+                className="group relative rounded-3xl bg-white border border-brand-border hover:border-[#8B5CF6]/50 overflow-hidden hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-white border border-brand-border flex items-center justify-center text-[#8B5CF6] group-hover:scale-105 group-hover:border-[#8B5CF6] transition-all shadow-sm">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-[10px] uppercase font-mono px-2.5 py-0.5 rounded-full bg-[#8B5CF6]/15 text-[#8B5CF6] font-bold">
-                      {cat.product_count} Items
-                    </span>
+                {/* Category Image Area */}
+                <div className="relative w-full aspect-[4/3] bg-brand-softGray overflow-hidden">
+                  <img
+                    src={imageUrl}
+                    alt={cat.name}
+                    className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                  />
+                  {/* Subtle dark bottom gradient on image for contrast */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10"></div>
+
+                  {/* Top Floating Glass Badge */}
+                  <div className="absolute top-3 left-3 inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-[11px] font-bold text-[#8B5CF6] shadow-sm">
+                    <Icon className="w-3.5 h-3.5 text-[#8B5CF6]" />
+                    <span>{cat.name.split(' ')[0]}</span>
                   </div>
-                  <h3 className="text-base font-bold text-brand-graphite group-hover:text-[#8B5CF6] transition-colors">
-                    {cat.name}
-                  </h3>
-                  <p className="text-xs text-brand-muted mt-2 leading-relaxed line-clamp-2">
-                    {cat.description}
-                  </p>
+
+                  {/* Item Count Chip */}
+                  <div className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono font-bold text-white shadow-sm border border-white/20">
+                    {cat.product_count} Items
+                  </div>
                 </div>
-                <div className="pt-6 flex items-center text-xs font-bold text-[#8B5CF6] group-hover:translate-x-1 transition-transform">
-                  <span>Explore category</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
+
+                {/* Card Text Content */}
+                <div className="p-5 flex flex-col justify-between flex-1">
+                  <div>
+                    <h3 className="text-base font-extrabold text-brand-graphite group-hover:text-[#8B5CF6] transition-colors leading-snug">
+                      {cat.name}
+                    </h3>
+                    <p className="text-xs text-brand-muted mt-1.5 leading-relaxed line-clamp-2">
+                      {cat.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 mt-2 border-t border-brand-border/60 flex items-center justify-between text-xs font-bold text-[#8B5CF6]">
+                    <span>Explore Collection</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
               </Link>
             );
