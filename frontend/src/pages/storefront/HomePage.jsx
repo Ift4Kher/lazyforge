@@ -66,7 +66,7 @@ export function HomePage() {
             const categoryImageMap = {
               'robotics-kits': 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
               'smart-controllers': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
-              '3d-printed-models': 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80',
+              '3d-printed-models': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
               'anime-collectibles': 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
               'electronic-accessories': 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
             };
@@ -76,7 +76,7 @@ export function HomePage() {
               <Link
                 key={cat.id || cat.slug}
                 to={`/products?category=${cat.slug}`}
-                className="group relative aspect-[9/13.8] min-h-[430px] rounded-[38px] overflow-hidden border-[8px] border-white ring-1 ring-slate-900/5 shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:shadow-[0_28px_60px_rgba(139,92,246,0.2)] hover:-translate-y-1.5 transition-all duration-500 flex flex-col justify-end bg-[#F1F3F5]"
+                className="group relative aspect-[9/12.8] min-h-[365px] rounded-[32px] overflow-hidden border-[6px] border-white ring-1 ring-slate-900/5 shadow-[0_16px_38px_rgba(0,0,0,0.07)] hover:shadow-[0_24px_50px_rgba(139,92,246,0.18)] hover:-translate-y-1.5 transition-all duration-500 flex flex-col justify-end bg-[#F1F3F5]"
               >
                 {/* Full-Bleed Background Image */}
                 <img
@@ -90,15 +90,15 @@ export function HomePage() {
                 <div className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-white/95 via-white/80 to-transparent backdrop-blur-[6px] z-10 pointer-events-none transition-all group-hover:from-white/98 group-hover:via-white/85" />
 
                 {/* Floating Content Over Frosted Glass */}
-                <div className="relative z-20 p-5 space-y-2.5">
+                <div className="relative z-20 p-4 sm:p-4.5 space-y-2">
                   {/* Category Name + Green Verified Badge */}
                   <div>
                     <div className="flex items-center space-x-1.5">
-                      <h3 className="text-[17px] font-bold text-[#111827] group-hover:text-[#8B5CF6] transition-colors tracking-tight">
+                      <h3 className="text-base font-bold text-[#111827] group-hover:text-[#8B5CF6] transition-colors tracking-tight">
                         {cat.name}
                       </h3>
                       {/* Green Verified Scalloped Badge */}
-                      <span className="w-[18px] h-[18px] rounded-full bg-[#15803D] flex items-center justify-center text-white shrink-0 shadow-xs ring-1 ring-white/60">
+                      <span className="w-4 h-4 rounded-full bg-[#15803D] flex items-center justify-center text-white shrink-0 shadow-xs ring-1 ring-white/60">
                         <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
@@ -106,29 +106,29 @@ export function HomePage() {
                     </div>
 
                     {/* Subtitle / Description */}
-                    <p className="text-xs text-[#4B5563] mt-1 leading-relaxed line-clamp-2 font-normal">
+                    <p className="text-xs text-[#4B5563] mt-0.5 leading-relaxed line-clamp-2 font-normal">
                       {cat.description}
                     </p>
                   </div>
 
                   {/* Bottom Stats & Follow/Explore+ Pill Button */}
-                  <div className="pt-1.5 flex items-center justify-between">
+                  <div className="pt-1 flex items-center justify-between">
                     {/* Stats on Left */}
-                    <div className="flex items-center space-x-3 text-xs text-[#64748B]">
-                      <div className="flex items-center space-x-1.5">
+                    <div className="flex items-center space-x-2.5 text-xs text-[#64748B]">
+                      <div className="flex items-center space-x-1">
                         <User className="w-3.5 h-3.5 text-[#64748B]" />
                         <span className="font-semibold text-[#1E293B]">
                           {cat.slug === 'robotics-kits' ? '312' : cat.slug === 'smart-controllers' ? '428' : cat.slug === '3d-printed-models' ? '195' : '264'}
                         </span>
                       </div>
-                      <div className="flex items-center space-x-1.5">
+                      <div className="flex items-center space-x-1">
                         <CheckSquare className="w-3.5 h-3.5 text-[#64748B]" />
                         <span className="font-semibold text-[#1E293B]">{cat.product_count || 48}</span>
                       </div>
                     </div>
 
                     {/* White Pill Button on Right (Matching Follow + in mockup) */}
-                    <div className="px-4 py-2 rounded-full bg-white text-[#111827] group-hover:bg-[#8B5CF6] group-hover:text-white group-hover:border-[#8B5CF6] text-xs font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center space-x-1 transition-all duration-300">
+                    <div className="px-3.5 py-1.5 rounded-full bg-white text-[#111827] group-hover:bg-[#8B5CF6] group-hover:text-white group-hover:border-[#8B5CF6] text-xs font-semibold shadow-[0_3px_10px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center space-x-1 transition-all duration-300">
                       <span>Follow</span>
                       <span className="font-bold text-sm leading-none">+</span>
                     </div>
@@ -163,10 +163,10 @@ export function HomePage() {
         {loadingProducts ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="p-4 rounded-2xl bg-white border border-brand-border animate-pulse space-y-4">
-                <div className="aspect-square bg-brand-softGray rounded-xl"></div>
-                <div className="h-4 bg-brand-softGray rounded w-3/4"></div>
-                <div className="h-4 bg-brand-softGray rounded w-1/2"></div>
+              <div key={i} className="aspect-[9/12.6] min-h-[350px] rounded-[30px] border-[6px] border-white bg-slate-100 animate-pulse p-4 flex flex-col justify-end space-y-3">
+                <div className="h-4 bg-slate-200 rounded w-3/4"></div>
+                <div className="h-3 bg-slate-200 rounded w-1/2"></div>
+                <div className="h-7 bg-slate-200 rounded-full w-24 self-end"></div>
               </div>
             ))}
           </div>

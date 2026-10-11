@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Eye, Zap, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Zap } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 
 export function ProductCard({ product }) {
@@ -23,117 +23,118 @@ export function ProductCard({ product }) {
     }
   };
 
+  const fallbackImage = 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80';
+  const imageUrl = product.primary_image || fallbackImage;
+
   return (
-    <div className="group relative rounded-2xl bg-white border border-brand-border hover:border-[#8B5CF6]/50 p-4 transition-all duration-300 hover:shadow-card-hover flex flex-col justify-between">
-      {/* Thumbnail Area */}
-      <div>
-        <div className="relative aspect-square w-full rounded-xl bg-brand-softGray border border-brand-border/60 overflow-hidden mb-4">
-          {product.primary_image ? (
-            <img
-              src={product.primary_image}
-              alt={product.name}
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-brand-muted">
-              <Zap className="w-10 h-10 opacity-30 text-[#8B5CF6]" />
-            </div>
+    <div className="group relative aspect-[9/12.6] min-h-[350px] rounded-[30px] overflow-hidden border-[6px] border-white ring-1 ring-slate-900/5 shadow-[0_14px_34px_rgba(0,0,0,0.07)] hover:shadow-[0_20px_45px_rgba(139,92,246,0.18)] hover:-translate-y-1.5 transition-all duration-500 flex flex-col justify-between bg-[#F1F3F5]">
+      {/* Full-Bleed Background Image */}
+      <img
+        src={imageUrl}
+        alt={product.name}
+        className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out z-0"
+        loading="lazy"
+      />
+
+      {/* Clickable Card Link Overlay */}
+      <Link
+        to={`/products/${product.slug}`}
+        className="absolute inset-0 z-10"
+        aria-label={`View details for ${product.name}`}
+      />
+
+      {/* Top Floating Badges */}
+      <div className="relative z-20 p-3.5 flex items-center justify-between w-full pointer-events-none">
+        <div className="flex items-center gap-1.5 pointer-events-auto">
+          {discountPercent > 0 && (
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#8B5CF6] text-white shadow-sm backdrop-blur-md">
+              -{discountPercent}% OFF
+            </span>
           )}
-
-          {/* Badges Overlay */}
-          <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-10">
-            {discountPercent > 0 && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#8B5CF6] text-white shadow-sm">
-                -{discountPercent}% OFF
-              </span>
-            )}
-            {product.is_featured ? (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white shadow-sm">
-                Featured
-              </span>
-            ) : null}
-          </div>
-
-          {/* Stock Tag on Thumbnail */}
-          <div className="absolute bottom-2.5 left-2.5 z-10">
-            {inStock ? (
-              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/95 backdrop-blur-md text-emerald-700 shadow-sm border border-emerald-200">
-                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                <span>In Stock</span>
-              </span>
-            ) : (
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/95 backdrop-blur-md text-red-600 shadow-sm border border-red-200">
-                Out of Stock
-              </span>
-            )}
-          </div>
-
-          {/* Quick Hover Overlay Link */}
-          <Link
-            to={`/products/${product.slug}`}
-            className="absolute inset-0 bg-[#8B5CF6]/0 group-hover:bg-[#8B5CF6]/10 transition-colors z-0"
-            aria-label={`View details for ${product.name}`}
-          />
+          {product.is_featured ? (
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white shadow-sm">
+              Featured
+            </span>
+          ) : null}
         </div>
 
-        {/* Product Meta */}
-        <div className="space-y-1.5">
-          {product.category_name && (
-            <Link
-              to={`/products?category=${product.category_slug}`}
-              className="text-[11px] font-semibold text-[#8B5CF6] hover:underline uppercase tracking-wider font-mono block"
-            >
-              {product.category_name}
-            </Link>
-          )}
-
-          <Link to={`/products/${product.slug}`} className="block">
-            <h3 className="text-sm font-bold text-brand-graphite group-hover:text-[#8B5CF6] transition-colors line-clamp-2 leading-snug">
-              {product.name}
-            </h3>
-          </Link>
-
-          {product.short_description && (
-            <p className="text-xs text-brand-muted line-clamp-2 leading-relaxed">
-              {product.short_description}
-            </p>
+        <div className="pointer-events-auto">
+          {inStock ? (
+            <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/95 backdrop-blur-md text-emerald-700 shadow-sm border border-emerald-100">
+              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+              <span>In Stock</span>
+            </span>
+          ) : (
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/95 backdrop-blur-md text-red-600 shadow-sm border border-red-100">
+              Out of Stock
+            </span>
           )}
         </div>
       </div>
 
-      {/* Pricing & CTA */}
-      <div className="pt-4 mt-3 border-t border-brand-border/60 flex items-center justify-between">
+      {/* Subtle Frosted Glass Bottom Overlay */}
+      <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-white via-white/90 to-transparent backdrop-blur-[8px] z-10 pointer-events-none transition-all group-hover:from-white group-hover:via-white/95" />
+
+      {/* Bottom Content Area */}
+      <div className="relative z-20 p-4 space-y-2">
+        {/* Category Tag */}
+        {product.category_name && (
+          <Link
+            to={`/products?category=${product.category_slug}`}
+            className="text-[10px] font-bold text-[#8B5CF6] hover:underline uppercase tracking-wider font-mono block relative z-20"
+          >
+            {product.category_name}
+          </Link>
+        )}
+
+        {/* Product Name + Green Verified Scalloped Badge */}
         <div>
-          <div className="flex items-baseline space-x-2">
-            <span className="text-base sm:text-lg font-extrabold text-brand-graphite">
+          <div className="flex items-start justify-between gap-1.5">
+            <Link to={`/products/${product.slug}`} className="block flex-1 relative z-20">
+              <h3 className="text-sm font-bold text-[#111827] group-hover:text-[#8B5CF6] transition-colors line-clamp-1 leading-snug">
+                {product.name}
+              </h3>
+            </Link>
+            <span
+              className="w-4 h-4 rounded-full bg-[#15803D] flex items-center justify-center text-white shrink-0 mt-0.5 shadow-xs ring-1 ring-white/60"
+              title="Verified Genuine Hardware"
+            >
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </span>
+          </div>
+
+          {product.short_description && (
+            <p className="text-[11px] text-[#4B5563] mt-0.5 line-clamp-1 leading-relaxed font-normal">
+              {product.short_description}
+            </p>
+          )}
+        </div>
+
+        {/* Price & Floating Add+ Pill Button */}
+        <div className="pt-1 flex items-center justify-between">
+          <div className="flex items-baseline space-x-1.5">
+            <span className="text-sm sm:text-base font-extrabold text-[#111827]">
               ৳{currentPrice.toLocaleString()}
             </span>
             {salePrice !== null && regularPrice > salePrice && (
-              <span className="text-xs text-brand-muted line-through">
+              <span className="text-[11px] text-slate-400 line-through">
                 ৳{regularPrice.toLocaleString()}
               </span>
             )}
           </div>
-          <span className="text-[10px] text-brand-muted block font-medium">Verified COD Ready</span>
-        </div>
 
-        <div className="flex items-center space-x-1.5">
-          <Link
-            to={`/products/${product.slug}`}
-            className="p-2 rounded-xl border border-brand-border hover:border-[#8B5CF6] text-brand-graphite hover:text-[#8B5CF6] hover:bg-brand-softGray transition-all"
-            title="View Details"
-          >
-            <Eye className="w-4 h-4" />
-          </Link>
+          {/* White Pill Button (Add +) */}
           <button
             type="button"
             onClick={handleQuickAdd}
             disabled={!inStock}
-            className="p-2 rounded-xl bg-[#8B5CF6] hover:bg-[#7C3AED] text-white shadow-sm disabled:opacity-40 disabled:cursor-not-allowed hover:scale-105 transition-all"
+            className="relative z-20 px-3.5 py-1.5 rounded-full bg-white text-[#111827] group-hover:bg-[#8B5CF6] group-hover:text-white group-hover:border-[#8B5CF6] text-xs font-semibold shadow-[0_3px_10px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center space-x-1 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 cursor-pointer"
             title={inStock ? 'Quick Add to Cart' : 'Out of Stock'}
           >
-            <ShoppingBag className="w-4 h-4" />
+            <span>Add</span>
+            <span className="font-bold text-sm leading-none">+</span>
           </button>
         </div>
       </div>
