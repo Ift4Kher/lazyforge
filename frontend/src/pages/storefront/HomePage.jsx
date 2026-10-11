@@ -127,10 +127,10 @@ export function HomePage() {
                       </div>
                     </div>
 
-                    {/* White Pill Button on Right (Matching Follow + in mockup) */}
-                    <div className="px-3.5 py-1.5 rounded-full bg-white text-[#111827] group-hover:bg-[#8B5CF6] group-hover:text-white group-hover:border-[#8B5CF6] text-xs font-semibold shadow-[0_3px_10px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center space-x-1 transition-all duration-300">
-                      <span>Follow</span>
-                      <span className="font-bold text-sm leading-none">+</span>
+                    {/* White Pill Button on Right (Learn More) */}
+                    <div className="px-3.5 py-1.5 rounded-full bg-white text-[#111827] group-hover:bg-[#8B5CF6] group-hover:text-white group-hover:border-[#8B5CF6] text-xs font-semibold shadow-[0_3px_10px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center space-x-1.5 transition-all duration-300">
+                      <span>Learn More</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                     </div>
                   </div>
                 </div>
