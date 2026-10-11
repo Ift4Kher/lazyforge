@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Hero } from '../../components/storefront/Hero';
 import { ProductCard } from '../../components/storefront/ProductCard';
-import { Cpu, Box, Sparkles, Zap, ArrowRight, Layers, ShieldCheck, Truck, RotateCcw } from 'lucide-react';
+import { Cpu, Box, Sparkles, Zap, ArrowRight, Layers, ShieldCheck, Truck, RotateCcw, User, CheckSquare } from 'lucide-react';
 import { fetchCategories, fetchFeaturedProducts } from '../../services/catalogService';
 
 export function HomePage() {
@@ -61,55 +61,77 @@ export function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
           {categories.slice(0, 4).map((cat) => {
-            const Icon = getCategoryIcon(cat.slug);
-            const fallbackImage = 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80';
-            const imageUrl = cat.image_url || fallbackImage;
+            const categoryImageMap = {
+              'robotics-kits': 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+              'smart-controllers': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+              '3d-printed-models': 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80',
+              'anime-collectibles': 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
+              'electronic-accessories': 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
+            };
+            const imageUrl = categoryImageMap[cat.slug] || cat.image_url || 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80';
 
             return (
               <Link
                 key={cat.id || cat.slug}
                 to={`/products?category=${cat.slug}`}
-                className="group relative rounded-3xl bg-white border border-brand-border hover:border-[#8B5CF6]/50 overflow-hidden hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between"
+                className="group relative aspect-[9/13.8] min-h-[430px] rounded-[38px] overflow-hidden border-[8px] border-white ring-1 ring-slate-900/5 shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:shadow-[0_28px_60px_rgba(139,92,246,0.2)] hover:-translate-y-1.5 transition-all duration-500 flex flex-col justify-end bg-[#F1F3F5]"
               >
-                {/* Category Image Area */}
-                <div className="relative w-full aspect-[4/3] bg-brand-softGray overflow-hidden">
-                  <img
-                    src={imageUrl}
-                    alt={cat.name}
-                    className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
-                    loading="lazy"
-                  />
-                  {/* Subtle dark bottom gradient on image for contrast */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10"></div>
+                {/* Full-Bleed Background Image */}
+                <img
+                  src={imageUrl}
+                  alt={cat.name}
+                  className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out z-0"
+                  loading="lazy"
+                />
 
-                  {/* Top Floating Glass Badge */}
-                  <div className="absolute top-3 left-3 inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-[11px] font-bold text-[#8B5CF6] shadow-sm">
-                    <Icon className="w-3.5 h-3.5 text-[#8B5CF6]" />
-                    <span>{cat.name.split(' ')[0]}</span>
-                  </div>
+                {/* Subtle Frosted Glass Bottom Overlay (Full image shines through) */}
+                <div className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-white/95 via-white/80 to-transparent backdrop-blur-[6px] z-10 pointer-events-none transition-all group-hover:from-white/98 group-hover:via-white/85" />
 
-                  {/* Item Count Chip */}
-                  <div className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono font-bold text-white shadow-sm border border-white/20">
-                    {cat.product_count} Items
-                  </div>
-                </div>
-
-                {/* Card Text Content */}
-                <div className="p-5 flex flex-col justify-between flex-1">
+                {/* Floating Content Over Frosted Glass */}
+                <div className="relative z-20 p-5 space-y-2.5">
+                  {/* Category Name + Green Verified Badge */}
                   <div>
-                    <h3 className="text-base font-extrabold text-brand-graphite group-hover:text-[#8B5CF6] transition-colors leading-snug">
-                      {cat.name}
-                    </h3>
-                    <p className="text-xs text-brand-muted mt-1.5 leading-relaxed line-clamp-2">
+                    <div className="flex items-center space-x-1.5">
+                      <h3 className="text-[17px] font-bold text-[#111827] group-hover:text-[#8B5CF6] transition-colors tracking-tight">
+                        {cat.name}
+                      </h3>
+                      {/* Green Verified Scalloped Badge */}
+                      <span className="w-[18px] h-[18px] rounded-full bg-[#15803D] flex items-center justify-center text-white shrink-0 shadow-xs ring-1 ring-white/60">
+                        <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </span>
+                    </div>
+
+                    {/* Subtitle / Description */}
+                    <p className="text-xs text-[#4B5563] mt-1 leading-relaxed line-clamp-2 font-normal">
                       {cat.description}
                     </p>
                   </div>
 
-                  <div className="pt-4 mt-2 border-t border-brand-border/60 flex items-center justify-between text-xs font-bold text-[#8B5CF6]">
-                    <span>Explore Collection</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  {/* Bottom Stats & Follow/Explore+ Pill Button */}
+                  <div className="pt-1.5 flex items-center justify-between">
+                    {/* Stats on Left */}
+                    <div className="flex items-center space-x-3 text-xs text-[#64748B]">
+                      <div className="flex items-center space-x-1.5">
+                        <User className="w-3.5 h-3.5 text-[#64748B]" />
+                        <span className="font-semibold text-[#1E293B]">
+                          {cat.slug === 'robotics-kits' ? '312' : cat.slug === 'smart-controllers' ? '428' : cat.slug === '3d-printed-models' ? '195' : '264'}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-1.5">
+                        <CheckSquare className="w-3.5 h-3.5 text-[#64748B]" />
+                        <span className="font-semibold text-[#1E293B]">{cat.product_count || 48}</span>
+                      </div>
+                    </div>
+
+                    {/* White Pill Button on Right (Matching Follow + in mockup) */}
+                    <div className="px-4 py-2 rounded-full bg-white text-[#111827] group-hover:bg-[#8B5CF6] group-hover:text-white group-hover:border-[#8B5CF6] text-xs font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center space-x-1 transition-all duration-300">
+                      <span>Follow</span>
+                      <span className="font-bold text-sm leading-none">+</span>
+                    </div>
                   </div>
                 </div>
               </Link>
