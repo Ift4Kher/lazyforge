@@ -72,7 +72,7 @@ export function Navbar() {
             {/* Cart Icon with liquid glass pill styling */}
             <Link
               to="/cart"
-              className="relative p-2.5 text-white glass-pill rounded-xl transition-all hover:scale-105"
+              className="relative w-10 h-10 inline-flex items-center justify-center text-white glass-pill rounded-xl transition-all hover:scale-105 shrink-0"
               aria-label="Shopping Cart"
             >
               <ShoppingBag className="w-5 h-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]" />
@@ -85,10 +85,10 @@ export function Navbar() {
 
             {/* User Account */}
             {user ? (
-              <div className="relative group">
+              <div className="relative group shrink-0">
                 <button
                   type="button"
-                  className="flex items-center space-x-2 text-sm text-white p-2 rounded-xl glass-pill transition-all"
+                  className="h-10 px-3.5 inline-flex items-center space-x-2 text-sm text-white glass-pill rounded-xl transition-all"
                 >
                   <User className="w-4 h-4 text-white" />
                   <span className="hidden sm:inline-block font-semibold truncate max-w-[100px]">{user.name}</span>
@@ -116,7 +116,7 @@ export function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="inline-flex items-center px-4.5 py-2 rounded-xl text-xs font-bold bg-white text-[#8B5CF6] hover:bg-white/90 shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:scale-105 transition-all"
+                className="h-10 px-5 inline-flex items-center justify-center whitespace-nowrap rounded-xl text-xs font-bold bg-white text-[#8B5CF6] hover:bg-white/95 shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:scale-105 transition-all shrink-0"
               >
                 Sign In
               </Link>
