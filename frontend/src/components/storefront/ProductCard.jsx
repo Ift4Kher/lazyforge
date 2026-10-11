@@ -124,12 +124,12 @@ export function ProductCard({ product }) {
             )}
           </div>
 
-          {/* White Pill Button (Add +) */}
+          {/* Glassmorphic Pill Button (Add +) */}
           <button
             type="button"
             onClick={handleQuickAdd}
             disabled={!inStock}
-            className="px-3.5 py-1.5 rounded-full bg-slate-50 hover:bg-[#8B5CF6] hover:text-white text-[#111827] text-xs font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.06)] border border-slate-200 hover:border-[#8B5CF6] flex items-center space-x-1 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 cursor-pointer"
+            className="px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-md text-[#17191F] hover:bg-[#8B5CF6] hover:text-white hover:border-[#8B5CF6] text-xs font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.06),inset_0_1px_1.5px_rgba(255,255,255,1),inset_0_-1px_1px_rgba(0,0,0,0.03)] border border-white/80 hover:shadow-[0_6px_20px_rgba(139,92,246,0.3),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center space-x-1.5 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 hover:scale-105 cursor-pointer"
             title={inStock ? 'Quick Add to Cart' : 'Out of Stock'}
           >
             <span>Add</span>
