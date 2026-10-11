@@ -4,9 +4,11 @@ export const theme = {
     cleanWhite: '#FFFFFF', // Page background
     softGray: '#F5F6F8',   // Section background
     graphite: '#17191F',   // Primary text
-    violetAccent: '#6558D3', // Primary actions
-    violetHover: '#5446C4',
-    violetSubtle: '#EEEDFB',
+    violetAccent: '#8B5CF6', // Primary actions & Navbar
+    violetHover: '#7C3AED',
+    violetDark: '#6D28D9',
+    violetSubtle: '#EDE9FE',
+    navbarViolet: '#8B5CF6',
     textMuted: '#667085',
     border: '#E4E7EC',
     borderLight: '#F2F4F7',
