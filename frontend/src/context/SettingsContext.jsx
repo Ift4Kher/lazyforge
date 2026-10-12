@@ -3,7 +3,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const DEFAULT_SETTINGS = {
   hero: {
     mediaType: 'video',
-    videoUrl: '/uploads/hero-video.mp4',
+    videoUrl: '/uploads/hero-video2.mp4',
+    mobileVideoUrl: '/uploads/hero-video1.mp4',
     posterUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1920&q=80',
     heading: 'ENGINEERING TOMORROW’S TECH TODAY',
     subtitle: 'Premium robotics, 3D-printed innovations, and next-gen electronic gadgets engineered for Bangladesh tech enthusiasts.',

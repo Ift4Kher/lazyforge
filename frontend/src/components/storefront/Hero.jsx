@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
@@ -7,9 +7,25 @@ export function Hero() {
   const { hero } = useSettings();
   const videoRef = useRef(null);
 
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const heroData = hero || {
     mediaType: 'video',
-    videoUrl: '/uploads/hero-video.mp4',
+    videoUrl: '/uploads/hero-video2.mp4',
+    mobileVideoUrl: '/uploads/hero-video1.mp4',
     posterUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1920&q=80',
     heading: 'ENGINEERING TOMORROW’S TECH TODAY',
     subtitle: 'Premium robotics, 3D-printed innovations, and next-gen electronic gadgets engineered for Bangladesh tech enthusiasts.',
@@ -18,6 +34,10 @@ export function Hero() {
     secondaryCtaText: 'View 3D Models',
     secondaryCtaLink: '/campaigns/robot-mascot',
   };
+
+  const mobileVideoUrl = heroData.mobileVideoUrl || '/uploads/hero-video1.mp4';
+  const desktopVideoUrl = heroData.videoUrl || '/uploads/hero-video2.mp4';
+  const activeVideoSrc = isMobile ? mobileVideoUrl : desktopVideoUrl;
 
   useEffect(() => {
     if (videoRef.current) {
@@ -35,14 +55,15 @@ export function Hero() {
         console.warn('Play error:', err);
       }
     }
-  }, [heroData.videoUrl]);
+  }, [activeVideoSrc]);
 
   return (
     <section className="relative overflow-hidden bg-black min-h-screen min-h-[100dvh] w-full flex items-center border-b border-brand-border">
-      {/* Full-Screen Edge-to-Edge Crystal-Clear Autoplaying Video (identical on PC and Mobile) */}
+      {/* Full-Screen Edge-to-Edge Autoplaying Video: Mobile uses hero-video1.mp4, PC uses hero-video2.mp4 */}
       <video
+        key={activeVideoSrc}
         ref={videoRef}
-        src={heroData.videoUrl}
+        src={activeVideoSrc}
         poster={heroData.posterUrl}
         autoPlay
         muted
@@ -54,7 +75,10 @@ export function Hero() {
           filter: 'none',
           WebkitFilter: 'none',
         }}
-      />
+      >
+        <source src={mobileVideoUrl} media="(max-width: 767px)" type="video/mp4" />
+        <source src={desktopVideoUrl} media="(min-width: 768px)" type="video/mp4" />
+      </video>
 
       {/* Floating Content Over Fullscreen Video with Brand Violet & Clean White Styling */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-24 w-full">

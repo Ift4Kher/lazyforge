@@ -124,7 +124,8 @@ async function seedDatabase(databaseName) {
     // 5. Hero & Site Settings (Matching LazyForge reference video & brand aesthetic)
     const heroSettings = {
       mediaType: 'video',
-      videoUrl: '/uploads/hero-video.mp4',
+      videoUrl: '/uploads/hero-video2.mp4',
+      mobileVideoUrl: '/uploads/hero-video1.mp4',
       posterUrl: '/assets/hero-poster.jpg',
       imageUrl: '/assets/hero-banner.jpg',
       heading: 'ENGINEERING TOMORROW’S TECH TODAY',

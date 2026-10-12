@@ -144,10 +144,10 @@ export function AdminSettingsPage() {
             </div>
           </div>
 
-          {/* Video URL */}
+          {/* Desktop Video URL */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-brand-graphite">
-              Hero Video File URL / Local Path
+              PC / Desktop Hero Video URL
             </label>
             <input
               type="text"
@@ -156,7 +156,23 @@ export function AdminSettingsPage() {
               className="w-full px-3 py-2 rounded-xl bg-brand-softGray border border-brand-border focus:border-brand-accent focus:outline-none text-xs font-mono"
             />
             <p className="text-[11px] text-brand-muted">
-              Default bundled video: <code className="text-brand-graphite">/uploads/hero-video.mp4</code>
+              Bundled PC video: <code className="text-brand-graphite">/uploads/hero-video2.mp4</code>
+            </p>
+          </div>
+
+          {/* Mobile Video URL */}
+          <div className="space-y-1">
+            <label className="text-xs font-bold text-brand-graphite">
+              Mobile Hero Video URL
+            </label>
+            <input
+              type="text"
+              value={formData.mobile_video_url || '/uploads/hero-video1.mp4'}
+              onChange={(e) => setFormData({ ...formData, mobile_video_url: e.target.value })}
+              className="w-full px-3 py-2 rounded-xl bg-brand-softGray border border-brand-border focus:border-brand-accent focus:outline-none text-xs font-mono"
+            />
+            <p className="text-[11px] text-brand-muted">
+              Bundled mobile vertical video: <code className="text-brand-graphite">/uploads/hero-video1.mp4</code>
             </p>
           </div>
 
