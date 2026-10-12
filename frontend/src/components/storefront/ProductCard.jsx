@@ -13,7 +13,7 @@ export function ProductCard({ product }) {
     ? Math.round(((regularPrice - salePrice) / regularPrice) * 100) 
     : 0;
 
-  const inStock = product.total_stock > 0;
+  const inStock = (product.total_stock !== undefined ? product.total_stock : (product.stock !== undefined ? product.stock : 10)) > 0;
 
   const handleQuickAdd = (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ export function ProductCard({ product }) {
   };
 
   const fallbackImage = 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80';
-  const imageUrl = product.primary_image || fallbackImage;
+  const imageUrl = product.primary_image || product.image_url || product.images?.[0]?.url || fallbackImage;
 
   return (
     <div className="group relative rounded-[28px] bg-white border-[6px] border-white ring-1 ring-slate-900/5 shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_45px_rgba(139,92,246,0.18)] hover:-translate-y-1.5 transition-all duration-500 flex flex-col justify-between overflow-hidden">
