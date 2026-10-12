@@ -13,7 +13,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 navbar-liquid-glass text-white transition-all">
       {/* Liquid Glass Announcement Bar */}
-      <div className="bg-[rgba(124,58,237,0.55)] backdrop-blur-md py-1.5 px-4 text-center text-xs text-white/95 border-b border-white/10 shadow-[inset_0_-1px_0_rgba(255,255,255,0.1)]">
+      <div className="bg-[rgba(124,58,237,0.55)] backdrop-blur-md py-1 px-3 sm:py-1.5 sm:px-4 text-center text-[11px] sm:text-xs text-white/95 border-b border-white/10 shadow-[inset_0_-1px_0_rgba(255,255,255,0.1)] truncate">
         <span className="font-semibold">⚡ Official Launch:</span> Express Delivery Across Bangladesh | Verified Cash on Delivery
       </div>
 
@@ -116,7 +116,7 @@ export function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="h-10 px-5 inline-flex items-center justify-center whitespace-nowrap rounded-xl text-xs font-bold bg-white text-[#8B5CF6] hover:bg-white/95 shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:scale-105 transition-all shrink-0"
+                className="h-9 px-3.5 sm:h-10 sm:px-5 inline-flex items-center justify-center whitespace-nowrap rounded-xl text-xs font-bold bg-white text-[#8B5CF6] hover:bg-white/95 shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:scale-105 transition-all shrink-0"
               >
                 Sign In
               </Link>
