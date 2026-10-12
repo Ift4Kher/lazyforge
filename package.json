@@ -5,6 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "install:frontend": "npm --prefix frontend install",
+    "install:backend": "npm --prefix backend install",
     "start": "npm run start --prefix backend",
     "dev:backend": "npm run dev --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",
