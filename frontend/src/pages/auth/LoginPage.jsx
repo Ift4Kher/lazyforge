@@ -113,6 +113,16 @@ export function LoginPage() {
           </button>
         </form>
 
+        {/* Register CTA */}
+        <div className="pt-4 border-t border-brand-border/60 text-center">
+          <p className="text-xs text-brand-muted">
+            Don't have an account?{' '}
+            <Link to="/register" className="font-semibold text-brand-accent hover:underline">
+              Create an account
+            </Link>
+          </p>
+        </div>
+
         {/* Demo Quick-Fill Button */}
         <div className="pt-2 border-t border-brand-border/60 text-center">
           <p className="text-[11px] text-brand-muted mb-2">Development / Audit Quick Access:</p>

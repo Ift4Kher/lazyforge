@@ -77,4 +77,15 @@ describe('LazyForge Catalog & Products API', () => {
     expect(res.status).toBe(404);
     expect(res.body.success).toBe(false);
   });
+
+  it('GET /api/v1/products/3d-models returns products with 3D models available for showcase', async () => {
+    const res = await request(app).get('/api/v1/products/3d-models');
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.products)).toBe(true);
+    expect(res.body.products.length).toBeGreaterThan(0);
+    const has3D = res.body.products.filter((p) => Boolean(p.model_3d_url));
+    expect(has3D.length).toBeGreaterThanOrEqual(4);
+  });
 });
+

@@ -18,6 +18,7 @@ import {
 import { fetchProductBySlug } from '../../services/catalogService';
 import { useCart } from '../../context/CartContext';
 import { ProductCard } from '../../components/storefront/ProductCard';
+import { ProductReviewsSection } from '../../components/storefront/ProductReviewsSection';
 
 export function ProductDetailPage() {
   const { slug } = useParams();
@@ -400,6 +401,38 @@ export function ProductDetailPage() {
             </div>
           )}
         </div>
+
+        {/* JSON-LD Product Structured Data for Technical SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Product',
+              name: product.name,
+              image: selectedImage || (product.images?.[0]?.image_url),
+              description: product.short_description || product.description,
+              sku: selectedVariant ? selectedVariant.sku : product.sku,
+              brand: {
+                '@type': 'Brand',
+                name: 'LazyForge Technologies',
+              },
+              offers: {
+                '@type': 'Offer',
+                priceCurrency: 'BDT',
+                price: unitPrice,
+                availability:
+                  currentStock > 0
+                    ? 'https://schema.org/InStock'
+                    : 'https://schema.org/OutOfStock',
+                itemCondition: 'https://schema.org/NewCondition',
+              },
+            }),
+          }}
+        />
+
+        {/* Customer Reviews & Telemetry */}
+        <ProductReviewsSection productId={product.id} productName={product.name} />
 
         {/* Related Products Shelf */}
         {product.relatedProducts && product.relatedProducts.length > 0 && (

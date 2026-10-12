@@ -251,6 +251,20 @@ CREATE TABLE IF NOT EXISTS affiliates (
   INDEX idx_aff_code (referral_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS affiliate_referrals (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  affiliate_id INT NOT NULL,
+  order_id INT NOT NULL,
+  order_total DECIMAL(12, 2) NOT NULL,
+  commission_amount DECIMAL(12, 2) NOT NULL,
+  status ENUM('pending', 'approved', 'paid', 'cancelled') DEFAULT 'approved',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (affiliate_id) REFERENCES affiliates(id) ON DELETE CASCADE,
+  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+  INDEX idx_aff_ref (affiliate_id),
+  INDEX idx_aff_order (order_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS reviews (
   id INT AUTO_INCREMENT PRIMARY KEY,
   product_id INT NOT NULL,

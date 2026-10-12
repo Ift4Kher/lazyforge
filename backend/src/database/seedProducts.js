@@ -24,6 +24,34 @@ export async function seedProducts(databaseName) {
 
     const products = [
       {
+        name: 'LazyForge Apex-01 Autonomous Tabletop Robot Companion',
+        slug: 'lazyforge-apex-01-companion',
+        sku: 'LF-MASCOT-01',
+        category_slug: 'robotics-kits',
+        regular_price: 28500.00,
+        sale_price: 24900.00,
+        is_featured: true,
+        model_3d_url: 'apex_mascot',
+        model_3d_format: 'preset',
+        short_description: 'Autonomous cyber mascot companion with reactive OLED visor, dual telemetry antennas, and 12-axis articulated magnetic servo platform.',
+        description: 'Engineered by LazyForge Technologies. Features an ESP32 dual-core neural coprocessor, 12-axis articulated magnetic servos, tactile reactive LED visor, and high-frequency edge telemetry. Designed for desk automation and sci-fi aesthetic enthusiasts.',
+        specifications: {
+          'Microcontroller': 'ESP32-S3 Dual-Core Xtensa LX7 @ 240MHz',
+          'Chassis': 'Ceramic-Coated Matte Polycarbonate & Anodized Gunmetal Al-Mg Alloy',
+          'Display': 'Curved 1.54" Cyber-Cyan OLED Sensor Array',
+          'Servos': '12x Magnetic Hall-Encoder Precision Micro Actuators',
+          'Connectivity': 'Dual-Band Wi-Fi 6, Bluetooth 5.0 LE, LazyForge Mesh',
+          'Battery': '5000mAh Lithium-Polymer with USB-C 30W Fast PD',
+        },
+        images: [
+          { url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80', is_primary: true, alt: 'Apex-01 Cyber Companion Hero' },
+        ],
+        variants: [
+          { name: 'Ceramic White & Cyan Edition', sku: 'LF-MASCOT-01-WHT', attribute_name: 'Edition', attribute_value: 'Ceramic White', price_adjustment: 0.00, stock: 15 },
+          { name: 'Stealth Obsidian & Violet Edition', sku: 'LF-MASCOT-01-BLK', attribute_name: 'Edition', attribute_value: 'Stealth Obsidian', price_adjustment: 1200.00, stock: 8 },
+        ],
+      },
+      {
         name: 'ESP32 Autonomous Quadruped Spider Robot Kit',
         slug: 'esp32-autonomous-quadruped-spider-robot-kit',
         sku: 'LF-ROB-001',
@@ -31,6 +59,8 @@ export async function seedProducts(databaseName) {
         regular_price: 4800.00,
         sale_price: 4250.00,
         is_featured: true,
+        model_3d_url: 'spider_bot',
+        model_3d_format: 'preset',
         short_description: '12-DOF programmable spider robot powered by ESP32 with Wi-Fi/Bluetooth control and obstacle avoidance.',
         description: 'The LazyForge Quadruped Spider Robot is an advanced robotics platform engineered for enthusiasts, makers, and university researchers. Featuring 12 high-precision metal gear micro servos, an onboard ESP32 dual-core brain, ultrasonic distance mapping, and full Python/C++ open-source firmware compatibility.',
         specifications: {
@@ -59,6 +89,8 @@ export async function seedProducts(databaseName) {
         regular_price: 3600.00,
         sale_price: 3200.00,
         is_featured: true,
+        model_3d_url: 'robotic_arm',
+        model_3d_format: 'preset',
         short_description: 'Precision all-aluminum mechanical robotic manipulator arm with high-torque MG996R servos.',
         description: 'Engineered for industrial automation prototypes and educational training. Solid anodized CNC aluminum alloy bracket architecture driven by high-torque metal-gear servos capable of lifting objects up to 250 grams with sub-millimeter repeatable precision.',
         specifications: {
@@ -85,6 +117,8 @@ export async function seedProducts(databaseName) {
         regular_price: 650.00,
         sale_price: 520.00,
         is_featured: true,
+        model_3d_url: 'esp32_core',
+        model_3d_format: 'preset',
         short_description: 'Upgraded USB Type-C 38-Pin ESP32 board with CH340 chip, Wi-Fi, and Bluetooth 4.2 BLE.',
         description: 'The gold standard for IoT development. High performance Tensilica Xtensa 32-bit LX6 dual-core processor running at up to 240MHz. Features native CP2102/CH340 USB-C interface for lightning-fast firmware flashes in Arduino IDE, ESP-IDF, and MicroPython.',
         specifications: {
@@ -130,12 +164,13 @@ export async function seedProducts(databaseName) {
       {
         name: 'Articulated Silk Crystal Mech Dragon (50cm)',
         slug: 'articulated-silk-crystal-mech-dragon-50cm',
-        slug: 'articulated-silk-crystal-mech-dragon-50cm',
         sku: 'LF-3DP-001',
         category_slug: '3d-printed-models',
         regular_price: 1950.00,
         sale_price: 1650.00,
         is_featured: true,
+        model_3d_url: 'mech_drone',
+        model_3d_format: 'preset',
         short_description: 'Full multi-joint articulated mechanical dragon 3D printed with dual-tone iridescent silk PLA.',
         description: 'Manufactured inside the LazyForge 3D print farm using industrial 0.12mm layer heights. Every individual vertebra and wing segment features print-in-place ball hinges for lifelike fluid articulation. Shimmers between violet and metallic emerald depending on ambient light.',
         specifications: {
@@ -237,22 +272,25 @@ export async function seedProducts(databaseName) {
         await connection.query(
           `UPDATE products SET 
             name = ?, sku = ?, short_description = ?, description = ?, 
-            specifications = ?, category_id = ?, regular_price = ?, sale_price = ?, is_featured = ?
+            specifications = ?, category_id = ?, regular_price = ?, sale_price = ?, is_featured = ?,
+            model_3d_url = ?, model_3d_format = ?
            WHERE id = ?`,
           [
             prod.name, prod.sku, prod.short_description, prod.description,
             JSON.stringify(prod.specifications), categoryId, prod.regular_price, prod.sale_price, prod.is_featured,
+            prod.model_3d_url || null, prod.model_3d_format || null,
             productId
           ]
         );
       } else {
         const [result] = await connection.query(
           `INSERT INTO products 
-            (name, slug, sku, short_description, description, specifications, category_id, regular_price, sale_price, is_featured, is_active)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE)`,
+            (name, slug, sku, short_description, description, specifications, category_id, regular_price, sale_price, is_featured, model_3d_url, model_3d_format, is_active)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE)`,
           [
             prod.name, prod.slug, prod.sku, prod.short_description, prod.description,
-            JSON.stringify(prod.specifications), categoryId, prod.regular_price, prod.sale_price, prod.is_featured
+            JSON.stringify(prod.specifications), categoryId, prod.regular_price, prod.sale_price, prod.is_featured,
+            prod.model_3d_url || null, prod.model_3d_format || null
           ]
         );
         productId = result.insertId;

@@ -90,6 +90,7 @@ export async function getProducts(req, res, next) {
       SELECT 
         p.id, p.name, p.slug, p.sku, p.short_description, 
         p.regular_price, p.sale_price, p.is_featured, p.category_id,
+        p.model_3d_url, p.model_3d_format,
         c.name as category_name, c.slug as category_slug,
         (
           SELECT image_url 
@@ -133,6 +134,7 @@ export async function getFeaturedProducts(req, res, next) {
       SELECT 
         p.id, p.name, p.slug, p.sku, p.short_description,
         p.regular_price, p.sale_price, p.is_featured,
+        p.model_3d_url, p.model_3d_format,
         c.name as category_name, c.slug as category_slug,
         (
           SELECT image_url 
@@ -240,6 +242,54 @@ export async function getProductBySlug(req, res, next) {
         variants,
         relatedProducts,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Public: Get products available for 3D Showcase
+ * GET /api/v1/products/3d-models
+ */
+export async function get3DProducts(req, res, next) {
+  try {
+    const sql = `
+      SELECT 
+        p.id, p.name, p.slug, p.sku, p.short_description, p.description,
+        p.specifications, p.regular_price, p.sale_price, p.is_featured,
+        p.model_3d_url, p.model_3d_format,
+        c.name as category_name, c.slug as category_slug,
+        (
+          SELECT image_url 
+          FROM product_images pi 
+          WHERE pi.product_id = p.id 
+          ORDER BY pi.is_primary DESC, pi.sort_order ASC 
+          LIMIT 1
+        ) as primary_image,
+        COALESCE(
+          (SELECT SUM(stock_quantity) FROM product_variants WHERE product_id = p.id AND is_active = TRUE),
+          0
+        ) as total_stock
+      FROM products p
+      LEFT JOIN categories c ON c.id = p.category_id
+      WHERE p.is_active = TRUE
+      ORDER BY (p.model_3d_url IS NOT NULL) DESC, p.id ASC
+    `;
+    const rows = await query(sql);
+    const parsed = rows.map((r) => {
+      let specs = {};
+      if (typeof r.specifications === 'string') {
+        try { specs = JSON.parse(r.specifications); } catch {}
+      } else if (r.specifications) {
+        specs = r.specifications;
+      }
+      return { ...r, specifications: specs };
+    });
+    return res.status(200).json({
+      success: true,
+      data: parsed,
+      products: parsed,
     });
   } catch (error) {
     next(error);

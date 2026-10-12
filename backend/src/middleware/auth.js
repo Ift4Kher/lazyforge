@@ -67,3 +67,6 @@ export async function optionalAuth(req, res, next) {
     next();
   }
 }
+
+export const authenticate = verifyAuth;
+

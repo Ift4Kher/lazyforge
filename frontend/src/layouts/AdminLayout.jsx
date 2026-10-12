@@ -10,6 +10,8 @@ import {
   LogOut,
   ExternalLink,
   ShieldAlert,
+  MessageSquare,
+  Users,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -54,7 +56,8 @@ export function AdminLayout() {
     { label: 'Products & Stock', path: '/admin/products', icon: Package },
     { label: 'Orders & Sales', path: '/admin/orders', icon: ShoppingCart },
     { label: 'Campaign Builder', path: '/admin/builder', icon: Layers },
-    { label: 'Coupons & Affiliates', path: '/admin/marketing', icon: Tag },
+    { label: 'Customer Reviews', path: '/admin/reviews', icon: MessageSquare },
+    { label: 'Affiliate Partners', path: '/admin/affiliates', icon: Users },
     { label: 'Store Settings', path: '/admin/settings', icon: Settings },
   ];
 

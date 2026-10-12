@@ -164,6 +164,139 @@ async function seedDatabase(databaseName) {
       [JSON.stringify(siteSettings)]
     );
 
+    // 6. Default Promotional Coupons
+    const defaultCoupons = [
+      ['LAZYBOT10', 'percentage', 10.00, 1000.00, 2000.00, 500],
+      ['FORGE500', 'fixed', 500.00, 3500.00, 500.00, 200],
+      ['ROBOTICS2026', 'percentage', 15.00, 2000.00, 3000.00, 100],
+    ];
+
+    for (const [code, type, val, minOrd, maxCap, limit] of defaultCoupons) {
+      const [existingCoupon] = await connection.query(
+        'SELECT id FROM coupons WHERE code = ?',
+        [code]
+      );
+      if (existingCoupon.length === 0) {
+        await connection.query(
+          `INSERT INTO coupons (code, discount_type, discount_value, min_order_amount, max_discount_amount, usage_limit, is_active)
+           VALUES (?, ?, ?, ?, ?, ?, TRUE)`,
+          [code, type, val, minOrd, maxCap, limit]
+        );
+      }
+    }
+
+    // 7. Seed Sample Reviews
+    const [reviewCount] = await connection.query('SELECT count(*) as count FROM reviews');
+    if (reviewCount[0].count === 0) {
+      const [prods] = await connection.query('SELECT id FROM products LIMIT 4');
+      const sampleReviews = [
+        {
+          name: 'Tanvir Hossain (BUET Robotics)',
+          rating: 5,
+          comment: 'Incredible mechanical build quality! The inverse kinematics for the quadruped legs work smoothly out of the box with ESP32 FreeRTOS.',
+          verified: 1,
+        },
+        {
+          name: 'Fahim Morshed',
+          rating: 5,
+          comment: 'Arrived in Dhaka within 24 hours. The packaging was ESD-safe and the 3D-printed brackets fit standard MG90S servos with zero play.',
+          verified: 1,
+        },
+        {
+          name: 'Nafis Chowdhury',
+          rating: 4,
+          comment: 'Very solid kit. The code sample in Python made BLE joystick control super straightforward. Will order the robotic arm next!',
+          verified: 1,
+        },
+        {
+          name: 'Shahriar Kabir',
+          rating: 5,
+          comment: 'LazyForge is by far the highest tier robotics hardware store in Bangladesh. True cyberpunk aesthetics and premium electronics.',
+          verified: 1,
+        },
+      ];
+
+      for (const p of prods) {
+        for (const sr of sampleReviews) {
+          await connection.query(
+            `INSERT INTO reviews (product_id, customer_name, rating, comment, is_verified_purchase, status)
+             VALUES (?, ?, ?, ?, ?, 'approved')`,
+            [p.id, sr.name, sr.rating, sr.comment, sr.verified]
+          );
+        }
+      }
+    }
+
+    // 8. Default Affiliate Partner for Demo
+    const [existingAff] = await connection.query("SELECT id FROM affiliates WHERE referral_code = 'CYBERCREATOR'");
+    if (existingAff.length === 0) {
+      const [adminUser] = await connection.query("SELECT id FROM users WHERE email = 'admin@lazyforge.com'");
+      if (adminUser.length > 0) {
+        await connection.query(
+          `INSERT INTO affiliates (user_id, referral_code, commission_rate, balance, total_earned, is_active)
+           VALUES (?, 'CYBERCREATOR', 7.50, 2450.00, 8900.00, TRUE)`,
+          [adminUser[0].id]
+        );
+      }
+    }
+
+    // 9. Default Campaign Landing Page (Apex-01 Robot Mascot)
+    const [existingLp] = await connection.query("SELECT id FROM landing_pages WHERE slug = 'robot-mascot'");
+    if (existingLp.length === 0) {
+      const defaultSections = [
+        {
+          id: 'sec-hero',
+          type: 'hero',
+          title: 'Hero Video & Welcome',
+          enabled: true,
+          heading: 'APEX-01 AUTONOMOUS ROBOTICS COMPANION',
+          subheading: 'Precision engineered tabletop robotics agent with real-time neural telemetry and 12-axis magnetic servos.',
+          ctaText: 'Deploy Apex-01',
+          ctaLink: '/products',
+        },
+        {
+          id: 'sec-3d',
+          type: '3d_viewer',
+          title: 'Interactive 3D Robot Rig',
+          enabled: true,
+          heading: 'Apex-01 Autonomous Companion',
+          subheading: 'Real-time WebGL CAD inspection with servo articulation and reactive LED visor.',
+          badge: 'INTERACTIVE THREE.JS RIG',
+        },
+        {
+          id: 'sec-specs',
+          type: 'specifications',
+          title: 'Hardware & Compute Telemetry',
+          enabled: true,
+          heading: 'Battle-Tested Microcontroller Architecture',
+          subheading: 'Built with dual-core 240MHz ESP32-S3, high-torque micro servos, and real-time WiFi telemetry.',
+        },
+        {
+          id: 'sec-faq',
+          type: 'faq',
+          title: 'Fulfillment & Warranty FAQ',
+          enabled: true,
+          heading: 'Frequently Asked Questions',
+          subheading: 'Everything you need to know about Bangladesh delivery, Cash on Delivery, and technical support.',
+        },
+      ];
+
+      const [lpResult] = await connection.query(
+        `INSERT INTO landing_pages (title, slug, status, meta_title, meta_description)
+         VALUES ('Apex-01 Robot Mascot Showcase', 'robot-mascot', 'published', 'Apex-01 Robot Mascot | LazyForge Technologies', 'Explore the interactive 3D robotics companion engineered for Bangladesh makers.')`
+      );
+      const lpId = lpResult.insertId;
+
+      const [vResult] = await connection.query(
+        `INSERT INTO landing_page_versions (landing_page_id, version_number, layout_json, custom_css, is_published)
+         VALUES (?, 1, ?, '/* Apex-01 Cyber Styling */', TRUE)`,
+        [lpId, JSON.stringify(defaultSections)]
+      );
+      const vId = vResult.insertId;
+
+      await connection.query('UPDATE landing_pages SET published_version_id = ? WHERE id = ?', [vId, lpId]);
+    }
+
     await connection.commit();
     console.log(`[SEED SUCCESS] ${databaseName} seeded successfully.`);
   } catch (err) {

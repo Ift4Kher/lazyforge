@@ -34,6 +34,12 @@ app.use('/api/v1', apiV1Router);
 // Fallback compatibility for /api -> /api/v1
 app.use('/api', apiV1Router);
 
+import { seoController } from './controllers/seoController.js';
+
+// SEO Crawlers Endpoints
+app.get('/sitemap.xml', seoController.getSitemap);
+app.get('/robots.txt', seoController.getRobots);
+
 // Root greeting
 app.get('/', (req, res) => {
   res.json({

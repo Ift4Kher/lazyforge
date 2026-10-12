@@ -4,9 +4,22 @@ import { StorefrontLayout } from '../layouts/StorefrontLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { HomePage } from '../pages/storefront/HomePage';
 import { LoginPage } from '../pages/auth/LoginPage';
+import { RegisterPage } from '../pages/auth/RegisterPage';
+import { CustomerDashboardPage } from '../pages/customer/CustomerDashboardPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
+import { AdminOrdersPage } from '../pages/admin/AdminOrdersPage';
+import { AdminProductsPage } from '../pages/admin/AdminProductsPage';
+import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage';
+import { AdminPageBuilderPage } from '../pages/admin/AdminPageBuilderPage';
+import { AdminReviewsPage } from '../pages/admin/AdminReviewsPage';
+import { AdminAffiliatesPage } from '../pages/admin/AdminAffiliatesPage';
 import { ProductListPage } from '../pages/storefront/ProductListPage';
 import { ProductDetailPage } from '../pages/storefront/ProductDetailPage';
+import { RobotMascotPage } from '../pages/storefront/RobotMascotPage';
+import { CampaignLandingPage } from '../pages/storefront/CampaignLandingPage';
+import { CartPage } from '../pages/storefront/CartPage';
+import { CheckoutPage } from '../pages/storefront/CheckoutPage';
+import { OrderConfirmationPage } from '../pages/storefront/OrderConfirmationPage';
 
 function NotFoundPage() {
   return (
@@ -44,77 +57,26 @@ export function AppRoutes() {
       <Route element={<StorefrontLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/account" element={<CustomerDashboardPage />} />
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/products/:slug" element={<ProductDetailPage />} />
         <Route path="/categories" element={<ProductListPage />} />
-        <Route
-          path="/campaigns/robot-mascot"
-          element={
-            <PlaceholderPage
-              title="3D Robot Mascot Interactive Showcase"
-              description="Three.js real-time inspection of the LazyForge robotics mascot."
-            />
-          }
-        />
-        <Route
-          path="/cart"
-          element={
-            <PlaceholderPage
-              title="Shopping Cart"
-              description="Review your selected gadgets before proceeding to centralized checkout."
-            />
-          }
-        />
+        <Route path="/campaigns/:slug" element={<CampaignLandingPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmationPage />} />
       </Route>
 
       {/* Admin Protected Layout */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboardPage />} />
-        <Route
-          path="products"
-          element={
-            <PlaceholderPage
-              title="Product Catalog & Stock Management"
-              description="Manage product descriptions, variants, SKU inventory, and 3D preview assets."
-            />
-          }
-        />
-        <Route
-          path="orders"
-          element={
-            <PlaceholderPage
-              title="Orders & Fulfillment Pipeline"
-              description="Track customer orders, verify Cash on Delivery collections, and update delivery statuses."
-            />
-          }
-        />
-        <Route
-          path="builder"
-          element={
-            <PlaceholderPage
-              title="Visual Landing Page Builder"
-              description="Construct drag-and-drop campaign landing pages with live preview."
-            />
-          }
-        />
-        <Route
-          path="marketing"
-          element={
-            <PlaceholderPage
-              title="Marketing, Coupons & Affiliates"
-              description="Configure discount coupons, campaign schedules, and affiliate commission rates."
-            />
-          }
-        />
-        <Route
-          path="settings"
-          element={
-            <PlaceholderPage
-              title="Store & Hero Media Settings"
-              description="Manage sound-enabled hero video configurations, shipping rates, and SSLCommerz credentials."
-            />
-          }
-        />
+        <Route path="products" element={<AdminProductsPage />} />
+        <Route path="orders" element={<AdminOrdersPage />} />
+        <Route path="builder" element={<AdminPageBuilderPage />} />
+        <Route path="reviews" element={<AdminReviewsPage />} />
+        <Route path="affiliates" element={<AdminAffiliatesPage />} />
+        <Route path="settings" element={<AdminSettingsPage />} />
       </Route>
 
       {/* 404 Fallback */}

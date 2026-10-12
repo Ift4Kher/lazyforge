@@ -2,7 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Hero } from '../../components/storefront/Hero';
 import { ProductCard } from '../../components/storefront/ProductCard';
-import { Cpu, Box, Sparkles, Zap, ArrowRight, Layers, ShieldCheck, Truck, RotateCcw, User, CheckSquare } from 'lucide-react';
+import { Product3DShowcaseSection } from '../../components/storefront/Product3DShowcaseSection';
+import {
+  Cpu,
+  Box,
+  Sparkles,
+  Zap,
+  ArrowRight,
+  Layers,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
+  RotateCw,
+  Sliders,
+  User,
+  CheckSquare,
+} from 'lucide-react';
 import { fetchCategories, fetchFeaturedProducts } from '../../services/catalogService';
 
 export function HomePage() {
@@ -179,32 +194,8 @@ export function HomePage() {
         )}
       </section>
 
-      {/* 3D Lab Showcase Teaser Banner */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-brand-softGray via-white to-purple-50 border border-[#8B5CF6]/30 p-8 sm:p-12 shadow-sm">
-          <div className="relative z-10 max-w-2xl space-y-4">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-white border border-[#8B5CF6]/30 text-xs font-mono font-bold text-[#8B5CF6] shadow-sm">
-              <Layers className="w-3.5 h-3.5" />
-              <span>Three.js Realtime Graphics</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-graphite">
-              Interact with Products in Full 3D Space
-            </h2>
-            <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-              Rotate, zoom, and inspect manufacturing-grade 3D details of robotics kits and 3D printed mechanical artifacts before purchasing.
-            </p>
-            <div className="pt-4">
-              <Link
-                to="/campaigns/robot-mascot"
-                className="inline-flex items-center space-x-2 px-7 py-3.5 rounded-xl font-bold text-sm bg-[#8B5CF6] text-white hover:bg-[#7C3AED] shadow-md hover:scale-105 transition-all"
-              >
-                <span>Launch 3D Mascot Showcase</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Multi-Product 3D Showcase Section */}
+      <Product3DShowcaseSection />
 
       {/* Why Choose LazyForge Highlights */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
