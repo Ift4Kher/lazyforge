@@ -12,14 +12,15 @@ import {
 } from 'lucide-react';
 import { ProductCard } from '../../components/storefront/ProductCard';
 import { fetchProducts, fetchCategories } from '../../services/catalogService';
+import { DEFAULT_PRODUCTS, DEFAULT_CATEGORIES } from '../../data/mockCatalogData';
 
 export function ProductListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 12, totalPages: 1 });
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(DEFAULT_PRODUCTS);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [pagination, setPagination] = useState({ total: DEFAULT_PRODUCTS.length, page: 1, limit: 12, totalPages: 1 });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Filter state synced with URL search params

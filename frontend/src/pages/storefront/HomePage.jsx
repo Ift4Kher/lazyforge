@@ -19,11 +19,12 @@ import {
   CheckSquare,
 } from 'lucide-react';
 import { fetchCategories, fetchFeaturedProducts } from '../../services/catalogService';
+import { DEFAULT_CATEGORIES, DEFAULT_FEATURED_PRODUCTS } from '../../data/mockCatalogData';
 
 export function HomePage() {
-  const [categories, setCategories] = useState([]);
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [featuredProducts, setFeaturedProducts] = useState(DEFAULT_FEATURED_PRODUCTS.slice(0, 8));
+  const [loadingProducts, setLoadingProducts] = useState(false);
 
   useEffect(() => {
     fetchCategories()
