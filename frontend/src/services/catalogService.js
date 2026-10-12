@@ -1,22 +1,48 @@
 // Catalog API service connecting to LazyForge Express Backend
+// With seamless fallback to mock data when deployed to static hosts (Vercel) or when API is offline
 
-const BASE_URL = '/api';
+import {
+  DEFAULT_CATEGORIES,
+  DEFAULT_PRODUCTS,
+  DEFAULT_FEATURED_PRODUCTS,
+} from '../data/mockCatalogData';
+
+const BASE_URL = import.meta.env?.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : '/api';
+
+async function safeFetchJson(url) {
+  try {
+    const res = await fetch(url);
+    const contentType = res.headers.get('content-type') || '';
+    if (res.ok && contentType.includes('application/json')) {
+      return await res.json();
+    }
+    return null;
+  } catch (err) {
+    console.warn(`[CatalogService] Network fetch failed for ${url}:`, err.message);
+    return null;
+  }
+}
 
 export async function fetchCategories() {
-  const res = await fetch(`${BASE_URL}/categories`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch categories');
+  const data = await safeFetchJson(`${BASE_URL}/categories`);
+  if (data && Array.isArray(data.categories) && data.categories.length > 0) {
+    return data.categories;
   }
-  const data = await res.json();
-  return data.categories || [];
+  return DEFAULT_CATEGORIES;
 }
 
 export async function fetchCategoryBySlug(slug) {
-  const res = await fetch(`${BASE_URL}/categories/${slug}`);
-  if (!res.ok) {
-    throw new Error('Category not found');
+  const data = await safeFetchJson(`${BASE_URL}/categories/${slug}`);
+  if (data && data.category) {
+    return data;
   }
-  return await res.json();
+  const found = DEFAULT_CATEGORIES.find((c) => c.slug === slug);
+  return {
+    category: found || DEFAULT_CATEGORIES[0],
+    products: DEFAULT_PRODUCTS.filter((p) => p.category_slug === slug),
+  };
 }
 
 export async function fetchProducts(params = {}) {
@@ -31,27 +57,52 @@ export async function fetchProducts(params = {}) {
   if (params.page) query.set('page', params.page);
   if (params.limit) query.set('limit', params.limit);
 
-  const res = await fetch(`${BASE_URL}/products?${query.toString()}`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch products');
+  const data = await safeFetchJson(`${BASE_URL}/products?${query.toString()}`);
+  if (data && Array.isArray(data.products) && data.products.length > 0) {
+    return data;
   }
-  return await res.json();
+
+  // Fallback in-memory filter
+  let filtered = [...DEFAULT_PRODUCTS];
+  if (params.category) {
+    filtered = filtered.filter((p) => p.category_slug === params.category);
+  }
+  if (params.search) {
+    const term = params.search.toLowerCase();
+    filtered = filtered.filter(
+      (p) =>
+        p.name.toLowerCase().includes(term) ||
+        p.short_description?.toLowerCase().includes(term)
+    );
+  }
+  if (params.featured) {
+    filtered = filtered.filter((p) => p.is_featured);
+  }
+
+  return {
+    products: filtered,
+    pagination: {
+      total: filtered.length,
+      page: 1,
+      limit: params.limit || 12,
+      totalPages: 1,
+    },
+  };
 }
 
 export async function fetchFeaturedProducts(limit = 8) {
-  const res = await fetch(`${BASE_URL}/products/featured?limit=${limit}`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch featured products');
+  const data = await safeFetchJson(`${BASE_URL}/products/featured?limit=${limit}`);
+  if (data && Array.isArray(data.products) && data.products.length > 0) {
+    return data.products;
   }
-  const data = await res.json();
-  return data.products || [];
+  return DEFAULT_FEATURED_PRODUCTS.slice(0, limit);
 }
 
 export async function fetchProductBySlug(slug) {
-  const res = await fetch(`${BASE_URL}/products/${slug}`);
-  if (!res.ok) {
-    throw new Error('Product not found');
+  const data = await safeFetchJson(`${BASE_URL}/products/${slug}`);
+  if (data && data.product) {
+    return data.product;
   }
-  const data = await res.json();
-  return data.product;
+  const product = DEFAULT_PRODUCTS.find((p) => p.slug === slug);
+  return product || DEFAULT_PRODUCTS[0];
 }

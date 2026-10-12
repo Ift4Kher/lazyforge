@@ -13,14 +13,15 @@ export function AuthProvider({ children }) {
         const res = await fetch('/api/v1/auth/me', {
           credentials: 'include',
         });
-        if (res.ok) {
+        const contentType = res.headers.get('content-type') || '';
+        if (res.ok && contentType.includes('application/json')) {
           const data = await res.json();
           if (data.success && data.user) {
             setUser(data.user);
           }
         }
       } catch (err) {
-        console.error('Failed to verify session:', err);
+        // Session verify fallback for offline/static deployment
       } finally {
         setLoading(false);
       }
