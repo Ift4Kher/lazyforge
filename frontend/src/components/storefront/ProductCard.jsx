@@ -43,14 +43,14 @@ export function ProductCard({ product }) {
   const reviewsCount = product.reviews_count || (8 + ((product.id || 1) * 3) % 15);
 
   return (
-    <div className="group relative rounded-2xl bg-white border border-slate-200/90 hover:border-[#0066FF] shadow-[0_4px_20px_rgba(0,102,255,0.06)] hover:shadow-[0_16px_40px_rgba(0,102,255,0.18)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+    <div className="group relative rounded-2xl bg-white border-2 border-slate-300 hover:border-[#0066FF] shadow-[0_4px_20px_rgba(0,102,255,0.08),0_0_0_1px_rgba(0,102,255,0.08)] hover:shadow-[0_16px_40px_rgba(0,102,255,0.22)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden">
       
       {/* Top Cyber Accent Hairline */}
-      <div className="h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-[#0066FF] to-[#00D2FF] transition-all duration-500" />
+      <div className="h-[2.5px] w-full bg-gradient-to-r from-transparent via-[#0066FF] to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
 
-      {/* Corner CAD Tech Markings */}
-      <div className="absolute top-2 right-2 w-2.5 h-2.5 border-t border-r border-blue-400/40 pointer-events-none group-hover:border-[#0066FF] transition-colors" />
-      <div className="absolute bottom-2 left-2 w-2.5 h-2.5 border-b border-l border-blue-400/40 pointer-events-none group-hover:border-[#0066FF] transition-colors" />
+      {/* Corner CAD Tech Markings - Crisp & Visible */}
+      <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t-2 border-r-2 border-[#0066FF] rounded-tr-xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b-2 border-l-2 border-[#0066FF] rounded-bl-xl pointer-events-none" />
 
       <div className="p-4 flex flex-col justify-between h-full space-y-3">
         

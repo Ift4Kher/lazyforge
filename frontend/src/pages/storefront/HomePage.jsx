@@ -139,17 +139,18 @@ export function HomePage() {
               <Link
                 key={cat.id || cat.slug}
                 to={`/products?category=${cat.slug}`}
-                className="group relative rounded-2xl bg-white border border-slate-200/90 hover:border-[#0066FF] shadow-[0_4px_16px_rgba(0,102,255,0.05)] hover:shadow-[0_12px_28px_rgba(0,102,255,0.18)] hover:-translate-y-1.5 transition-all duration-300 p-3.5 flex flex-col justify-between overflow-hidden"
+                className="group relative rounded-2xl bg-white border-2 border-slate-300 hover:border-[#0066FF] shadow-[0_4px_16px_rgba(0,102,255,0.08),0_0_0_1px_rgba(0,102,255,0.08)] hover:shadow-[0_12px_32px_rgba(0,102,255,0.25)] hover:-translate-y-1.5 transition-all duration-300 p-3.5 flex flex-col justify-between overflow-hidden"
               >
                 {/* Top Subtle Cyber Accent Line */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-[#0066FF] to-[#00D2FF] transition-all duration-300" />
+                <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#0066FF] to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
 
-                {/* Corner Tech Markings */}
-                <div className="absolute top-1.5 right-1.5 w-2 h-2 border-t border-r border-blue-400/30 group-hover:border-[#0066FF] transition-colors" />
+                {/* Corner Tech Brackets - Crisp & Visible */}
+                <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t-2 border-r-2 border-[#0066FF] rounded-tr-xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b-2 border-l-2 border-[#0066FF] rounded-bl-xl pointer-events-none" />
 
                 {/* Category Image on Glowing Radial Pedestal */}
-                <div className="relative aspect-square w-full rounded-xl bg-gradient-to-b from-[#F0F5FF]/80 via-slate-50/50 to-white flex items-center justify-center p-2 mb-2.5 overflow-hidden border border-slate-100/80">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,102,255,0.06)_0%,transparent_70%)] pointer-events-none" />
+                <div className="relative aspect-square w-full rounded-xl bg-gradient-to-b from-[#F0F5FF]/90 via-slate-50/60 to-white flex items-center justify-center p-2 mb-2.5 overflow-hidden border border-slate-200">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,102,255,0.08)_0%,transparent_70%)] pointer-events-none" />
                   <img
                     src={imageUrl}
                     alt={cat.name}
@@ -169,7 +170,7 @@ export function HomePage() {
                     </span>
                   </div>
 
-                  <div className="w-5 h-5 rounded-full bg-slate-100 group-hover:bg-[#0066FF] text-slate-500 group-hover:text-white flex items-center justify-center shrink-0 transition-all shadow-2xs">
+                  <div className="w-5 h-5 rounded-full border border-blue-200 bg-blue-50/80 group-hover:bg-[#0066FF] text-[#0066FF] group-hover:text-white flex items-center justify-center shrink-0 transition-all shadow-2xs">
                     <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </div>
