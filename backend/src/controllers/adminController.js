@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { query, transaction, execute } from '../config/database.js';
+import { checkCustomerDelivery, getBDCourierConfig, saveBDCourierConfig } from '../services/bdCourierService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -775,6 +776,67 @@ export const adminController = {
         `attachment; filename="lazyforge-orders-${new Date().toISOString().slice(0, 10)}.csv"`
       );
       res.status(200).send(csvContent);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * Check customer courier delivery history & COD risk analysis via BDCourier
+   * POST /api/v1/admin/courier/bdcourier/check
+   */
+  async checkBDCourierCustomer(req, res, next) {
+    try {
+      const { phone } = req.body;
+      if (!phone) {
+        return res.status(400).json({
+          success: false,
+          error: 'Phone number is required to run BDCourier verification.',
+        });
+      }
+
+      const result = await checkCustomerDelivery(phone);
+      res.status(result.success ? 200 : 400).json(result);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * Get BDCourier configuration settings
+   * GET /api/v1/admin/courier/bdcourier/settings
+   */
+  async getBDCourierSettings(req, res, next) {
+    try {
+      const config = await getBDCourierConfig();
+      // Mask API key for security
+      const maskedKey = config.apiKey 
+        ? `${config.apiKey.slice(0, 4)}••••••••${config.apiKey.slice(-4)}` 
+        : '';
+
+      res.json({
+        success: true,
+        data: {
+          hasKey: config.hasKey,
+          maskedKey,
+          isEnabled: config.isEnabled,
+          autoCheckCOD: config.autoCheckCOD,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * Update BDCourier configuration settings
+   * PUT /api/v1/admin/courier/bdcourier/settings
+   */
+  async updateBDCourierSettings(req, res, next) {
+    try {
+      const { apiKey, isEnabled, autoCheckCOD } = req.body;
+      const result = await saveBDCourierConfig({ apiKey, isEnabled, autoCheckCOD });
+      res.json(result);
     } catch (err) {
       next(err);
     }

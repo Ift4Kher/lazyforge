@@ -13,6 +13,11 @@ import {
   Eye,
   ChevronDown,
   Download,
+  ShieldCheck,
+  ShieldAlert,
+  Settings,
+  Key,
+  Check,
 } from 'lucide-react';
 import { formatBDT } from '../../utils/currency';
 
@@ -27,6 +32,111 @@ export function AdminOrdersPage() {
   const [selectedStatus, setSelectedStatus] = useState(searchParams.get('status') || '');
   const [activeOrder, setActiveOrder] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // BDCourier Integration State
+  const [bdCourierData, setBdCourierData] = useState({});
+  const [isCheckingBDCourier, setIsCheckingBDCourier] = useState(false);
+  const [showBDCourierModal, setShowBDCourierModal] = useState(false);
+  const [bdCourierSettings, setBdCourierSettings] = useState({
+    apiKey: '',
+    maskedKey: '',
+    hasKey: false,
+    isEnabled: true,
+    autoCheckCOD: true,
+  });
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [testPhone, setTestPhone] = useState('01712345678');
+  const [testResult, setTestResult] = useState(null);
+  const [isTestingPhone, setIsTestingPhone] = useState(false);
+
+  const fetchBDCourierSettings = async () => {
+    try {
+      const res = await fetch('/api/v1/admin/courier/bdcourier/settings');
+      const data = await res.json();
+      if (data.success && data.data) {
+        setBdCourierSettings((prev) => ({ ...prev, ...data.data }));
+      }
+    } catch (err) {
+      console.error('Failed to load BDCourier settings:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBDCourierSettings();
+  }, []);
+
+  const handleSaveBDCourierSettings = async (e) => {
+    e.preventDefault();
+    setIsSavingSettings(true);
+    try {
+      const res = await fetch('/api/v1/admin/courier/bdcourier/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          apiKey: bdCourierSettings.apiKey,
+          isEnabled: bdCourierSettings.isEnabled,
+          autoCheckCOD: bdCourierSettings.autoCheckCOD,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('BDCourier settings updated successfully!');
+        fetchBDCourierSettings();
+      } else {
+        alert(data.error || 'Failed to update settings');
+      }
+    } catch (err) {
+      alert('Error communicating with server');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
+  const checkCustomerWithBDCourier = async (phone, orderId = null) => {
+    if (!phone) return null;
+    setIsCheckingBDCourier(true);
+    try {
+      const res = await fetch('/api/v1/admin/courier/bdcourier/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setBdCourierData((prev) => ({
+          ...prev,
+          [phone]: data,
+          ...(orderId ? { [orderId]: data } : {}),
+        }));
+        return data;
+      }
+    } catch (err) {
+      console.error('BDCourier lookup failed:', err);
+    } finally {
+      setIsCheckingBDCourier(false);
+    }
+    return null;
+  };
+
+  const handleTestPhoneCheck = async (e) => {
+    e.preventDefault();
+    if (!testPhone.trim()) return;
+    setIsTestingPhone(true);
+    setTestResult(null);
+    try {
+      const res = await fetch('/api/v1/admin/courier/bdcourier/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: testPhone }),
+      });
+      const data = await res.json();
+      setTestResult(data);
+    } catch (err) {
+      setTestResult({ success: false, error: 'Connection failure.' });
+    } finally {
+      setIsTestingPhone(false);
+    }
+  };
 
   const handleExportCSV = async () => {
     setIsExporting(true);
@@ -127,6 +237,9 @@ export function AdminOrdersPage() {
       const data = await res.json();
       if (data.success) {
         setActiveOrder(data.data);
+        if (data.data.customer_phone) {
+          checkCustomerWithBDCourier(data.data.customer_phone, data.data.id);
+        }
       }
     } catch {
       alert('Failed to fetch full order details');
@@ -147,6 +260,14 @@ export function AdminOrdersPage() {
           </p>
         </div>
         <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          <button
+            onClick={() => setShowBDCourierModal(true)}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-blue-50 border border-blue-200 text-[#0066FF] hover:bg-blue-100 transition-all shadow-2xs cursor-pointer"
+            title="Configure BDCourier API & Check COD fraud detection"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-[#0066FF]" />
+            <span>BDCourier</span>
+          </button>
           <button
             onClick={handleExportCSV}
             disabled={isExporting}
@@ -263,7 +384,36 @@ export function AdminOrdersPage() {
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-brand-graphite">{order.customer_name}</div>
-                      <div className="text-[10px] text-brand-muted">{order.customer_phone}</div>
+                      <div className="text-[10px] text-brand-muted flex items-center gap-1.5 mt-0.5">
+                        <span>{order.customer_phone}</span>
+                        {bdCourierData[order.customer_phone] ? (
+                          <span
+                            className={`px-1.5 py-0.2 rounded text-[9px] font-bold inline-flex items-center gap-0.5 ${
+                              bdCourierData[order.customer_phone].risk_level === 'safe'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : bdCourierData[order.customer_phone].risk_level === 'medium'
+                                ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                : 'bg-rose-50 text-rose-700 border border-rose-200'
+                            }`}
+                            title={`BDCourier Success Ratio: ${bdCourierData[order.customer_phone].success_ratio}%`}
+                          >
+                            <ShieldCheck className="w-2.5 h-2.5" />
+                            {bdCourierData[order.customer_phone].success_ratio}%
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              checkCustomerWithBDCourier(order.customer_phone, order.id);
+                            }}
+                            className="px-1.5 py-0.2 rounded text-[9px] font-medium bg-blue-50 text-[#0066FF] hover:bg-blue-100 transition-colors border border-blue-200 cursor-pointer"
+                            title="Check buyer history with BDCourier"
+                          >
+                            Check COD
+                          </button>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="font-medium text-brand-graphite">{order.delivery_city}</div>
@@ -404,6 +554,123 @@ export function AdminOrdersPage() {
               </div>
             </div>
 
+            {/* BDCourier Customer Delivery Intelligence & COD Fraud Verification */}
+            {(() => {
+              const bdCheck = bdCourierData[activeOrder.customer_phone] || bdCourierData[activeOrder.id];
+              return (
+                <div className="p-4 rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50/60 via-white to-slate-50/50 space-y-3 text-xs shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-6 h-6 rounded-lg bg-[#0066FF] flex items-center justify-center text-white shadow-xs">
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <span className="font-bold text-slate-900 block leading-tight">BDCourier Risk & Delivery Intelligence</span>
+                        <span className="text-[10px] text-slate-500 font-mono">SteadFast • Pathao • RedX National Verification</span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => checkCustomerWithBDCourier(activeOrder.customer_phone, activeOrder.id)}
+                      disabled={isCheckingBDCourier}
+                      className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-blue-200 text-[#0066FF] hover:bg-blue-50 transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      <RefreshCw className={`w-3 h-3 ${isCheckingBDCourier ? 'animate-spin' : ''}`} />
+                      <span>{isCheckingBDCourier ? 'Analyzing...' : 'Re-check'}</span>
+                    </button>
+                  </div>
+
+                  {bdCheck ? (
+                    <div className="space-y-3 pt-1">
+                      {/* Overall Ratio Bar & Risk Badge */}
+                      <div className="flex items-center justify-between bg-white p-2.5 rounded-lg border border-slate-200/80">
+                        <div>
+                          <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Overall Delivery Ratio</div>
+                          <div className="text-lg font-black font-mono text-[#0066FF] leading-tight">
+                            {bdCheck.success_ratio}%
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide inline-flex items-center gap-1 ${
+                              bdCheck.risk_level === 'safe'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                : bdCheck.risk_level === 'medium'
+                                ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                                : 'bg-rose-100 text-rose-800 border border-rose-300'
+                            }`}
+                          >
+                            {bdCheck.risk_level === 'safe' && <ShieldCheck className="w-3 h-3" />}
+                            {bdCheck.risk_level === 'medium' && <AlertCircle className="w-3 h-3" />}
+                            {bdCheck.risk_level === 'danger' && <ShieldAlert className="w-3 h-3" />}
+                            {bdCheck.risk_level === 'safe' ? 'LOW COD RISK' : bdCheck.risk_level === 'medium' ? 'MODERATE RISK' : 'HIGH RETURN RISK'}
+                          </span>
+                          <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                            Status: {bdCheck.risk_level?.toUpperCase()}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                        <div
+                          className={`h-full transition-all duration-500 rounded-full ${
+                            bdCheck.success_ratio >= 80
+                              ? 'bg-emerald-500'
+                              : bdCheck.success_ratio >= 60
+                              ? 'bg-amber-500'
+                              : 'bg-rose-500'
+                          }`}
+                          style={{ width: `${Math.min(100, Math.max(0, bdCheck.success_ratio))}%` }}
+                        />
+                      </div>
+
+                      {/* Verdict Message */}
+                      <div className="p-2.5 rounded-lg bg-blue-50/70 border border-blue-100 text-slate-700 text-[11px] leading-relaxed">
+                        <span className="font-semibold text-slate-900 mr-1">Telemetry Analysis:</span>
+                        {bdCheck.risk_verdict?.message || 'Customer delivery telemetry analyzed across verified courier logs.'}
+                      </div>
+
+                      {/* Courier Breakdown Grid */}
+                      {bdCheck.data && Object.keys(bdCheck.data).length > 0 && (
+                        <div className="grid grid-cols-3 gap-2 text-center pt-1">
+                          {Object.entries(bdCheck.data).map(([key, c]) => (
+                            <div key={key} className="p-2 rounded-lg bg-white border border-slate-200">
+                              <div className="font-bold text-slate-800 text-[11px] truncate">{c.name || key}</div>
+                              <div className="text-[10px] font-mono font-bold text-[#0066FF] mt-0.5">{c.success_ratio}%</div>
+                              <div className="text-[9px] text-slate-400 mt-0.5">
+                                <span className="text-emerald-600 font-bold">{c.success_parcel || 0}</span> / <span className="text-rose-600">{c.cancelled_parcel || 0}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {bdCheck.notice && (
+                        <div className="text-[9px] text-slate-400 italic">
+                          ℹ️ {bdCheck.notice}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="p-3 text-center bg-white rounded-lg border border-dashed border-blue-200 text-slate-500">
+                      <p className="text-[11px]">No BDCourier check recorded yet for {activeOrder.customer_phone}.</p>
+                      <button
+                        type="button"
+                        onClick={() => checkCustomerWithBDCourier(activeOrder.customer_phone, activeOrder.id)}
+                        disabled={isCheckingBDCourier}
+                        className="mt-2 px-3 py-1 rounded bg-[#0066FF] text-white font-bold text-xs hover:bg-blue-600 transition-colors cursor-pointer"
+                      >
+                        {isCheckingBDCourier ? 'Checking with BDCourier...' : 'Run Fraud & Delivery Check'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
             {/* Order Items */}
             <div className="space-y-3">
               <h4 className="text-xs font-bold text-brand-graphite uppercase font-mono tracking-wider">
@@ -463,6 +730,147 @@ export function AdminOrdersPage() {
               >
                 Close
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* BDCourier Settings & Phone Testing Modal */}
+      {showBDCourierModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-graphite/60 backdrop-blur-xs">
+          <div className="bg-white border border-brand-border rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-5">
+            <div className="flex items-center justify-between border-b border-brand-border pb-3">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#0066FF] flex items-center justify-center text-white shadow-xs">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900 leading-tight">BDCourier Integration</h3>
+                  <p className="text-[11px] text-slate-500">National Fraud Detection & Courier Analytics</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowBDCourierModal(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Settings Form */}
+            <form onSubmit={handleSaveBDCourierSettings} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-bold text-slate-800 mb-1">
+                  BDCourier API Key
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    value={bdCourierSettings.apiKey}
+                    onChange={(e) => setBdCourierSettings({ ...bdCourierSettings, apiKey: e.target.value })}
+                    placeholder={bdCourierSettings.maskedKey || 'Paste BDCourier API Key from bdcourier.com'}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-hidden focus:border-[#0066FF] focus:bg-white transition-all"
+                  />
+                  <div className="absolute right-2.5 top-2 text-[10px] text-slate-400 font-mono">
+                    {bdCourierSettings.hasKey ? '✓ Active' : 'No Key'}
+                  </div>
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1">
+                  Get your secret key from your{' '}
+                  <a
+                    href="https://bdcourier.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#0066FF] underline font-semibold"
+                  >
+                    BDCourier.com
+                  </a>{' '}
+                  developer dashboard.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-1 border-t border-slate-100">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={bdCourierSettings.isEnabled}
+                    onChange={(e) => setBdCourierSettings({ ...bdCourierSettings, isEnabled: e.target.checked })}
+                    className="rounded text-[#0066FF] focus:ring-[#0066FF]"
+                  />
+                  <span className="font-semibold text-slate-800 text-xs">Enable BDCourier Telemetry</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={bdCourierSettings.autoCheckCOD}
+                    onChange={(e) => setBdCourierSettings({ ...bdCourierSettings, autoCheckCOD: e.target.checked })}
+                    className="rounded text-[#0066FF] focus:ring-[#0066FF]"
+                  />
+                  <span className="font-semibold text-slate-800 text-xs">Auto-verify customer on order inspect</span>
+                </label>
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  type="submit"
+                  disabled={isSavingSettings}
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#0066FF] text-white hover:bg-blue-600 transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
+                >
+                  {isSavingSettings ? 'Saving...' : 'Save Configuration'}
+                </button>
+              </div>
+            </form>
+
+            {/* Test Phone Section */}
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
+              <span className="font-bold text-slate-800 block text-[11px] uppercase tracking-wide">
+                Live Customer Verification Test
+              </span>
+              <form onSubmit={handleTestPhoneCheck} className="flex gap-2">
+                <input
+                  type="text"
+                  value={testPhone}
+                  onChange={(e) => setTestPhone(e.target.value)}
+                  placeholder="017XXXXXXXX"
+                  className="grow px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-mono text-slate-900 focus:outline-hidden focus:border-[#0066FF]"
+                />
+                <button
+                  type="submit"
+                  disabled={isTestingPhone}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-white hover:bg-[#0066FF] transition-colors disabled:opacity-50 cursor-pointer"
+                >
+                  {isTestingPhone ? 'Testing...' : 'Check'}
+                </button>
+              </form>
+
+              {testResult && (
+                <div className="p-3 rounded-lg bg-white border border-slate-200 space-y-2 mt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900">{testResult.phone}</span>
+                    <span
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        testResult.risk_level === 'safe'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : testResult.risk_level === 'medium'
+                          ? 'bg-amber-100 text-amber-800'
+                          : 'bg-rose-100 text-rose-800'
+                      }`}
+                    >
+                      {testResult.risk_level?.toUpperCase()} • {testResult.success_ratio}%
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 leading-snug">
+                    {testResult.risk_verdict?.message}
+                  </p>
+                  {testResult.notice && (
+                    <p className="text-[10px] text-slate-400 italic">
+                      ℹ️ {testResult.notice}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

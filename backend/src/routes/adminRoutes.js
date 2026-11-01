@@ -21,6 +21,11 @@ router.get('/orders', adminController.getOrders);
 router.get('/orders/:id', adminController.getOrderById);
 router.patch('/orders/:id/status', adminController.updateOrderStatus);
 
+// BDCourier Courier Check & Intelligence Settings
+router.post('/courier/bdcourier/check', adminController.checkBDCourierCustomer);
+router.get('/courier/bdcourier/settings', adminController.getBDCourierSettings);
+router.put('/courier/bdcourier/settings', adminController.updateBDCourierSettings);
+
 // Products & Inventory Management & 3D Models
 router.get('/products', adminController.getProducts);
 router.post('/products', adminController.createProduct);
