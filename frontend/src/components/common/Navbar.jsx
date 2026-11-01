@@ -78,33 +78,21 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 gap-4">
           
-          {/* Brand Logo - Gear Robot Icon + LazyForge Technologies matching Reference Image */}
+          {/* Brand Logo - Official LazyForge Identity */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2.5 group shrink-0 py-1" aria-label="LazyForge Technologies">
-              <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
-                <svg className="w-10 h-10 text-[#1E293B] group-hover:scale-105 transition-transform" viewBox="0 0 40 40" fill="none">
-                  {/* 8-Tooth Gear Silhouette */}
-                  <path d="M17 3h6v4.2a13 13 0 014.2 1.8l3-3 4.2 4.2-3 3a13 13 0 011.8 4.2H37v6h-4.2a13 13 0 01-1.8 4.2l3 3-4.2 4.2-3-3a13 13 0 01-4.2 1.8V37h-6v-4.2a13 13 0 01-4.2-1.8l-3 3-4.2-4.2 3-3a13 13 0 01-1.8-4.2H3v-6h4.2a13 13 0 011.8-4.2l-3-3 4.2-4.2 3 3a13 13 0 014.2-1.8V3z" fill="#1E293B" />
-                  {/* Inner White Robot Face Capsule */}
-                  <rect x="11" y="11" width="18" height="18" rx="5" fill="#FFFFFF" />
-                  {/* Antenna */}
-                  <circle cx="20" cy="8.5" r="1.5" fill="#0066FF" />
-                  <line x1="20" y1="9.5" x2="20" y2="11.5" stroke="#1E293B" strokeWidth="1.5" />
-                  {/* Blue Eyes */}
-                  <circle cx="15.5" cy="18" r="2.2" fill="#0066FF" />
-                  <circle cx="24.5" cy="18" r="2.2" fill="#0066FF" />
-                  {/* Friendly Smile */}
-                  <path d="M17 22.5c1 1.2 5 1.2 6 0" stroke="#1E293B" strokeWidth="1.6" strokeLinecap="round" />
-                </svg>
-              </div>
-              <div className="flex flex-col leading-tight">
-                <span className="text-[19px] font-black tracking-tight text-slate-900 group-hover:text-[#0066FF] transition-colors font-sans">
-                  LazyForge
-                </span>
-                <span className="text-[11px] font-bold text-slate-500 tracking-wider">
-                  Technologies
-                </span>
-              </div>
+            {/* Left Tech Notch Line */}
+            <div className="hidden xl:flex items-center space-x-1.5 mr-3 opacity-60">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#0066FF]" />
+              <div className="w-3 h-[1.5px] bg-[#0066FF]" />
+            </div>
+
+            <Link to="/" className="flex items-center group shrink-0 py-1" aria-label="LazyForge Technologies">
+              <img
+                src="/images/lazyforge-logo.png"
+                alt="LazyForge"
+                className="h-10 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+              <span className="sr-only">LazyForge Technologies</span>
             </Link>
           </div>
 
