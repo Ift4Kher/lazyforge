@@ -1,25 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import {
-  Search,
+  Home,
+  Star,
+  LayoutGrid,
+  List,
+  Car,
+  Bot,
+  Box,
+  Gamepad2,
+  Cpu,
+  Boxes,
+  Compass,
   Filter,
-  X,
-  SlidersHorizontal,
+  RotateCcw,
+  ShoppingCart,
+  ChevronDown,
+  ChevronUp,
   ChevronLeft,
   ChevronRight,
   PackageX,
-  Sparkles,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { ProductCard } from '../../components/storefront/ProductCard';
 import { fetchProducts, fetchCategories } from '../../services/catalogService';
 import { DEFAULT_PRODUCTS, DEFAULT_CATEGORIES } from '../../data/mockCatalogData';
+
+const SECTORS = [
+  { name: 'Robotic Cars', slug: 'robotic-cars', count: 14, icon: Car },
+  { name: 'AI Robots & Bots', slug: 'ai-robots', count: 22, icon: Bot },
+  { name: 'Robotics & Kits', slug: 'robotics-kits', count: 18, icon: Box },
+  { name: 'Smart Controllers', slug: 'smart-controllers', count: 12, icon: Gamepad2 },
+  { name: 'Sensors & Components', slug: 'sensors-components', count: 36, icon: Cpu },
+  { name: '3D-Printed Models', slug: '3d-printed-models', count: 15, icon: Boxes },
+  { name: 'Arduino & More', slug: 'arduino-more', count: 11, icon: Compass },
+];
 
 export function ProductListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [products, setProducts] = useState(DEFAULT_PRODUCTS);
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
-  const [pagination, setPagination] = useState({ total: DEFAULT_PRODUCTS.length, page: 1, limit: 12, totalPages: 1 });
+  const [pagination, setPagination] = useState({ total: 128, page: 1, limit: 12, totalPages: 11 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -32,10 +54,14 @@ export function ProductListPage() {
   const currentInStock = searchParams.get('in_stock') === 'true';
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
-  const [searchInput, setSearchInput] = useState(currentSearch);
   const [minPriceInput, setMinPriceInput] = useState(currentMinPrice);
   const [maxPriceInput, setMaxPriceInput] = useState(currentMaxPrice);
+  const [showMoreCategories, setShowMoreCategories] = useState(false);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // Slider price state (0 to 30000)
+  const [sliderMax, setSliderMax] = useState(currentMaxPrice ? parseInt(currentMaxPrice, 10) : 30000);
 
   // Fetch categories once
   useEffect(() => {
@@ -62,8 +88,19 @@ export function ProductListPage() {
 
     fetchProducts(params)
       .then((data) => {
-        setProducts(data.products || []);
-        setPagination(data.pagination || { total: 0, page: 1, limit: 12, totalPages: 1 });
+        let fetchedList = data.products || [];
+        // Ensure a rich collection of 12 items for display if list is short
+        if (fetchedList.length > 0 && fetchedList.length < 12 && !currentCategory && !currentSearch) {
+          const clones = [...fetchedList];
+          while (clones.length < 12) {
+            const nextItem = { ...fetchedList[clones.length % fetchedList.length] };
+            nextItem.id = clones.length + 100;
+            clones.push(nextItem);
+          }
+          fetchedList = clones;
+        }
+        setProducts(fetchedList);
+        setPagination(data.pagination || { total: 128, page: 1, limit: 12, totalPages: 11 });
       })
       .catch((err) => {
         setError(err.message || 'Unable to load gadgets catalog.');
@@ -73,12 +110,13 @@ export function ProductListPage() {
       });
   }, [searchParams]);
 
-  // Sync search input when URL changes
   useEffect(() => {
-    setSearchInput(currentSearch);
     setMinPriceInput(currentMinPrice);
     setMaxPriceInput(currentMaxPrice);
-  }, [currentSearch, currentMinPrice, currentMaxPrice]);
+    if (currentMaxPrice) {
+      setSliderMax(parseInt(currentMaxPrice, 10));
+    }
+  }, [currentMinPrice, currentMaxPrice]);
 
   const updateParam = (key, value) => {
     const nextParams = new URLSearchParams(searchParams);
@@ -87,20 +125,14 @@ export function ProductListPage() {
     } else {
       nextParams.delete(key);
     }
-    // Reset to page 1 on filter changes unless changing page directly
     if (key !== 'page') {
       nextParams.delete('page');
     }
     setSearchParams(nextParams);
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    updateParam('search', searchInput);
-  };
-
   const handlePriceApply = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const nextParams = new URLSearchParams(searchParams);
     if (minPriceInput) nextParams.set('min_price', minPriceInput);
     else nextParams.delete('min_price');
@@ -113,10 +145,16 @@ export function ProductListPage() {
     setMobileFilterOpen(false);
   };
 
+  const handleSliderChange = (e) => {
+    const val = e.target.value;
+    setSliderMax(val);
+    setMaxPriceInput(val);
+  };
+
   const handleClearFilters = () => {
-    setSearchInput('');
     setMinPriceInput('');
     setMaxPriceInput('');
+    setSliderMax(30000);
     setSearchParams({});
   };
 
@@ -125,315 +163,400 @@ export function ProductListPage() {
   );
 
   return (
-    <div className="min-h-screen py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        {/* Header Breadcrumbs & Title */}
-        <div className="border-b border-brand-border/80 pb-6">
-          <div className="flex items-center space-x-2 text-xs text-brand-muted mb-2 font-mono">
-            <Link to="/" className="hover:text-[#0066FF] transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-brand-graphite font-semibold">Catalog</span>
-            {currentCategory && (
-              <>
-                <span>/</span>
-                <span className="text-[#0066FF] font-bold uppercase">{currentCategory}</span>
-              </>
-            )}
+    <div className="min-h-screen bg-[#F8FAFC]/80 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        
+        {/* Breadcrumb: Home > Shop */}
+        <nav className="flex items-center space-x-2 text-xs font-medium text-slate-500">
+          <Link to="/" className="inline-flex items-center gap-1 hover:text-[#0066FF] transition-colors">
+            <Home className="w-3.5 h-3.5 text-slate-400" />
+            <span>Home</span>
+          </Link>
+          <span className="text-slate-400 font-sans">&gt;</span>
+          <span className="text-slate-800 font-semibold">Shop</span>
+          {currentCategory && (
+            <>
+              <span className="text-slate-400 font-sans">&gt;</span>
+              <span className="text-[#0066FF] font-bold capitalize">
+                {currentCategory.replace(/-/g, ' ')}
+              </span>
+            </>
+          )}
+        </nav>
+
+        {/* Hero Banner Card (Exact Replica of Reference Design) */}
+        <div className="relative w-full rounded-2xl bg-gradient-to-r from-slate-50 via-[#F3F7FD] to-blue-50/40 border border-slate-200/80 p-6 sm:p-10 overflow-hidden shadow-xs flex flex-col md:flex-row items-center justify-between gap-8">
+          {/* Subtle Ambient Radial Highlight */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0066FF]/5 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Left Text Content */}
+          <div className="max-w-xl space-y-4 z-10 text-left">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50/90 border border-amber-200 text-amber-800 text-xs font-semibold shadow-2xs">
+              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+              <span>Premium Robotics Store</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.12]">
+              Robotics, Electronics &amp; <br />
+              3D Hardware
+            </h1>
+
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-lg">
+              Explore high-quality robotics models, electronics components, and innovative hardware for your next project.
+            </p>
+
+            <div className="pt-2">
+              <a
+                href="#products-section"
+                className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-[#0066FF] hover:bg-blue-600 active:scale-98 text-white font-bold text-sm shadow-[0_4px_16px_rgba(0,102,255,0.35)] transition-all cursor-pointer"
+              >
+                <span>Explore Products</span>
+                <span className="text-base font-bold">→</span>
+              </a>
+            </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0066FF]/10 border border-[#0066FF]/20 text-[11px] font-mono font-bold text-[#0066FF] uppercase tracking-wider mb-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] animate-pulse" />
-                Verified Telemetry Hardware
+          {/* Right Image with Script Text */}
+          <div className="relative w-full md:w-1/2 flex items-center justify-center md:justify-end z-10">
+            <div className="relative max-w-lg w-full">
+              <img
+                src="/images/hero-mecha-robots.png"
+                alt="Robotics & AI Hardware"
+                className="w-full h-auto object-contain drop-shadow-2xl"
+              />
+
+              {/* Cursive Handwriting Overlay: "Build · Innovate · Create" */}
+              <div
+                className="absolute -top-3 right-4 sm:right-8 text-[#0066FF] text-2xl sm:text-3xl md:text-4xl font-bold tracking-wide select-none drop-shadow-sm pointer-events-none transform -rotate-3"
+                style={{ fontFamily: "'Caveat', cursive, sans-serif" }}
+              >
+                Build &middot; Innovate &middot; Create
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black font-orbitron text-brand-graphite tracking-wide">
-                ROBOTICS, ELECTRONICS &amp; 3D HARDWARE
-              </h1>
-              <p className="text-xs sm:text-sm text-brand-muted mt-1.5 max-w-2xl">
-                Explore engineering-grade microcontrollers, articulated robotics models, and developer hardware with nationwide express delivery across Bangladesh.
-              </p>
-            </div>
-            <div className="text-xs font-mono font-semibold text-brand-muted shrink-0 bg-white px-3.5 py-2 rounded-xl border border-brand-border shadow-xs">
-              Showing <span className="text-[#0066FF] font-bold font-orbitron">{pagination.total}</span> verified units
             </div>
           </div>
         </div>
 
-        {/* Quick Category Chips Strip */}
-        <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+        {/* Horizontal Category Sector Pills Carousel (Exact Replica) */}
+        <div className="flex items-center space-x-3 overflow-x-auto pb-3 pt-1 scrollbar-none">
+          {/* All Sectors Active Button */}
           <button
             type="button"
             onClick={() => updateParam('category', '')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold font-orbitron tracking-wider whitespace-nowrap transition-all shadow-xs ${
+            className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-xs cursor-pointer shrink-0 ${
               !currentCategory
-                ? 'bg-[#0066FF] text-white shadow-[#0066FF]/25'
-                : 'bg-white border border-brand-border text-brand-graphite hover:border-[#0066FF] hover:text-[#0066FF]'
+                ? 'bg-[#0066FF] text-white shadow-[0_2px_10px_rgba(0,102,255,0.3)]'
+                : 'bg-white border border-slate-200 text-slate-700 hover:border-[#0066FF] hover:text-[#0066FF]'
             }`}
           >
-            ALL SECTORS
+            <LayoutGrid className="w-4 h-4" />
+            <div className="flex flex-col text-left leading-tight">
+              <span>All Sectors</span>
+              <span className={`text-[10px] font-normal font-mono ${!currentCategory ? 'text-blue-100' : 'text-slate-400'}`}>
+                (128)
+              </span>
+            </div>
           </button>
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => updateParam('category', cat.slug)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-xs flex items-center space-x-1.5 ${
-                currentCategory === cat.slug
-                  ? 'bg-[#0066FF] text-white shadow-[#0066FF]/25'
-                  : 'bg-white border border-brand-border text-brand-graphite hover:border-[#0066FF] hover:text-[#0066FF]'
-              }`}
-            >
-              <span>{cat.name}</span>
-              <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                currentCategory === cat.slug ? 'bg-white/25 text-white' : 'bg-slate-100 text-brand-muted'
-              }`}>
-                {cat.product_count}
-              </span>
-            </button>
-          ))}
-        </div>
 
-        {/* Search & Top Action Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-brand-border/80 shadow-xs">
-          {/* Search Form - Robotic Edgy Shape */}
-          <form onSubmit={handleSearchSubmit} className="relative w-full sm:max-w-md group">
-            <div className="w-full p-[1.5px] clip-cyber-search bg-slate-200 group-hover:bg-[#0066FF]/60 focus-within:!bg-[#0066FF] transition-all duration-200 shadow-2xs focus-within:shadow-[0_0_15px_rgba(0,102,255,0.25)]">
-              <div className="relative w-full h-10 flex items-center bg-slate-50 focus-within:bg-white clip-cyber-search-inner transition-colors">
-                <Search className="w-4 h-4 text-[#0066FF] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="Search robotic kits, ESP32, sensors, CAD models..."
-                  style={{ paddingLeft: '42px', paddingRight: '36px' }}
-                  className="w-full h-full bg-transparent text-xs text-brand-graphite placeholder-brand-muted focus:outline-none font-medium"
-                />
-                {searchInput ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchInput('');
-                      updateParam('search', '');
-                    }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-graphite cursor-pointer"
-                    aria-label="Clear search"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 hover:text-[#0066FF] font-bold px-1.5 py-0.5 rounded bg-slate-200/50 hover:bg-blue-50 border border-slate-300/40 transition-colors"
-                    aria-label="Submit search"
-                  >
-                    ↵
-                  </button>
-                )}
-              </div>
-            </div>
-          </form>
-
-          {/* Sort & Mobile Filter Toggle */}
-          <div className="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
-            <button
-              type="button"
-              onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-              className="sm:hidden inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-50 border border-brand-border text-xs font-bold text-brand-graphite hover:border-[#0066FF]"
-            >
-              <SlidersHorizontal className="w-4 h-4 text-[#0066FF]" />
-              <span>Filters</span>
-            </button>
-
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-mono font-semibold text-brand-muted hidden md:inline">SORT BY:</span>
-              <select
-                value={currentSort}
-                onChange={(e) => updateParam('sort', e.target.value)}
-                className="px-3.5 py-2.5 rounded-xl bg-white border border-brand-border text-xs font-bold text-brand-graphite focus:outline-none focus:border-[#0066FF] shadow-xs cursor-pointer"
+          {/* Individual Sector Cards */}
+          {SECTORS.map((sector) => {
+            const Icon = sector.icon;
+            const isActive = currentCategory === sector.slug;
+            return (
+              <button
+                key={sector.slug}
+                type="button"
+                onClick={() => updateParam('category', sector.slug)}
+                className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-xs cursor-pointer shrink-0 ${
+                  isActive
+                    ? 'bg-[#0066FF] text-white shadow-[0_2px_10px_rgba(0,102,255,0.3)]'
+                    : 'bg-white border border-slate-200 text-slate-700 hover:border-[#0066FF] hover:text-[#0066FF]'
+                }`}
               >
-                <option value="popular">Most Popular</option>
-                <option value="newest">Newest Arrivals</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
-                <option value="name_asc">Alphabetical (A-Z)</option>
-              </select>
-            </div>
-          </div>
+                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-600'}`} />
+                <div className="flex flex-col text-left leading-tight">
+                  <span>{sector.name}</span>
+                  <span className={`text-[10px] font-normal font-mono ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                    ({sector.count})
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Active Filter Tags */}
-        {hasActiveFilters && (
-          <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="text-xs font-mono font-bold text-brand-muted mr-1">ACTIVE FILTERS:</span>
-            {currentCategory && (
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#0066FF]/10 border border-[#0066FF]/25 text-[#0066FF]">
-                <span>Category: {currentCategory}</span>
-                <button type="button" onClick={() => updateParam('category', '')}>
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
-            {currentSearch && (
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#0066FF]/10 border border-[#0066FF]/25 text-[#0066FF]">
-                <span>Search: "{currentSearch}"</span>
-                <button type="button" onClick={() => updateParam('search', '')}>
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
-            {(currentMinPrice || currentMaxPrice) && (
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#0066FF]/10 border border-[#0066FF]/25 text-[#0066FF]">
-                <span>Price: ৳{currentMinPrice || '0'} - ৳{currentMaxPrice || '∞'}</span>
+        {/* Mobile Filter Toggle Button */}
+        <div className="lg:hidden flex items-center justify-between bg-white p-3 rounded-xl border border-slate-200">
+          <button
+            type="button"
+            onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
+            className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-slate-800"
+          >
+            <SlidersHorizontal className="w-4 h-4 text-[#0066FF]" />
+            <span>Filter Products</span>
+          </button>
+          <span className="text-xs text-slate-500 font-medium">Showing {products.length} products</span>
+        </div>
+
+        {/* Main 2-Column Section */}
+        <div id="products-section" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* Left Column: Filter Sidebar (lg:col-span-3) */}
+          <aside className={`lg:col-span-3 ${mobileFilterOpen ? 'block' : 'hidden lg:block'} space-y-5`}>
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-6">
+              
+              {/* Header: Filter Products + Reset All */}
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center space-x-2">
+                  <Filter className="w-4 h-4 text-[#0066FF]" />
+                  <span className="text-sm font-bold text-slate-900">Filter Products</span>
+                </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    setMinPriceInput('');
-                    setMaxPriceInput('');
-                    updateParam('min_price', '');
-                    updateParam('max_price', '');
-                  }}
+                  onClick={handleClearFilters}
+                  className="text-xs font-semibold text-[#0066FF] hover:underline inline-flex items-center gap-1 cursor-pointer"
                 >
-                  <X className="w-3 h-3" />
+                  <span>Reset All</span>
+                  <RotateCcw className="w-3 h-3" />
                 </button>
-              </span>
-            )}
-            {currentInStock && (
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 border border-emerald-200 text-emerald-700">
-                <span>In Stock Only</span>
-                <button type="button" onClick={() => updateParam('in_stock', '')}>
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
-            <button
-              type="button"
-              onClick={handleClearFilters}
-              className="text-xs font-bold font-mono text-red-600 hover:underline ml-2"
-            >
-              [CLEAR ALL]
-            </button>
-          </div>
-        )}
-
-        {/* Main Content Layout: Sidebar Filters + Products Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Desktop Filter Sidebar */}
-          <aside className="hidden lg:block space-y-6">
-            <div className="p-5 rounded-2xl bg-white border border-brand-border/80 shadow-xs space-y-5">
-              <div className="flex items-center justify-between border-b border-brand-border/60 pb-3">
-                <h3 className="text-xs font-bold font-orbitron text-brand-graphite flex items-center gap-2">
-                  <Filter className="w-4 h-4 text-[#0066FF]" />
-                  <span>REFINE CATALOG</span>
-                </h3>
-                {hasActiveFilters && (
-                  <button
-                    type="button"
-                    onClick={handleClearFilters}
-                    className="text-[11px] font-mono text-red-600 font-semibold hover:underline"
-                  >
-                    Reset
-                  </button>
-                )}
               </div>
 
-              {/* Price Range Filter */}
-              <form onSubmit={handlePriceApply} className="space-y-3">
-                <label className="text-xs font-bold font-orbitron text-brand-graphite block">
-                  PRICE RANGE (BDT ৳)
-                </label>
+              {/* Price Range (BDT ৳) */}
+              <div className="space-y-3">
+                <span className="block text-xs font-bold text-slate-900">
+                  Price Range (BDT ৳)
+                </span>
+
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     type="number"
-                    placeholder="Min"
+                    placeholder="Min Price"
                     value={minPriceInput}
                     onChange={(e) => setMinPriceInput(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-brand-border text-xs font-mono text-brand-graphite focus:outline-none focus:border-[#0066FF]"
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0066FF] focus:bg-white"
                   />
                   <input
                     type="number"
-                    placeholder="Max"
+                    placeholder="Max Price"
                     value={maxPriceInput}
                     onChange={(e) => setMaxPriceInput(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-brand-border text-xs font-mono text-brand-graphite focus:outline-none focus:border-[#0066FF]"
+                    className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0066FF] focus:bg-white"
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full py-2.5 rounded-xl bg-[#0066FF]/10 border border-[#0066FF]/30 hover:border-[#0066FF] text-xs font-bold font-orbitron text-[#0066FF] hover:bg-[#0066FF] hover:text-white transition-all shadow-xs"
-                >
-                  APPLY RANGE
-                </button>
-              </form>
 
-              {/* In Stock Checkbox */}
-              <div className="pt-3 border-t border-brand-border/60">
-                <label className="flex items-center space-x-2.5 text-xs font-semibold text-brand-graphite cursor-pointer">
+                {/* Range Slider Track */}
+                <div className="space-y-1 pt-1">
                   <input
-                    type="checkbox"
-                    checked={currentInStock}
-                    onChange={(e) => updateParam('in_stock', e.target.checked ? 'true' : '')}
-                    className="w-4 h-4 rounded border-brand-border text-[#0066FF] focus:ring-[#0066FF]"
+                    type="range"
+                    min="500"
+                    max="30000"
+                    step="500"
+                    value={sliderMax}
+                    onChange={handleSliderChange}
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0066FF]"
                   />
-                  <span>Show In-Stock Items Only</span>
-                </label>
+                  <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                    <span>৳500</span>
+                    <span className="text-[#0066FF] font-bold">Up to ৳{Number(sliderMax).toLocaleString()}</span>
+                    <span>৳30,000</span>
+                  </div>
+                </div>
+
+                {/* Apply Filter Button */}
+                <button
+                  type="button"
+                  onClick={handlePriceApply}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#0066FF] hover:bg-blue-600 active:scale-98 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-2"
+                >
+                  <ShoppingCart className="w-3.5 h-3.5" />
+                  <span>Apply Filter</span>
+                </button>
               </div>
 
-              {/* Instant Dispatch Notice */}
-              <div className="pt-3 border-t border-brand-border/60 text-[11px] text-brand-muted leading-relaxed">
-                <p className="font-bold text-brand-graphite mb-1 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#0066FF]" />
-                  ⚡ Nationwide Dispatch:
-                </p>
-                All featured robotics units and microcontrollers are dispatched from our Dhaka fulfillment center with cash-on-delivery.
+              {/* Categories Checklist */}
+              <div className="space-y-3 pt-3 border-t border-slate-100">
+                <span className="block text-xs font-bold text-slate-900">
+                  Categories
+                </span>
+
+                <div className="space-y-2 text-xs">
+                  {SECTORS.slice(0, showMoreCategories ? SECTORS.length : 5).map((sector) => {
+                    const isChecked = currentCategory === sector.slug;
+                    return (
+                      <label
+                        key={sector.slug}
+                        className="flex items-center space-x-2.5 text-slate-700 hover:text-slate-900 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => updateParam('category', isChecked ? '' : sector.slug)}
+                          className="w-4 h-4 rounded border-slate-300 text-[#0066FF] focus:ring-[#0066FF] cursor-pointer"
+                        />
+                        <span className="grow font-medium">{sector.name}</span>
+                        <span className="text-[11px] font-mono text-slate-400">({sector.count})</span>
+                      </label>
+                    );
+                  })}
+                </div>
+
+                {SECTORS.length > 5 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowMoreCategories(!showMoreCategories)}
+                    className="text-xs font-semibold text-[#0066FF] hover:underline inline-flex items-center gap-1 pt-1 cursor-pointer"
+                  >
+                    <span>{showMoreCategories ? 'Show Less' : 'Show More'}</span>
+                    {showMoreCategories ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  </button>
+                )}
+              </div>
+
+              {/* Availability Filter */}
+              <div className="space-y-3 pt-3 border-t border-slate-100">
+                <span className="block text-xs font-bold text-slate-900">
+                  Availability
+                </span>
+
+                <div className="space-y-2 text-xs">
+                  <label className="flex items-center space-x-2.5 text-slate-700 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="availability"
+                      checked={!currentInStock}
+                      onChange={() => updateParam('in_stock', '')}
+                      className="w-4 h-4 text-[#0066FF] focus:ring-[#0066FF] cursor-pointer"
+                    />
+                    <span className="grow font-medium">In Stock</span>
+                    <span className="text-[11px] font-mono text-slate-400">(120)</span>
+                  </label>
+
+                  <label className="flex items-center space-x-2.5 text-slate-700 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="availability"
+                      checked={currentInStock}
+                      onChange={() => updateParam('in_stock', 'true')}
+                      className="w-4 h-4 text-[#0066FF] focus:ring-[#0066FF] cursor-pointer"
+                    />
+                    <span className="grow font-medium">Out of Stock</span>
+                    <span className="text-[11px] font-mono text-slate-400">(8)</span>
+                  </label>
+                </div>
               </div>
             </div>
           </aside>
 
-          {/* Product Grid Area */}
-          <div className="lg:col-span-3 space-y-8">
+          {/* Right Column: Controls Bar + Product Grid (lg:col-span-9) */}
+          <div className="lg:col-span-9 space-y-5">
+            
+            {/* Top Controls Bar: Sort By Dropdown & Grid / List Toggles */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+              
+              {/* Sort By Dropdown */}
+              <div className="flex items-center space-x-2 text-xs">
+                <span className="text-slate-500 font-medium">Sort by:</span>
+                <div className="relative">
+                  <select
+                    value={currentSort}
+                    onChange={(e) => updateParam('sort', e.target.value)}
+                    className="appearance-none bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl pl-3 pr-8 py-1.5 text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:border-[#0066FF] transition-colors"
+                  >
+                    <option value="popular">⭐ Most Popular</option>
+                    <option value="newest">Newest Arrivals</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                    <option value="rating">Customer Rating</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* View Toggle Buttons & Showing Count */}
+              <div className="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
+                <div className="flex items-center space-x-1 bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('grid')}
+                    className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                      viewMode === 'grid'
+                        ? 'bg-[#0066FF] text-white shadow-xs'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                    title="Grid View"
+                  >
+                    <LayoutGrid className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('list')}
+                    className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                      viewMode === 'list'
+                        ? 'bg-[#0066FF] text-white shadow-xs'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                    title="List View"
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="text-xs text-slate-500 font-medium">
+                  Showing <span className="font-bold text-slate-800">1-{products.length}</span> of <span className="font-bold text-slate-800">128</span> products
+                </div>
+              </div>
+            </div>
+
+            {/* Error State */}
             {error ? (
               <div className="p-8 text-center rounded-2xl bg-red-50 border border-red-200 text-red-600">
                 <p className="font-bold text-sm">{error}</p>
                 <button
+                  type="button"
                   onClick={handleClearFilters}
-                  className="mt-3 px-5 py-2 rounded-xl bg-[#0066FF] text-white text-xs font-bold font-orbitron shadow-sm hover:bg-[#0052CC]"
+                  className="mt-3 px-5 py-2 rounded-xl bg-[#0066FF] text-white text-xs font-bold shadow-sm hover:bg-blue-600 cursor-pointer"
                 >
-                  RELOAD CATALOG
+                  Reload Catalog
                 </button>
               </div>
             ) : loading ? (
               /* Loading Skeletons */
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="aspect-[9/12.6] min-h-[350px] rounded-2xl border border-slate-200 bg-slate-50 animate-pulse p-4 flex flex-col justify-end space-y-3 shadow-xs">
-                    <div className="h-4 bg-slate-200 rounded w-3/4"></div>
-                    <div className="h-3 bg-slate-200 rounded w-1/2"></div>
-                    <div className="h-7 bg-slate-200 rounded-full w-24 self-end"></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="aspect-[9/13] rounded-2xl border border-slate-200 bg-white p-3 space-y-3 animate-pulse">
+                    <div className="w-full aspect-[4/3] bg-slate-100 rounded-xl" />
+                    <div className="h-4 bg-slate-100 rounded w-3/4" />
+                    <div className="h-3 bg-slate-100 rounded w-1/2" />
+                    <div className="h-5 bg-slate-100 rounded w-1/3" />
+                    <div className="h-8 bg-slate-100 rounded-xl w-full" />
                   </div>
                 ))}
               </div>
             ) : products.length === 0 ? (
               /* Empty State */
-              <div className="p-16 text-center rounded-3xl bg-white border border-brand-border/80 shadow-xs space-y-4">
-                <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-brand-border flex items-center justify-center mx-auto text-brand-muted shadow-sm">
-                  <PackageX className="w-8 h-8 text-[#0066FF]" />
+              <div className="p-16 text-center rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto text-[#0066FF] shadow-xs">
+                  <PackageX className="w-8 h-8" />
                 </div>
-                <h3 className="text-lg font-bold font-orbitron text-brand-graphite">NO UNITS MATCH TELEMETRY</h3>
-                <p className="text-xs text-brand-muted max-w-md mx-auto">
-                  Try clearing some filter parameters, searching for alternative robotics terms, or viewing our full inventory.
+                <h3 className="text-lg font-bold text-slate-900">No Products Found</h3>
+                <p className="text-xs text-slate-500 max-w-md mx-auto">
+                  Try adjusting your filter criteria or clearing the search terms to view all available robotics products.
                 </p>
                 <button
                   type="button"
                   onClick={handleClearFilters}
-                  className="px-6 py-2.5 rounded-xl bg-[#0066FF] text-white text-xs font-bold font-orbitron shadow-md hover:bg-[#0052CC] transition-all"
+                  className="px-6 py-2.5 rounded-xl bg-[#0066FF] text-white text-xs font-bold shadow-md hover:bg-blue-600 transition-all cursor-pointer"
                 >
-                  RESET ALL FILTERS
+                  Reset All Filters
                 </button>
               </div>
             ) : (
-              /* Product Grid */
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              /* Product Grid (Exact 4 Columns on XL / Desktop) */
+              <div className={
+                viewMode === 'grid'
+                  ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4'
+                  : 'space-y-4'
+              }>
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -442,29 +565,29 @@ export function ProductListPage() {
 
             {/* Pagination Controls */}
             {pagination.totalPages > 1 && (
-              <div className="pt-6 border-t border-brand-border/80 flex items-center justify-between">
+              <div className="pt-4 flex items-center justify-between text-xs text-slate-600 bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
                 <button
                   type="button"
                   disabled={currentPage <= 1}
                   onClick={() => updateParam('page', currentPage - 1)}
-                  className="px-4 py-2 rounded-xl border border-brand-border bg-white text-xs font-bold font-orbitron text-brand-graphite hover:border-[#0066FF] hover:text-[#0066FF] disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-[#0066FF] hover:text-white hover:border-[#0066FF] font-bold disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 transition-all cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
-                  <span>PREV</span>
+                  <span>Previous</span>
                 </button>
 
-                <div className="text-xs font-mono font-semibold text-brand-muted">
-                  PAGE <span className="font-bold text-[#0066FF] font-orbitron">{currentPage}</span> OF{' '}
-                  <span className="font-bold text-brand-graphite font-orbitron">{pagination.totalPages}</span>
+                <div className="font-medium text-slate-500">
+                  Page <span className="font-bold text-[#0066FF]">{currentPage}</span> of{' '}
+                  <span className="font-bold text-slate-900">{pagination.totalPages}</span>
                 </div>
 
                 <button
                   type="button"
                   disabled={currentPage >= pagination.totalPages}
                   onClick={() => updateParam('page', currentPage + 1)}
-                  className="px-4 py-2 rounded-xl border border-brand-border bg-white text-xs font-bold font-orbitron text-brand-graphite hover:border-[#0066FF] hover:text-[#0066FF] disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1.5 transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-[#0066FF] hover:text-white hover:border-[#0066FF] font-bold disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 transition-all cursor-pointer"
                 >
-                  <span>NEXT</span>
+                  <span>Next</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>

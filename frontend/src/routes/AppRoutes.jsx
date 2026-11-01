@@ -62,6 +62,7 @@ export function AppRoutes() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/account" element={<CustomerDashboardPage />} />
         <Route path="/products" element={<ProductListPage />} />
+        <Route path="/shop" element={<ProductListPage />} />
         <Route path="/products/:slug" element={<ProductDetailPage />} />
         <Route path="/categories" element={<ProductListPage />} />
         <Route path="/about" element={<AboutPage />} />
