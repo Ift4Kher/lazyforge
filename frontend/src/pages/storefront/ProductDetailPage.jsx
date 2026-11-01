@@ -85,9 +85,9 @@ export function ProductDetailPage() {
         </p>
         <Link
           to="/products"
-          className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-[#8B5CF6] text-white text-xs font-bold shadow-md hover:bg-[#7C3AED] transition-all"
+          className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-[#0066FF] text-white text-xs font-bold font-orbitron shadow-md hover:bg-[#0052CC] transition-all"
         >
-          <span>Return to Catalog</span>
+          <span>RETURN TO CATALOG</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -132,13 +132,13 @@ export function ProductDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center space-x-2 text-xs font-mono text-brand-muted">
-          <Link to="/" className="hover:text-[#8B5CF6]">Home</Link>
+          <Link to="/" className="hover:text-[#0066FF] transition-colors">Home</Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <Link to="/products" className="hover:text-[#8B5CF6]">Catalog</Link>
+          <Link to="/products" className="hover:text-[#0066FF] transition-colors">Catalog</Link>
           {product.category_name && (
             <>
               <ChevronRight className="w-3.5 h-3.5" />
-              <Link to={`/products?category=${product.category_slug}`} className="hover:text-[#8B5CF6]">
+              <Link to={`/products?category=${product.category_slug}`} className="hover:text-[#0066FF] transition-colors">
                 {product.category_name}
               </Link>
             </>
@@ -153,22 +153,28 @@ export function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Gallery Column */}
           <div className="space-y-4">
-            <div className="relative aspect-square w-full rounded-3xl bg-brand-softGray border border-brand-border overflow-hidden shadow-sm flex items-center justify-center">
+            <div className="relative aspect-square w-full rounded-2xl bg-white border border-brand-border/80 overflow-hidden shadow-xs flex items-center justify-center p-4">
+              {/* Sci-fi corner brackets */}
+              <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#0066FF]/60 pointer-events-none" />
+              <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#0066FF]/60 pointer-events-none" />
+              <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#0066FF]/60 pointer-events-none" />
+              <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#0066FF]/60 pointer-events-none" />
+
               {selectedImage ? (
                 <img
                   src={selectedImage}
                   alt={product.name}
-                  className="w-full h-full object-cover object-center transition-all duration-300"
+                  className="w-full h-full object-contain transition-all duration-300"
                 />
               ) : (
-                <Zap className="w-16 h-16 opacity-30 text-[#8B5CF6]" />
+                <Zap className="w-16 h-16 opacity-30 text-[#0066FF]" />
               )}
 
               {/* 3D Model Showcase Badge */}
               {product.model_3d_url && (
-                <div className="absolute top-4 right-4 inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#8B5CF6]/30 text-xs font-bold text-[#8B5CF6] shadow-sm">
+                <div className="absolute top-4 right-4 inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#0066FF]/30 text-xs font-bold font-orbitron text-[#0066FF] shadow-xs">
                   <Layers className="w-3.5 h-3.5" />
-                  <span>Interactive 3D Available</span>
+                  <span>3D CAD TELEMETRY</span>
                 </div>
               )}
             </div>
@@ -181,13 +187,13 @@ export function ProductDetailPage() {
                     key={img.id}
                     type="button"
                     onClick={() => setSelectedImage(img.image_url)}
-                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 bg-white p-1 ${
                       selectedImage === img.image_url
-                        ? 'border-[#8B5CF6] ring-2 ring-[#8B5CF6]/20'
+                        ? 'border-[#0066FF] ring-2 ring-[#0066FF]/20'
                         : 'border-brand-border opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={img.image_url} alt={img.alt_text || 'Thumbnail'} className="w-full h-full object-cover" />
+                    <img src={img.image_url} alt={img.alt_text || 'Thumbnail'} className="w-full h-full object-contain" />
                   </button>
                 ))}
               </div>
@@ -200,44 +206,44 @@ export function ProductDetailPage() {
               {product.category_name && (
                 <Link
                   to={`/products?category=${product.category_slug}`}
-                  className="text-xs font-mono font-bold text-[#8B5CF6] uppercase tracking-wider block mb-2"
+                  className="text-xs font-mono font-bold text-[#0066FF] uppercase tracking-wider block mb-2"
                 >
                   {product.category_name}
                 </Link>
               )}
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-graphite leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-black font-orbitron text-brand-graphite leading-tight tracking-wide">
                 {product.name}
               </h1>
-              <div className="flex items-center space-x-4 mt-2 text-xs text-brand-muted">
-                <span>SKU: <span className="font-mono font-bold text-brand-graphite">{selectedVariant?.sku || product.sku}</span></span>
+              <div className="flex items-center space-x-4 mt-2.5 text-xs text-brand-muted font-mono">
+                <span>SKU: <span className="font-bold text-brand-graphite">{selectedVariant?.sku || product.sku}</span></span>
                 <span>•</span>
                 {isOutOfStock ? (
                   <span className="text-red-600 font-bold">Out of Stock</span>
                 ) : (
-                  <span className="text-emerald-700 font-bold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>In Stock ({currentStock} available)</span>
+                  <span className="text-emerald-700 font-bold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>In Stock ({currentStock} units verified)</span>
                   </span>
                 )}
               </div>
             </div>
 
             {/* Price Presentation */}
-            <div className="p-4 rounded-2xl bg-brand-softGray border border-brand-border flex items-baseline justify-between">
+            <div className="p-4 rounded-2xl bg-white border border-brand-border/80 shadow-xs flex items-baseline justify-between">
               <div>
-                <span className="text-xs text-brand-muted block font-semibold mb-1">Unit Price:</span>
+                <span className="text-xs text-brand-muted block font-mono font-semibold mb-1">UNIT PRICE:</span>
                 <div className="flex items-baseline space-x-3">
-                  <span className="text-3xl font-black text-brand-graphite">
+                  <span className="text-3xl font-black font-orbitron text-[#0066FF]">
                     ৳{unitPrice.toLocaleString()}
                   </span>
                   {product.sale_price !== null && Number(product.regular_price) > Number(product.sale_price) && (
-                    <span className="text-sm text-brand-muted line-through">
+                    <span className="text-sm font-orbitron text-brand-muted line-through">
                       ৳{Number(product.regular_price).toLocaleString()}
                     </span>
                   )}
                 </div>
               </div>
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-mono">
                 COD Available
               </span>
             </div>
@@ -268,15 +274,15 @@ export function ProductDetailPage() {
                         }}
                         className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all border text-left flex flex-col ${
                           isSelected
-                            ? 'bg-[#8B5CF6] text-white border-[#8B5CF6] shadow-sm'
+                            ? 'bg-[#0066FF] text-white border-[#0066FF] shadow-xs'
                             : isVariantOutOfStock
-                            ? 'bg-brand-softGray border-brand-border text-brand-muted opacity-50 cursor-not-allowed'
-                            : 'bg-white border-brand-border text-brand-graphite hover:border-[#8B5CF6]'
+                            ? 'bg-slate-50 border-brand-border text-brand-muted opacity-50 cursor-not-allowed'
+                            : 'bg-white border-brand-border text-brand-graphite hover:border-[#0066FF]'
                         }`}
                       >
                         <span>{v.variant_name}</span>
                         {v.price_adjustment !== '0.00' && Number(v.price_adjustment) !== 0 && (
-                          <span className={`text-[10px] mt-0.5 ${isSelected ? 'text-purple-100' : 'text-brand-muted'}`}>
+                          <span className={`text-[10px] mt-0.5 ${isSelected ? 'text-blue-100' : 'text-brand-muted'}`}>
                             {Number(v.price_adjustment) > 0 ? `+৳${v.price_adjustment}` : `-৳${Math.abs(v.price_adjustment)}`}
                           </span>
                         )}
@@ -290,30 +296,30 @@ export function ProductDetailPage() {
             {/* Quantity Stepper & Actions */}
             <div className="space-y-3 pt-2">
               <div className="flex items-center space-x-4">
-                <span className="text-xs font-bold text-brand-graphite uppercase font-mono">Quantity:</span>
-                <div className="flex items-center rounded-xl border border-brand-border bg-white overflow-hidden shadow-sm">
+                <span className="text-xs font-bold text-brand-graphite uppercase font-mono">QUANTITY:</span>
+                <div className="flex items-center rounded-xl border border-brand-border bg-white overflow-hidden shadow-xs">
                   <button
                     type="button"
                     disabled={quantity <= 1 || isOutOfStock}
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="p-2 text-brand-graphite hover:bg-brand-softGray disabled:opacity-40"
+                    className="p-2 text-brand-graphite hover:bg-slate-50 disabled:opacity-40"
                   >
                     <Minus className="w-3.5 h-3.5" />
                   </button>
-                  <span className="w-12 text-center text-sm font-bold text-brand-graphite">
+                  <span className="w-12 text-center text-sm font-bold font-mono text-brand-graphite">
                     {quantity}
                   </span>
                   <button
                     type="button"
                     disabled={quantity >= currentStock || isOutOfStock}
                     onClick={() => setQuantity((q) => Math.min(currentStock, q + 1))}
-                    className="p-2 text-brand-graphite hover:bg-brand-softGray disabled:opacity-40"
+                    className="p-2 text-brand-graphite hover:bg-slate-50 disabled:opacity-40"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <div className="text-xs text-brand-muted">
-                  Subtotal: <span className="font-bold text-brand-graphite">৳{totalPrice.toLocaleString()}</span>
+                <div className="text-xs font-mono text-brand-muted">
+                  SUBTOTAL: <span className="font-bold text-[#0066FF] font-orbitron">৳{totalPrice.toLocaleString()}</span>
                 </div>
               </div>
 
@@ -323,42 +329,42 @@ export function ProductDetailPage() {
                   type="button"
                   disabled={isOutOfStock}
                   onClick={handleAddToCart}
-                  className="w-full py-3.5 px-6 rounded-xl text-xs font-bold bg-[#8B5CF6] text-white hover:bg-[#7C3AED] shadow-md hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2"
+                  className="w-full py-3.5 px-6 rounded-xl text-xs font-bold font-orbitron tracking-wider bg-[#0066FF] text-white hover:bg-[#0052CC] shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2"
                 >
                   <ShoppingBag className="w-4 h-4" />
-                  <span>{addedSuccess ? 'Added to Cart!' : 'Add to Cart'}</span>
+                  <span>{addedSuccess ? 'ADDED TO CART!' : 'ADD TO CART'}</span>
                 </button>
 
                 <button
                   type="button"
                   disabled={isOutOfStock}
                   onClick={handleBuyNow}
-                  className="w-full py-3.5 px-6 rounded-xl text-xs font-bold bg-brand-graphite text-white hover:bg-black shadow-md hover:scale-105 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2"
+                  className="w-full py-3.5 px-6 rounded-xl text-xs font-bold font-orbitron tracking-wider bg-brand-graphite text-white hover:bg-black shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2"
                 >
-                  <Zap className="w-4 h-4 text-amber-400" />
-                  <span>Buy Now (Cash on Delivery)</span>
+                  <Zap className="w-4 h-4 text-cyan-400" />
+                  <span>BUY NOW (COD)</span>
                 </button>
               </div>
 
               {addedSuccess && (
-                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800 text-center animate-fade-in">
-                  ✓ Successfully added to cart! <Link to="/cart" className="underline font-bold ml-1">View Cart & Checkout</Link>
+                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800 text-center animate-fade-in font-mono">
+                  ✓ Successfully added to cart! <Link to="/cart" className="underline font-bold ml-1">View Cart &amp; Checkout</Link>
                 </div>
               )}
             </div>
 
             {/* Trust Assurances */}
-            <div className="pt-4 border-t border-brand-border grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-brand-muted">
-              <div className="flex items-center space-x-2 p-2.5 rounded-xl bg-brand-softGray">
-                <Truck className="w-4 h-4 text-[#8B5CF6] shrink-0" />
+            <div className="pt-4 border-t border-brand-border/80 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-brand-muted">
+              <div className="flex items-center space-x-2 p-3 rounded-xl bg-white border border-brand-border/80 shadow-xs">
+                <Truck className="w-4 h-4 text-[#0066FF] shrink-0" />
                 <span>64 Districts Delivery</span>
               </div>
-              <div className="flex items-center space-x-2 p-2.5 rounded-xl bg-brand-softGray">
-                <ShieldCheck className="w-4 h-4 text-[#8B5CF6] shrink-0" />
+              <div className="flex items-center space-x-2 p-3 rounded-xl bg-white border border-brand-border/80 shadow-xs">
+                <ShieldCheck className="w-4 h-4 text-[#0066FF] shrink-0" />
                 <span>100% Genuine Hardware</span>
               </div>
-              <div className="flex items-center space-x-2 p-2.5 rounded-xl bg-brand-softGray">
-                <RotateCcw className="w-4 h-4 text-[#8B5CF6] shrink-0" />
+              <div className="flex items-center space-x-2 p-3 rounded-xl bg-white border border-brand-border/80 shadow-xs">
+                <RotateCcw className="w-4 h-4 text-[#0066FF] shrink-0" />
                 <span>7 Days Replacement</span>
               </div>
             </div>
@@ -366,10 +372,10 @@ export function ProductDetailPage() {
         </div>
 
         {/* Detailed Description & Specifications */}
-        <div className="pt-8 border-t border-brand-border space-y-8">
+        <div className="pt-8 border-t border-brand-border/80 space-y-8">
           <div>
-            <h2 className="text-xl font-extrabold text-brand-graphite mb-4">
-              Engineering Details & Overview
+            <h2 className="text-xl font-black font-orbitron text-brand-graphite mb-4 tracking-wide">
+              ENGINEERING DETAILS &amp; OVERVIEW
             </h2>
             <div className="prose prose-sm max-w-none text-brand-muted leading-relaxed space-y-4">
               <p>{product.description}</p>
@@ -379,20 +385,20 @@ export function ProductDetailPage() {
           {/* Technical Specifications Table */}
           {Object.keys(specifications).length > 0 && (
             <div>
-              <h2 className="text-xl font-extrabold text-brand-graphite mb-4 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-[#8B5CF6]" />
-                <span>Technical Specifications</span>
+              <h2 className="text-xl font-black font-orbitron text-brand-graphite mb-4 flex items-center gap-2 tracking-wide">
+                <Sparkles className="w-5 h-5 text-[#0066FF]" />
+                <span>TECHNICAL SPECIFICATIONS</span>
               </h2>
-              <div className="rounded-2xl border border-brand-border overflow-hidden">
+              <div className="rounded-2xl border border-brand-border overflow-hidden bg-white shadow-xs">
                 <div className="divide-y divide-brand-border">
                   {Object.entries(specifications).map(([key, value], idx) => (
                     <div
                       key={key}
                       className={`grid grid-cols-1 sm:grid-cols-3 px-6 py-3.5 text-xs ${
-                        idx % 2 === 0 ? 'bg-white' : 'bg-brand-softGray/50'
+                        idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/70'
                       }`}
                     >
-                      <span className="font-bold text-brand-graphite">{key}</span>
+                      <span className="font-bold font-mono text-brand-graphite">{key}</span>
                       <span className="sm:col-span-2 text-brand-muted font-mono">{String(value)}</span>
                     </div>
                   ))}
@@ -436,19 +442,19 @@ export function ProductDetailPage() {
 
         {/* Related Products Shelf */}
         {product.relatedProducts && product.relatedProducts.length > 0 && (
-          <div className="pt-10 border-t border-brand-border space-y-6">
+          <div className="pt-10 border-t border-brand-border/80 space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-mono font-bold text-[#8B5CF6] uppercase">Related Hardware</span>
-                <h2 className="text-2xl font-extrabold text-brand-graphite mt-0.5">
-                  Frequently Engineered Together
+                <span className="text-xs font-mono font-bold text-[#0066FF] uppercase">Related Hardware</span>
+                <h2 className="text-2xl font-black font-orbitron text-brand-graphite mt-0.5 tracking-wide">
+                  FREQUENTLY ENGINEERED TOGETHER
                 </h2>
               </div>
               <Link
                 to={`/products?category=${product.category_slug}`}
-                className="text-xs font-bold text-[#8B5CF6] hover:underline flex items-center gap-1"
+                className="text-xs font-bold font-orbitron text-[#0066FF] hover:underline flex items-center gap-1"
               >
-                <span>More in {product.category_name}</span>
+                <span>MORE IN {product.category_name}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>

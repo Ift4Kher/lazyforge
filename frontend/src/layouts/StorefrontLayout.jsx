@@ -20,7 +20,7 @@ export function StorefrontLayout() {
   }, [location.search]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-brand-graphite">
+    <div className="flex flex-col min-h-screen bg-white cyber-grid-light text-brand-graphite">
       <Navbar />
       <main className="flex-1">
         <Outlet />

@@ -59,14 +59,19 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="min-h-[75vh] flex items-center justify-center px-4 py-12 bg-white">
-      <div className="max-w-md w-full bg-white border border-brand-border rounded-3xl p-8 shadow-card-hover space-y-6">
+    <div className="min-h-[75vh] flex items-center justify-center px-4 py-12">
+      <div className="max-w-md w-full bg-white border border-brand-border/80 rounded-3xl p-8 shadow-xs space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-brand-softGray border border-brand-accent/30 mx-auto flex items-center justify-center shadow-sm">
-            <User className="w-6 h-6 text-brand-accent" />
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-[#0066FF]/30 mx-auto flex items-center justify-center shadow-xs">
+            <User className="w-6 h-6 text-[#0066FF]" />
           </div>
-          <h2 className="text-2xl font-extrabold text-brand-graphite">Create LazyForge Account</h2>
+          <div className="text-[10px] font-mono uppercase tracking-widest text-[#0066FF] font-bold">
+            NEW NODE INITIALIZATION
+          </div>
+          <h2 className="text-2xl font-black font-orbitron text-brand-graphite tracking-wide">
+            CREATE FORGE ACCOUNT
+          </h2>
           <p className="text-xs text-brand-muted">
             Join the robotics collective to manage hardware orders and support tickets
           </p>
@@ -83,8 +88,8 @@ export function RegisterPage() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-brand-graphite mb-1.5">
-              Full Name <span className="text-red-500">*</span>
+            <label className="block text-xs font-mono font-bold text-brand-graphite mb-1.5">
+              FULL NAME <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <User className="w-4 h-4 text-brand-muted absolute left-3.5 top-3.5" />
@@ -95,14 +100,14 @@ export function RegisterPage() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="e.g. Asif Mahmud"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-brand-softGray border border-brand-border focus:border-brand-accent text-sm text-brand-graphite placeholder-brand-muted focus:outline-none transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-brand-border text-xs text-brand-graphite placeholder-brand-muted focus:border-[#0066FF] focus:bg-white focus:outline-none transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-brand-graphite mb-1.5">
-              Email Address <span className="text-red-500">*</span>
+            <label className="block text-xs font-mono font-bold text-brand-graphite mb-1.5">
+              EMAIL ADDRESS <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-brand-muted absolute left-3.5 top-3.5" />
@@ -113,14 +118,14 @@ export function RegisterPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="name@domain.com"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-brand-softGray border border-brand-border focus:border-brand-accent text-sm text-brand-graphite placeholder-brand-muted focus:outline-none transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-brand-border text-xs text-brand-graphite placeholder-brand-muted focus:border-[#0066FF] focus:bg-white focus:outline-none transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-brand-graphite mb-1.5">
-              Mobile Number (Optional)
+            <label className="block text-xs font-mono font-bold text-brand-graphite mb-1.5">
+              MOBILE NUMBER (BD)
             </label>
             <div className="relative">
               <Phone className="w-4 h-4 text-brand-muted absolute left-3.5 top-3.5" />
@@ -130,14 +135,14 @@ export function RegisterPage() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="017XXXXXXXX"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-brand-softGray border border-brand-border focus:border-brand-accent text-sm font-mono text-brand-graphite placeholder-brand-muted focus:outline-none transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-brand-border text-xs font-mono text-brand-graphite placeholder-brand-muted focus:border-[#0066FF] focus:bg-white focus:outline-none transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-brand-graphite mb-1.5">
-              Password <span className="text-red-500">*</span>
+            <label className="block text-xs font-mono font-bold text-brand-graphite mb-1.5">
+              PASSWORD <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-brand-muted absolute left-3.5 top-3.5" />
@@ -148,14 +153,14 @@ export function RegisterPage() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Minimum 6 characters"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-brand-softGray border border-brand-border focus:border-brand-accent text-sm text-brand-graphite placeholder-brand-muted focus:outline-none transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-brand-border text-xs text-brand-graphite placeholder-brand-muted focus:border-[#0066FF] focus:bg-white focus:outline-none transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-brand-graphite mb-1.5">
-              Confirm Password <span className="text-red-500">*</span>
+            <label className="block text-xs font-mono font-bold text-brand-graphite mb-1.5">
+              CONFIRM PASSWORD <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-brand-muted absolute left-3.5 top-3.5" />
@@ -166,7 +171,7 @@ export function RegisterPage() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Re-enter password"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-brand-softGray border border-brand-border focus:border-brand-accent text-sm text-brand-graphite placeholder-brand-muted focus:outline-none transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-brand-border text-xs text-brand-graphite placeholder-brand-muted focus:border-[#0066FF] focus:bg-white focus:outline-none transition-colors"
               />
             </div>
           </div>
@@ -174,9 +179,9 @@ export function RegisterPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3 px-4 rounded-xl font-semibold text-sm bg-brand-accent text-white hover:bg-brand-accentHover shadow-glow-sm disabled:opacity-50 transition-all flex items-center justify-center space-x-2"
+            className="w-full py-3 px-4 rounded-xl font-bold font-orbitron text-xs tracking-wider bg-[#0066FF] text-white hover:bg-[#0052CC] shadow-md disabled:opacity-50 transition-all flex items-center justify-center space-x-2"
           >
-            <span>{isSubmitting ? 'Creating Account...' : 'Register Account'}</span>
+            <span>{isSubmitting ? 'CREATING NODE...' : 'INITIALIZE ACCOUNT'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -185,8 +190,8 @@ export function RegisterPage() {
         <div className="pt-4 border-t border-brand-border/60 text-center">
           <p className="text-xs text-brand-muted">
             Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-brand-accent hover:underline">
-              Sign In
+            <Link to="/login" className="font-bold text-[#0066FF] hover:underline font-mono">
+              Authorize Session
             </Link>
           </p>
         </div>

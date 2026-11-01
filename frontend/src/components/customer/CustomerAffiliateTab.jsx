@@ -135,16 +135,16 @@ export function CustomerAffiliateTab() {
   if (!affiliateData || !affiliateData.isAffiliate) {
     return (
       <div className="space-y-6">
-        <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-graphite via-[#1E1B4B] to-brand-graphite text-white border border-purple-500/30 shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="p-8 rounded-3xl bg-[#0B0F19] text-white border border-[#0066FF]/30 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#0066FF]/10 rounded-full blur-3xl pointer-events-none" />
           
           <div className="max-w-2xl space-y-4 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-[#00F0FF] text-[11px] font-mono font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00D2FF]/10 border border-[#00D2FF]/30 text-[#00D2FF] text-[11px] font-mono font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Maker & Creator Alliance</span>
             </div>
             
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black font-orbitron text-white tracking-wide">
               Earn 5% Commission on Hardware Referrals
             </h2>
             
@@ -152,13 +152,13 @@ export function CustomerAffiliateTab() {
               Share your custom LazyForge link with researchers, students, and robotics makers. Every time someone completes an order using your link or code, 5% of the hardware order value is credited directly to your partner wallet.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs font-mono">
               <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                <span className="font-bold text-[#00F0FF] block">5.0% Baseline</span>
+                <span className="font-bold text-[#00D2FF] block">5.0% Baseline</span>
                 <span className="text-gray-400 text-[11px]">On all robotics & kits</span>
               </div>
               <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                <span className="font-bold text-purple-300 block">৳500 Threshold</span>
+                <span className="font-bold text-blue-300 block">৳500 Threshold</span>
                 <span className="text-gray-400 text-[11px]">Direct bKash / Nagad</span>
               </div>
               <div className="p-3 rounded-xl bg-white/5 border border-white/10">
@@ -243,20 +243,20 @@ export function CustomerAffiliateTab() {
       )}
 
       {/* Referral Link Showcase Box */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-brand-graphite to-[#1E1B4B] text-white border border-purple-500/30 shadow-lg space-y-4">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#0B0F19] text-white border border-[#0066FF]/30 shadow-lg space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#00F0FF]">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#00D2FF]">
               Your Active Partner Link
             </span>
-            <h3 className="text-xl font-black text-white mt-0.5">
-              Share & Earn 5% On Every Order
+            <h3 className="text-xl font-black font-orbitron text-white mt-0.5 tracking-wide">
+              Share &amp; Earn 5% On Every Order
             </h3>
           </div>
           <button
             onClick={() => setShowPayoutModal(true)}
             disabled={aff.balance < 500}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00F0FF] hover:bg-[#00D4E0] text-brand-graphite text-xs font-extrabold shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed self-start sm:self-auto"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-bold font-orbitron shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed self-start sm:self-auto"
           >
             <Wallet className="w-4 h-4" />
             <span>Request Payout</span>
@@ -268,16 +268,16 @@ export function CustomerAffiliateTab() {
             type="text"
             readOnly
             value={referralLink}
-            className="bg-transparent px-3 py-2 text-xs font-mono text-purple-200 focus:outline-none flex-1 truncate"
+            className="bg-transparent px-3 py-2 text-xs font-mono text-blue-200 focus:outline-none flex-1 truncate"
           />
           <button
             onClick={handleCopyLink}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9] text-white text-xs font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2 shrink-0"
+            className="px-5 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-bold font-orbitron transition-all flex items-center justify-center gap-2 shrink-0"
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 text-[#00F0FF]" />
-                <span className="text-[#00F0FF]">Copied Link!</span>
+                <Check className="w-4 h-4 text-[#00D2FF]" />
+                <span className="text-[#00D2FF]">Copied Link!</span>
               </>
             ) : (
               <>
@@ -312,7 +312,7 @@ export function CustomerAffiliateTab() {
 
         <div className="p-5 rounded-2xl bg-white border border-gray-100 shadow-xs">
           <span className="text-xs text-gray-400 block mb-1">Commission Rate</span>
-          <span className="text-2xl font-black text-[#8B5CF6] font-mono">
+          <span className="text-2xl font-black text-[#0066FF] font-orbitron font-mono">
             {aff.commissionRate}%
           </span>
           <span className="text-[10px] text-gray-400 block mt-1">On hardware subtotal</span>
@@ -354,7 +354,7 @@ export function CustomerAffiliateTab() {
                     <span className="font-mono font-bold text-brand-graphite">
                       Order #{ref.orderNumber}
                     </span>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-purple-50 text-purple-700 border border-purple-200">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-blue-50 text-[#0066FF] border border-blue-200">
                       {ref.orderStatus}
                     </span>
                   </div>
@@ -392,8 +392,8 @@ export function CustomerAffiliateTab() {
           >
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <div>
-                <h4 className="text-base font-black text-brand-graphite">Request Commission Payout</h4>
-                <p className="text-xs text-brand-muted">Available balance: ৳{aff.balance.toFixed(2)}</p>
+                <h4 className="text-base font-black font-orbitron text-brand-graphite">REQUEST COMMISSION PAYOUT</h4>
+                <p className="text-xs text-brand-muted font-mono">Available balance: ৳{aff.balance.toFixed(2)}</p>
               </div>
               <button
                 type="button"
@@ -405,13 +405,13 @@ export function CustomerAffiliateTab() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">
+              <label className="block text-xs font-bold text-gray-700 mb-1 font-mono">
                 Disbursement Gateway
               </label>
               <select
                 value={payoutMethod}
                 onChange={(e) => setPayoutMethod(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs text-brand-graphite focus:outline-none focus:border-[#8B5CF6]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs text-brand-graphite focus:outline-none focus:border-[#0066FF]"
               >
                 <option value="bKash">bKash (Personal/Merchant)</option>
                 <option value="Nagad">Nagad</option>
@@ -421,7 +421,7 @@ export function CustomerAffiliateTab() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">
+              <label className="block text-xs font-bold text-gray-700 mb-1 font-mono">
                 Wallet Number / Account Info
               </label>
               <input
@@ -429,12 +429,12 @@ export function CustomerAffiliateTab() {
                 value={payoutDetails}
                 onChange={(e) => setPayoutDetails(e.target.value)}
                 placeholder="e.g. 017XXXXXXXX (bKash Personal)"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs text-brand-graphite focus:outline-none focus:border-[#8B5CF6]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs text-brand-graphite focus:outline-none focus:border-[#0066FF]"
                 required
               />
             </div>
 
-            <div className="p-3 rounded-xl bg-purple-50 border border-purple-100 text-[11px] text-purple-800">
+            <div className="p-3 rounded-xl bg-blue-50 border border-blue-100 text-[11px] text-blue-800 font-mono">
               Payouts are audited and disbursed within 24–48 hours by LazyForge Finance.
             </div>
 
@@ -449,9 +449,9 @@ export function CustomerAffiliateTab() {
               <button
                 type="submit"
                 disabled={requestingPayout}
-                className="px-5 py-2 rounded-xl bg-[#8B5CF6] text-white text-xs font-bold hover:bg-[#7C3AED] transition-all disabled:opacity-50"
+                className="px-5 py-2 rounded-xl bg-[#0066FF] text-white text-xs font-bold font-orbitron hover:bg-[#0052CC] transition-all disabled:opacity-50"
               >
-                {requestingPayout ? 'Submitting...' : 'Confirm Payout Request'}
+                {requestingPayout ? 'Submitting...' : 'CONFIRM PAYOUT'}
               </button>
             </div>
           </form>

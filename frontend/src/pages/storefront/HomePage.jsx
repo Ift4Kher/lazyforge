@@ -163,38 +163,46 @@ export function HomePage() {
       {/* Multi-Product 3D Showcase Section */}
       <Product3DShowcaseSection />
 
-      {/* Why Choose LazyForge Highlights */}
+      {/* Why Choose LazyForge Highlights (Sci-Fi Chamfered Cards) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-brand-softGray border border-brand-border space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-white border border-brand-border flex items-center justify-center text-[#8B5CF6] shadow-sm">
-              <Truck className="w-5 h-5" />
+          
+          <div className="group relative p-[1.5px] bg-slate-200/90 hover:bg-[#0066FF] clip-chamfer-tl-bl-18 rounded-tr-2xl rounded-br-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,102,255,0.15)]">
+            <div className="w-full h-full bg-white clip-chamfer-tl-bl-18-inner rounded-tr-[15px] rounded-br-[15px] p-6 space-y-3 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#0066FF] shadow-2xs group-hover:scale-110 transition-transform">
+                <Truck className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 font-['Orbitron',sans-serif] tracking-tight">Nationwide Express Delivery</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                Fast reliable dispatch across Bangladesh with verified Cash on Delivery support.
+              </p>
             </div>
-            <h3 className="text-base font-bold text-brand-graphite">Nationwide Express Delivery</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Fast reliable dispatch across Bangladesh with verified Cash on Delivery support.
-            </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-brand-softGray border border-brand-border space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-white border border-brand-border flex items-center justify-center text-[#8B5CF6] shadow-sm">
-              <ShieldCheck className="w-5 h-5" />
+          <div className="group relative p-[1.5px] bg-slate-200/90 hover:bg-[#0066FF] clip-chamfer-tl-bl-18 rounded-tr-2xl rounded-br-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,102,255,0.15)]">
+            <div className="w-full h-full bg-white clip-chamfer-tl-bl-18-inner rounded-tr-[15px] rounded-br-[15px] p-6 space-y-3 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#0066FF] shadow-2xs group-hover:scale-110 transition-transform">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 font-['Orbitron',sans-serif] tracking-tight">Quality-Tested Components</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                Every microcontroller, servo, and 3D print is bench-tested by electronics engineers prior to packaging.
+              </p>
             </div>
-            <h3 className="text-base font-bold text-brand-graphite">Quality-Tested Components</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Every microcontroller, servo, and 3D print is bench-tested by electronics engineers prior to packaging.
-            </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-brand-softGray border border-brand-border space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-white border border-brand-border flex items-center justify-center text-[#8B5CF6] shadow-sm">
-              <RotateCcw className="w-5 h-5" />
+          <div className="group relative p-[1.5px] bg-slate-200/90 hover:bg-[#0066FF] clip-chamfer-tl-bl-18 rounded-tr-2xl rounded-br-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,102,255,0.15)]">
+            <div className="w-full h-full bg-white clip-chamfer-tl-bl-18-inner rounded-tr-[15px] rounded-br-[15px] p-6 space-y-3 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#0066FF] shadow-2xs group-hover:scale-110 transition-transform">
+                <RotateCcw className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 font-['Orbitron',sans-serif] tracking-tight">7-Day Hassle-Free Replacement</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                Direct developer assistance and prompt replacement for any manufacturing defects or shipping issues.
+              </p>
             </div>
-            <h3 className="text-base font-bold text-brand-graphite">7-Day Hassle-Free Replacement</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Direct developer assistance and prompt replacement for any manufacturing defects or shipping issues.
-            </p>
           </div>
+
         </div>
       </section>
     </div>

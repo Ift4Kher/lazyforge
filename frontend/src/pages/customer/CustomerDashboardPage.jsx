@@ -120,16 +120,16 @@ export function CustomerDashboardPage() {
 
         <button
           onClick={() => setActiveTab('affiliate')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold font-orbitron transition-all ${
             activeTab === 'affiliate'
-              ? 'bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9] text-white shadow-md shadow-purple-500/20'
-              : 'text-gray-500 hover:text-[#8B5CF6] hover:bg-purple-50'
+              ? 'bg-[#0066FF] text-white shadow-md shadow-blue-500/20'
+              : 'text-gray-500 hover:text-[#0066FF] hover:bg-blue-50'
           }`}
         >
-          <Gift className="w-4 h-4 text-[#00F0FF]" />
-          <span>Creator & Affiliate Alliance</span>
-          <span className="px-2 py-0.5 rounded-full text-[9px] bg-[#00F0FF]/20 text-[#00F0FF] font-bold uppercase tracking-wider">
-            Earn 5%
+          <Gift className="w-4 h-4 text-[#00D2FF]" />
+          <span>CREATOR &amp; AFFILIATE ALLIANCE</span>
+          <span className="px-2 py-0.5 rounded-full text-[9px] bg-[#00D2FF]/20 text-[#00D2FF] font-bold uppercase tracking-wider">
+            EARN 5%
           </span>
         </button>
       </div>

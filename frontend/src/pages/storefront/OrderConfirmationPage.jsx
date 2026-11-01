@@ -82,7 +82,7 @@ export function OrderConfirmationPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       {/* Top Celebration / Status Card */}
       <div
-        className={`p-6 sm:p-8 rounded-3xl border text-center mb-8 ${
+        className={`p-6 sm:p-8 rounded-3xl border text-center mb-8 shadow-xs ${
           isFailed || isCancelled
             ? 'bg-red-50/60 border-red-200'
             : 'bg-emerald-50/60 border-emerald-200'
@@ -101,16 +101,16 @@ export function OrderConfirmationPage() {
         </div>
 
         <span className="text-xs font-mono font-bold uppercase tracking-wider text-brand-muted">
-          Order Confirmation
+          Order Confirmation Telemetry
         </span>
-        <h1 className="text-2xl sm:text-3xl font-black text-brand-graphite mt-1 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-black font-orbitron text-brand-graphite mt-1 tracking-wide">
           {isFailed
-            ? 'Payment Failed'
+            ? 'PAYMENT FAILED'
             : isCancelled
-            ? 'Order Cancelled'
+            ? 'ORDER CANCELLED'
             : isPaid
-            ? 'Payment Confirmed & Processing'
-            : 'Order Placed Successfully!'}
+            ? 'PAYMENT CONFIRMED & PROCESSING'
+            : 'ORDER PLACED SUCCESSFULLY!'}
         </h1>
         <p className="text-xs text-brand-muted max-w-md mx-auto mt-2">
           {isFailed
@@ -118,18 +118,18 @@ export function OrderConfirmationPage() {
             : 'Thank you for choosing LazyForge Technologies. Your hardware assembly and dispatch sequence has been queued.'}
         </p>
 
-        <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-white border border-gray-200 shadow-xs">
-          <span className="text-xs text-gray-500">Order Number:</span>
-          <span className="font-mono text-sm font-black text-brand-accent">{order.order_number}</span>
+        <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-white border border-brand-border/80 shadow-xs">
+          <span className="text-xs font-mono text-gray-500">Order Number:</span>
+          <span className="font-mono text-sm font-black text-[#0066FF]">{order.order_number}</span>
         </div>
       </div>
 
       {/* Main Order Details Card */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm space-y-8">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-brand-border/80 shadow-xs space-y-8">
         {/* Key Attributes Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-2xl bg-brand-softGray text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-2xl bg-slate-50 border border-brand-border/60 text-xs font-mono">
           <div>
-            <span className="text-gray-400 block text-[11px]">Order Date</span>
+            <span className="text-gray-400 block text-[11px]">ORDER DATE</span>
             <span className="font-bold text-brand-graphite">
               {new Date(order.created_at).toLocaleDateString('en-GB', {
                 day: 'numeric',
@@ -139,13 +139,13 @@ export function OrderConfirmationPage() {
             </span>
           </div>
           <div>
-            <span className="text-gray-400 block text-[11px]">Payment Method</span>
+            <span className="text-gray-400 block text-[11px]">PAYMENT METHOD</span>
             <span className="font-bold text-brand-graphite">
               {order.payment_method === 'COD' ? 'Cash on Delivery' : 'Online (SSLCommerz)'}
             </span>
           </div>
           <div>
-            <span className="text-gray-400 block text-[11px]">Payment Status</span>
+            <span className="text-gray-400 block text-[11px]">PAYMENT STATUS</span>
             <span
               className={`font-black font-mono ${
                 order.payment_status === 'PAID'
@@ -159,32 +159,32 @@ export function OrderConfirmationPage() {
             </span>
           </div>
           <div>
-            <span className="text-gray-400 block text-[11px]">Fulfillment Status</span>
-            <span className="font-black font-mono text-brand-accent">{order.order_status}</span>
+            <span className="text-gray-400 block text-[11px]">FULFILLMENT STATUS</span>
+            <span className="font-black font-mono text-[#0066FF]">{order.order_status}</span>
           </div>
         </div>
 
         {/* Recipient & Shipping Location */}
-        <div className="p-5 rounded-2xl border border-gray-100 space-y-3">
-          <h2 className="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-brand-accent" />
-            Delivery Credentials
+        <div className="p-5 rounded-2xl border border-brand-border/80 space-y-3 bg-white">
+          <h2 className="text-xs font-black font-orbitron uppercase tracking-wider text-brand-graphite flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-[#0066FF]" />
+            DELIVERY CREDENTIALS
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
             <div className="flex items-center gap-2 text-brand-graphite">
-              <User className="w-4 h-4 text-gray-400 flex-shrink-0" />
+              <User className="w-4 h-4 text-[#0066FF] flex-shrink-0" />
               <span className="font-bold">{order.customer_name}</span>
             </div>
             <div className="flex items-center gap-2 text-brand-graphite font-mono">
-              <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+              <Phone className="w-4 h-4 text-[#0066FF] flex-shrink-0" />
               <span>{order.customer_phone}</span>
             </div>
             <div className="flex items-center gap-2 text-brand-graphite">
-              <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+              <MapPin className="w-4 h-4 text-[#0066FF] flex-shrink-0" />
               <span>{order.delivery_city}</span>
             </div>
           </div>
-          <p className="text-xs text-gray-600 pt-1 border-t border-gray-50">
+          <p className="text-xs text-gray-600 pt-1 border-t border-gray-100 font-mono">
             <span className="font-semibold text-gray-700">Address: </span>
             {order.delivery_address}
           </p>
@@ -192,34 +192,34 @@ export function OrderConfirmationPage() {
 
         {/* Line Items Table */}
         <div className="space-y-4">
-          <h2 className="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-            <PackageCheck className="w-3.5 h-3.5 text-brand-accent" />
-            Purchased Artifacts
+          <h2 className="text-xs font-black font-orbitron uppercase tracking-wider text-brand-graphite flex items-center gap-1.5">
+            <PackageCheck className="w-3.5 h-3.5 text-[#0066FF]" />
+            PURCHASED ARTIFACTS
           </h2>
 
-          <div className="border border-gray-100 rounded-2xl overflow-hidden divide-y divide-gray-100 text-xs">
+          <div className="border border-brand-border/80 rounded-2xl overflow-hidden divide-y divide-gray-100 text-xs">
             {order.items &&
               order.items.map((item) => (
-                <div key={item.id} className="p-4 flex items-center justify-between gap-4">
+                <div key={item.id} className="p-4 flex items-center justify-between gap-4 bg-white">
                   <div className="flex items-center gap-3 min-w-0">
                     <img
                       src={item.image_url || 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=200&q=80'}
                       alt={item.product_name}
-                      className="w-12 h-12 rounded-xl object-contain bg-brand-softGray p-1 border border-gray-100 flex-shrink-0"
+                      className="w-12 h-12 rounded-xl object-contain bg-slate-50 p-1 border border-brand-border flex-shrink-0"
                     />
                     <div className="min-w-0">
                       <p className="font-bold text-brand-graphite truncate">{item.product_name}</p>
                       {item.variant_name && (
-                        <p className="text-[11px] text-gray-500">Edition: {item.variant_name}</p>
+                        <p className="text-[11px] text-gray-500 font-mono">Edition: {item.variant_name}</p>
                       )}
                       <p className="text-[10px] font-mono text-gray-400">SKU: {item.sku}</p>
                     </div>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <p className="text-xs font-black text-brand-graphite">
+                    <p className="text-xs font-black font-orbitron text-brand-graphite">
                       ৳{Number(item.total_price).toLocaleString()}
                     </p>
-                    <p className="text-[10px] text-gray-400">
+                    <p className="text-[10px] font-mono text-gray-400">
                       {item.quantity} × ৳{Number(item.unit_price).toLocaleString()}
                     </p>
                   </div>
@@ -229,7 +229,7 @@ export function OrderConfirmationPage() {
         </div>
 
         {/* Pricing Summary */}
-        <div className="p-5 rounded-2xl bg-brand-softGray border border-gray-100 space-y-2 text-xs">
+        <div className="p-5 rounded-2xl bg-slate-50 border border-brand-border/80 space-y-2 text-xs">
           <div className="flex justify-between text-gray-600">
             <span>Subtotal</span>
             <span className="font-mono font-bold text-brand-graphite">
@@ -249,8 +249,8 @@ export function OrderConfirmationPage() {
             </div>
           )}
           <div className="flex justify-between text-sm font-black text-brand-graphite pt-2 border-t border-gray-200">
-            <span>Grand Total</span>
-            <span className="font-mono text-brand-accent">৳{Number(order.total_amount).toLocaleString()}</span>
+            <span className="font-orbitron">GRAND TOTAL</span>
+            <span className="font-orbitron font-black text-[#0066FF]">৳{Number(order.total_amount).toLocaleString()}</span>
           </div>
         </div>
 
@@ -258,17 +258,17 @@ export function OrderConfirmationPage() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-100">
           <button
             onClick={() => window.print()}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-brand-border text-xs font-bold font-orbitron text-gray-700 hover:bg-slate-50 transition-colors shadow-xs"
           >
-            <Printer className="w-3.5 h-3.5" />
-            Print Invoice
+            <Printer className="w-3.5 h-3.5 text-[#0066FF]" />
+            PRINT INVOICE
           </button>
 
           <Link
             to="/products"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-bold text-xs bg-brand-accent text-white hover:bg-brand-accentHover shadow-glow-sm transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-bold font-orbitron text-xs bg-[#0066FF] text-white hover:bg-[#0052CC] shadow-md transition-all"
           >
-            Continue Shopping
+            <span>CONTINUE SHOPPING</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

@@ -834,7 +834,7 @@ export function RobotViewer3D({
 
   return (
     <div
-      className={`relative rounded-3xl overflow-hidden bg-[#0A0D14] border border-purple-500/30 shadow-2xl ${className}`}
+      className={`relative rounded-3xl overflow-hidden bg-[#0A0D14] border border-[#0066FF]/30 shadow-2xl ${className}`}
     >
       {/* WebGL Canvas Container or Fallback */}
       {webglSupported ? (
@@ -842,9 +842,9 @@ export function RobotViewer3D({
       ) : (
         <div
           style={{ height }}
-          className="w-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-[#0F111A] to-[#1E1B4B]"
+          className="w-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-[#0F111A] to-[#0B1528]"
         >
-          <div className="w-20 h-20 rounded-2xl bg-brand-accent/20 border border-brand-accent/40 flex items-center justify-center text-brand-accent mb-4 animate-pulse">
+          <div className="w-20 h-20 rounded-2xl bg-[#0066FF]/20 border border-[#0066FF]/40 flex items-center justify-center text-[#00D2FF] mb-4 animate-pulse">
             <Cpu className="w-10 h-10" />
           </div>
           <h4 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
@@ -858,8 +858,8 @@ export function RobotViewer3D({
 
       {/* Floating Header Badge */}
       <div className="absolute top-4 left-4 flex flex-col gap-1 pointer-events-none z-10">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-brand-accent/20 border border-brand-accent/40 text-brand-accent backdrop-blur-md shadow-glow-sm">
-          <Bot className="w-3.5 h-3.5 animate-pulse text-cyan-400" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] backdrop-blur-md shadow-glow-sm">
+          <Bot className="w-3.5 h-3.5 animate-pulse text-[#00D2FF]" />
           <span>{getModelLabel()}</span>
         </span>
         {loadError && (
@@ -872,17 +872,17 @@ export function RobotViewer3D({
       {/* Real-time Telemetry HUD */}
       {showTelemetry && (
         <div className="absolute bottom-4 left-4 p-3 rounded-2xl bg-black/70 border border-white/10 backdrop-blur-md text-[10px] font-mono text-slate-300 space-y-1 pointer-events-none hidden sm:block z-10 shadow-lg">
-          <div className="flex items-center gap-2 pb-1 border-b border-white/10 text-cyan-400 font-bold">
+          <div className="flex items-center gap-2 pb-1 border-b border-white/10 text-[#00D2FF] font-bold">
             <Activity className="w-3 h-3 animate-spin" />
             <span>LIVE 60 FPS TELEMETRY</span>
           </div>
           <div className="flex justify-between gap-4">
             <span className="text-slate-400">PITCH:</span>
-            <span className="text-purple-400 font-bold">{telemetry.rotX}&deg;</span>
+            <span className="text-[#00D2FF] font-bold">{telemetry.rotX}&deg;</span>
           </div>
           <div className="flex justify-between gap-4">
             <span className="text-slate-400">YAW:</span>
-            <span className="text-purple-400 font-bold">{telemetry.rotY}&deg;</span>
+            <span className="text-[#00D2FF] font-bold">{telemetry.rotY}&deg;</span>
           </div>
           <div className="flex justify-between gap-4">
             <span className="text-slate-400">ZOOM:</span>

@@ -181,16 +181,16 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
   return (
     <section className={`relative overflow-hidden py-16 sm:py-24 bg-[#080B11] text-white border-y border-white/5 ${className}`}>
       {/* Sci-Fi Cyber Ambient Background Gradients */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/15 rounded-full blur-[128px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/15 rounded-full blur-[128px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#0066FF]/15 rounded-full blur-[128px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#00D2FF]/15 rounded-full blur-[128px] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
           <div className="space-y-3 max-w-2xl">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-brand-accent/20 border border-brand-accent/40 text-brand-accent uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#38BDF8] uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-[#00D2FF]" />
                 <span>Interactive CAD Showcase</span>
               </span>
               <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
@@ -198,10 +198,10 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight font-['Orbitron',sans-serif]">
               {title || 'Inspect Robotics & Hardware in Full 3D'}
             </h2>
-            <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-medium">
               {subtitle ||
                 'Experience LazyForge engineering prior to ordering. Orbit 360°, inspect wireframe tolerances, and review live hardware telemetry for our robots, controllers, and 3D printed artifacts.'}
             </p>
@@ -211,19 +211,19 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono text-slate-400">
               UNIT <span className="text-white font-bold">{selectedIndex + 1}</span> OF{' '}
-              <span className="text-purple-400 font-bold">{products.length}</span>
+              <span className="text-[#38BDF8] font-bold">{products.length}</span>
             </span>
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrev}
-                className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-accent hover:bg-white/10 text-white transition-all active:scale-95"
+                className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-[#0066FF] hover:bg-white/10 text-white transition-all active:scale-95 cursor-pointer"
                 title="Previous 3D Model"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={handleNext}
-                className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-accent hover:bg-white/10 text-white transition-all active:scale-95"
+                className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-[#0066FF] hover:bg-white/10 text-white transition-all active:scale-95 cursor-pointer"
                 title="Next 3D Model"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -240,20 +240,20 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
               <button
                 key={prod.id || index}
                 onClick={() => setSelectedIndex(index)}
-                className={`flex items-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs font-mono whitespace-nowrap transition-all shrink-0 border ${
+                className={`flex items-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs font-mono whitespace-nowrap transition-all shrink-0 border cursor-pointer ${
                   isSelected
-                    ? 'bg-gradient-to-r from-purple-600/40 to-cyan-500/30 border-cyan-400 text-white shadow-[0_0_20px_rgba(0,240,255,0.25)] ring-1 ring-cyan-400/50'
+                    ? 'bg-gradient-to-r from-[#0066FF]/40 to-[#00D2FF]/30 border-[#00D2FF] text-white shadow-[0_0_20px_rgba(0,102,255,0.35)] ring-1 ring-[#00D2FF]/50'
                     : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/20 hover:bg-white/[0.06]'
                 }`}
               >
                 <Bot
                   className={`w-4 h-4 ${
-                    isSelected ? 'text-cyan-400 animate-pulse' : 'text-slate-500'
+                    isSelected ? 'text-[#00D2FF] animate-pulse' : 'text-slate-500'
                   }`}
                 />
                 <span className="font-semibold truncate max-w-[200px]">{prod.name}</span>
                 {isSelected && (
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#00F0FF]" />
+                  <span className="w-2 h-2 rounded-full bg-[#00D2FF] shadow-[0_0_8px_#00D2FF]" />
                 )}
               </button>
             );
@@ -265,13 +265,13 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
           {/* Left: Interactive Three.js Canvas */}
           <div className="lg:col-span-7 relative">
             {/* Cyber Corner Brackets */}
-            <div className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 border-cyan-400 z-20 pointer-events-none" />
-            <div className="absolute -top-2 -right-2 w-5 h-5 border-t-2 border-r-2 border-purple-400 z-20 pointer-events-none" />
-            <div className="absolute -bottom-2 -left-2 w-5 h-5 border-b-2 border-l-2 border-purple-400 z-20 pointer-events-none" />
-            <div className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 border-cyan-400 z-20 pointer-events-none" />
+            <div className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 border-[#00D2FF] z-20 pointer-events-none" />
+            <div className="absolute -top-2 -right-2 w-5 h-5 border-t-2 border-r-2 border-[#0066FF] z-20 pointer-events-none" />
+            <div className="absolute -bottom-2 -left-2 w-5 h-5 border-b-2 border-l-2 border-[#0066FF] z-20 pointer-events-none" />
+            <div className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 border-[#00D2FF] z-20 pointer-events-none" />
 
             {/* Embedded 3D Canvas */}
-            <div className="relative rounded-3xl overflow-hidden border border-purple-500/40 shadow-[0_0_50px_rgba(139,92,246,0.3)] ring-1 ring-cyan-500/20">
+            <div className="relative rounded-3xl overflow-hidden border border-[#0066FF]/40 shadow-[0_0_50px_rgba(0,102,255,0.3)] ring-1 ring-[#00D2FF]/20">
               <RobotViewer3D
                 key={activeProduct.id || activeProduct.model_3d_url}
                 height="520px"
@@ -286,7 +286,7 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#0066FF]/20 text-[#38BDF8] border border-[#0066FF]/30">
                   {activeProduct.category_name || 'Robotics & Hardware'}
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
@@ -294,7 +294,7 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
                 </span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug font-['Orbitron',sans-serif]">
                 {activeProduct.name}
               </h3>
 
@@ -310,7 +310,7 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
                   Engineered Unit Price
                 </span>
                 <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-2xl sm:text-3xl font-black font-mono text-cyan-400">
+                  <span className="text-2xl sm:text-3xl font-black font-mono text-[#38BDF8]">
                     {formatBDT(currentPrice)}
                   </span>
                   {hasDiscount && (
@@ -331,8 +331,8 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
             {/* Hardware Specifications Table */}
             {activeProduct.specifications && Object.keys(activeProduct.specifications).length > 0 && (
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2.5">
-                <div className="text-[11px] font-mono font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5 pb-1 border-b border-white/10">
-                  <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+                <div className="text-[11px] font-mono font-bold text-[#38BDF8] uppercase tracking-wider flex items-center gap-1.5 pb-1 border-b border-white/10">
+                  <Cpu className="w-3.5 h-3.5 text-[#00D2FF]" />
                   <span>Hardware &amp; CAD Specifications</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs font-mono">
@@ -360,7 +360,7 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 onClick={handleAddToCart}
-                className="flex-1 inline-flex items-center justify-center space-x-2 px-6 py-4 rounded-2xl font-bold text-sm bg-gradient-to-r from-[#8B5CF6] via-[#7C3AED] to-[#6366F1] text-white shadow-[0_0_30px_rgba(139,92,246,0.55)] hover:shadow-[0_0_45px_rgba(139,92,246,0.85)] hover:scale-[1.02] active:scale-95 transition-all duration-300"
+                className="flex-1 inline-flex items-center justify-center space-x-2 px-6 py-4 rounded-xl font-bold text-sm bg-[#0066FF] hover:bg-blue-600 text-white shadow-[0_0_30px_rgba(0,102,255,0.45)] hover:shadow-[0_0_45px_rgba(0,102,255,0.7)] hover:scale-[1.02] active:scale-95 transition-all duration-300 cursor-pointer"
               >
                 <ShoppingCart className="w-4 h-4" />
                 <span>Deploy Unit (Add to Cart)</span>
@@ -368,10 +368,10 @@ export function Product3DShowcaseSection({ className = '', title, subtitle }) {
 
               <Link
                 to={`/products/${activeProduct.slug}`}
-                className="inline-flex items-center justify-center space-x-2 px-6 py-4 rounded-2xl font-bold text-sm bg-white/5 hover:bg-white/10 border border-white/15 hover:border-cyan-400/50 text-white backdrop-blur-md transition-all duration-300"
+                className="inline-flex items-center justify-center space-x-2 px-6 py-4 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00D2FF]/50 text-white backdrop-blur-md transition-all duration-300"
               >
                 <span>Full Specs</span>
-                <ArrowRight className="w-4 h-4 text-cyan-400" />
+                <ArrowRight className="w-4 h-4 text-[#00D2FF]" />
               </Link>
             </div>
 
