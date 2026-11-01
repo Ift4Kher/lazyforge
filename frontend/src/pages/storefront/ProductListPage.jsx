@@ -186,7 +186,7 @@ export function ProductListPage() {
 
         {/* Hero Banner Card with Exact Background Image matching Reference Design */}
         <div 
-          className="relative w-full border border-slate-200/90 overflow-hidden shadow-xs bg-[#EEF2F8]"
+          className="relative w-full border-2 border-blue-200/90 overflow-hidden shadow-[0_4px_24px_rgba(0,102,255,0.08)] bg-[#EEF2F8]"
           style={{
             clipPath: 'polygon(16px 0%, calc(100% - 16px) 0%, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0% calc(100% - 16px), 0% 16px)'
           }}
@@ -224,8 +224,8 @@ export function ProductListPage() {
             onClick={() => updateParam('category', '')}
             className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all shadow-xs cursor-pointer shrink-0 ${
               !currentCategory
-                ? 'bg-[#0066FF] text-white shadow-[0_2px_10px_rgba(0,102,255,0.35)]'
-                : 'bg-white border border-slate-200 text-slate-700 hover:border-[#0066FF] hover:text-[#0066FF]'
+                ? 'bg-gradient-to-r from-[#0066FF] to-[#0088FF] text-white shadow-[0_3px_12px_rgba(0,102,255,0.35)]'
+                : 'bg-white border border-blue-200/80 text-slate-700 hover:border-[#0066FF] hover:text-[#0066FF] hover:bg-blue-50/40'
             }`}
           >
             <LayoutGrid className="w-4 h-4" />
@@ -248,8 +248,8 @@ export function ProductListPage() {
                 onClick={() => updateParam('category', sector.slug)}
                 className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all shadow-xs cursor-pointer shrink-0 ${
                   isActive
-                    ? 'bg-[#0066FF] text-white shadow-[0_2px_10px_rgba(0,102,255,0.35)]'
-                    : 'bg-white border border-slate-200 text-slate-700 hover:border-[#0066FF] hover:text-[#0066FF]'
+                    ? 'bg-gradient-to-r from-[#0066FF] to-[#0088FF] text-white shadow-[0_3px_12px_rgba(0,102,255,0.35)]'
+                    : 'bg-white border border-blue-200/80 text-slate-700 hover:border-[#0066FF] hover:text-[#0066FF] hover:bg-blue-50/40'
                 }`}
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-600'}`} />
@@ -265,11 +265,11 @@ export function ProductListPage() {
         </div>
 
         {/* Mobile Filter Toggle Button */}
-        <div className="lg:hidden flex items-center justify-between bg-white p-3 rounded-xl border border-slate-200">
+        <div className="lg:hidden flex items-center justify-between bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs">
           <button
             type="button"
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-            className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-slate-800 cursor-pointer"
+            className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-blue-50 text-xs font-bold text-[#0066FF] cursor-pointer"
           >
             <SlidersHorizontal className="w-4 h-4 text-[#0066FF]" />
             <span>Filter Products</span>
@@ -283,7 +283,7 @@ export function ProductListPage() {
           {/* Left Column: Filter Sidebar (lg:col-span-3) - Robotic Edgy Chamfer Silhouette */}
           <aside className={`lg:col-span-3 ${mobileFilterOpen ? 'block' : 'hidden lg:block'} space-y-5`}>
             <div 
-              className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-6"
+              className="bg-white border border-blue-200/80 rounded-2xl p-5 shadow-[0_4px_16px_rgba(0,102,255,0.06)] space-y-6"
               style={{
                 clipPath: 'polygon(14px 0%, calc(100% - 14px) 0%, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0% calc(100% - 14px), 0% 14px)'
               }}

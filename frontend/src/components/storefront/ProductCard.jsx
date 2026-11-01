@@ -50,12 +50,21 @@ export function ProductCard({ product }) {
   const ratingVal = product.rating || (4.5 + ((product.id || 1) % 5) * 0.1).toFixed(1);
   const reviewsCount = product.reviews_count || (8 + ((product.id || 1) * 3) % 15);
 
+  // Curated attractive cyber color gradients for card borders
+  const cyberBorderGradients = [
+    'from-[#0066FF] via-[#00D2FF] to-[#6366F1]', // Electric Blue -> Neon Cyan -> Tech Indigo
+    'from-[#2563EB] via-[#38BDF8] to-[#06B6D4]', // Royal Blue -> Sky -> Vivid Cyan
+    'from-[#4F46E5] via-[#818CF8] to-[#00D2FF]', // Quantum Iris -> Violet -> Cyan
+    'from-[#0284C7] via-[#00F0FF] to-[#1D4ED8]', // Deep Azure -> Laser Cyan -> Cobalt
+  ];
+  const borderGradient = cyberBorderGradients[(product.id || 0) % cyberBorderGradients.length];
+
   return (
-    <div className="group relative filter drop-shadow-[0_2px_12px_rgba(0,102,255,0.06)] hover:drop-shadow-[0_8px_24px_rgba(0,102,255,0.2)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
+    <div className="group relative filter drop-shadow-[0_4px_14px_rgba(0,102,255,0.1)] hover:drop-shadow-[0_12px_28px_rgba(0,102,255,0.3)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
       
-      {/* Outer Border Layer with 45-degree Robotic Chamfered Corners */}
+      {/* Outer Border Layer with 45-degree Robotic Chamfered Corners & Vivid Cyber Gradient */}
       <div 
-        className="p-[2px] h-full w-full bg-[#B2C3DA] group-hover:bg-[#0066FF] transition-colors duration-200 flex flex-col justify-between"
+        className={`p-[2.5px] h-full w-full bg-gradient-to-br ${borderGradient} group-hover:from-[#0052CC] group-hover:via-[#00F0FF] group-hover:to-[#2563EB] transition-all duration-300 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,102,255,0.15)] group-hover:shadow-[0_4px_16px_rgba(0,210,255,0.35)]`}
         style={{
           clipPath: 'polygon(14px 0%, calc(100% - 14px) 0%, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0% calc(100% - 14px), 0% 14px)'
         }}
@@ -67,9 +76,9 @@ export function ProductCard({ product }) {
             clipPath: 'polygon(11px 0%, calc(100% - 11px) 0%, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0% calc(100% - 11px), 0% 11px)'
           }}
         >
-          {/* Bottom-Left Cyber Triangle Facet (Signature Robotic Edgy Detail) */}
+          {/* Bottom-Left Cyber Triangle Facet (Signature Glowing Robotic Accent) */}
           <div 
-            className="absolute bottom-0 left-0 w-6 h-6 pointer-events-none z-10 bg-gradient-to-tr from-blue-100 via-blue-50/40 to-transparent"
+            className="absolute bottom-0 left-0 w-6 h-6 pointer-events-none z-10 bg-gradient-to-tr from-[#0066FF]/35 via-[#00D2FF]/20 to-transparent"
             style={{
               clipPath: 'polygon(0% 100%, 14px 100%, 0% calc(100% - 14px))'
             }}
@@ -171,8 +180,8 @@ export function ProductCard({ product }) {
                     }}
                     className={`w-8 h-8 border transition-all cursor-pointer flex items-center justify-center shrink-0 ${
                       isWishlisted 
-                        ? 'border-red-300 bg-red-50 text-red-500 shadow-xs' 
-                        : 'border-slate-200 text-slate-700 hover:text-red-500 hover:border-red-200 hover:bg-red-50/40 bg-white shadow-2xs'
+                        ? 'border-red-400 bg-red-50 text-red-500 shadow-xs' 
+                        : 'border-blue-200/90 text-slate-700 hover:text-red-500 hover:border-red-300 hover:bg-red-50/40 bg-white shadow-2xs'
                     }`}
                     title="Add to Wishlist"
                   >
