@@ -71,8 +71,8 @@ export function RobotViewer3D({
       modelGroupRef.current.rotation.set(0, -0.3, 0);
     }
     if (cameraRef.current) {
-      cameraRef.current.position.set(0, 1.4, 5.2);
-      cameraRef.current.lookAt(0, 0.9, 0);
+      cameraRef.current.position.set(0, 1.05, 5.8);
+      cameraRef.current.lookAt(0, 1.0, 0);
     }
   };
 
@@ -103,8 +103,27 @@ export function RobotViewer3D({
     const container = mountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || 600;
-    const heightPx = container.clientHeight || parseInt(height, 10) || 500;
+    const parseExplicitHeight = () => {
+      if (typeof height === 'number') return height;
+      if (typeof height === 'string' && height.endsWith('px')) {
+        return parseInt(height, 10);
+      }
+      return null;
+    };
+
+    const explicitH = parseExplicitHeight();
+    const getDims = () => {
+      const w = container.clientWidth || container.parentElement?.clientWidth || 600;
+      let h = explicitH || container.clientHeight || container.parentElement?.clientHeight;
+      if (!h || h < 200) {
+        h = 520;
+      }
+      return { width: Math.max(w, 200), height: Math.max(h, 250) };
+    };
+
+    const initialDims = getDims();
+    const width = initialDims.width;
+    const heightPx = initialDims.height;
 
     // 1. Scene with dark aesthetic matching reference mockup
     const scene = new THREE.Scene();
@@ -112,9 +131,9 @@ export function RobotViewer3D({
     sceneRef.current = scene;
 
     // 2. Camera: Centered and positioned for high-resolution inspection
-    const camera = new THREE.PerspectiveCamera(45, width / heightPx, 0.1, 100);
-    camera.position.set(0, 1.4, 5.2);
-    camera.lookAt(0, 0.9, 0);
+    const camera = new THREE.PerspectiveCamera(40, width / heightPx, 0.1, 100);
+    camera.position.set(0, 1.05, 5.8);
+    camera.lookAt(0, 1.0, 0);
     cameraRef.current = camera;
 
     // 3. Renderer with graceful fallback if WebGL is unavailable (e.g. test environments)
@@ -125,6 +144,9 @@ export function RobotViewer3D({
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.domElement.style.display = 'block';
+      renderer.domElement.style.width = '100%';
+      renderer.domElement.style.height = '100%';
       container.appendChild(renderer.domElement);
     } catch (err) {
       console.warn('WebGLRenderer unavailable in current runtime:', err.message);
@@ -162,7 +184,7 @@ export function RobotViewer3D({
 
     // 5. High-Tech Grid Floor
     const gridHelper = new THREE.GridHelper(16, 32, 0x3e4458, 0x2b303e);
-    gridHelper.position.y = -1.4;
+    gridHelper.position.y = -0.85;
     scene.add(gridHelper);
 
     // 6. Base Materials Palette
@@ -1093,21 +1115,29 @@ export function RobotViewer3D({
 
     animate();
 
-    // 10. Resize Handling
+    // 10. Resize Handling with ResizeObserver
     const handleResize = () => {
       if (!container) return;
-      const newWidth = container.clientWidth;
-      const newHeight = container.clientHeight || parseInt(height, 10) || 500;
-      camera.aspect = newWidth / newHeight;
+      const dims = getDims();
+      camera.aspect = dims.width / dims.height;
       camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight);
+      renderer.setSize(dims.width, dims.height);
     };
 
     window.addEventListener('resize', handleResize);
 
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        handleResize();
+      });
+      resizeObserver.observe(container);
+    }
+
     // 11. Cleanup on unmount
     return () => {
       cancelAnimationFrame(animId);
+      if (resizeObserver) resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
       domEl.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mousemove', onMouseMove);
@@ -1143,11 +1173,15 @@ export function RobotViewer3D({
   return (
     <div
       ref={containerRef}
-      className={`relative rounded-2xl overflow-hidden bg-[#232530] border border-slate-700/80 shadow-2xl flex flex-col justify-between ${className}`}
+      className={`relative w-full h-full min-h-[440px] rounded-2xl overflow-hidden bg-[#232530] border border-slate-700/80 shadow-2xl flex flex-col justify-between ${className}`}
     >
       {/* WebGL Canvas Container or Fallback */}
       {webglSupported ? (
-        <div ref={mountRef} style={{ height }} className="w-full flex-1 cursor-grab active:cursor-grabbing" />
+        <div
+          ref={mountRef}
+          style={{ height: height === '100%' ? '100%' : height }}
+          className="w-full h-full min-h-[400px] flex-1 cursor-grab active:cursor-grabbing relative overflow-hidden"
+        />
       ) : (
         <div
           style={{ height }}

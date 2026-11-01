@@ -230,7 +230,9 @@ export function ProductDetailPage() {
             </div>
 
             {/* Viewport Container with Sci-Fi Corner Brackets */}
-            <div className="relative aspect-square w-full rounded-2xl bg-white border border-brand-border/80 overflow-hidden shadow-xs flex items-center justify-center p-4">
+            <div className={`relative aspect-square w-full rounded-2xl border border-brand-border/80 overflow-hidden shadow-xs flex items-center justify-center p-2 ${
+              viewMode === '3d' ? 'bg-[#232530]' : 'bg-white'
+            }`}>
               {/* Sci-fi corner brackets */}
               <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#0066FF]/60 pointer-events-none z-10" />
               <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#0066FF]/60 pointer-events-none z-10" />
@@ -238,9 +240,10 @@ export function ProductDetailPage() {
               <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#0066FF]/60 pointer-events-none z-10" />
 
               {viewMode === '3d' ? (
-                <div className="w-full h-full relative rounded-xl overflow-hidden bg-[#0A0D14]">
+                <div className="w-full h-full relative rounded-xl overflow-hidden bg-[#232530] flex">
                   <RobotViewer3D
                     key={product.model_3d_url || 'voxel_robot'}
+                    className="w-full h-full"
                     height="100%"
                     modelType={product.model_3d_url || 'voxel_robot'}
                     modelUrl={product.model_3d_format === 'preset' ? null : product.model_3d_url}
@@ -251,11 +254,13 @@ export function ProductDetailPage() {
                   />
                 </div>
               ) : (
-                <img
-                  src={selectedImage || normalImages[0]}
-                  alt={product.name}
-                  className="w-full h-full object-contain transition-all duration-300"
-                />
+                <div className="w-full h-full flex items-center justify-center p-4">
+                  <img
+                    src={selectedImage || normalImages[0]}
+                    alt={product.name}
+                    className="w-full h-full object-contain transition-all duration-300"
+                  />
+                </div>
               )}
 
               {/* Quick 3D View badge when in photos mode */}
