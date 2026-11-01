@@ -65,6 +65,10 @@ export function Hero() {
       {/* Sci-Fi Decorative Grid & Tech Accent Lines */}
       <div className="absolute inset-0 cyber-grid-light opacity-80 pointer-events-none" />
 
+      {/* Ambient Sci-Fi Glow Orbs */}
+      <div className="absolute top-1/4 -left-24 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 right-10 w-80 h-80 bg-cyan-400/12 rounded-full blur-3xl pointer-events-none" />
+
       {/* Top Left Angular Tech Markings */}
       <div className="absolute top-4 left-6 hidden sm:flex items-center space-x-1.5 opacity-60">
         <div className="w-12 h-[2px] bg-slate-300" />
@@ -99,11 +103,17 @@ export function Hero() {
           {/* Right Column: High-Tech Typography & CTAs */}
           <div className="lg:col-span-5 order-1 lg:order-2 space-y-6">
             
+            {/* Directive Telemetry Pill */}
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#0066FF]/10 border border-[#0066FF]/30 text-[#0066FF] text-[11px] font-mono font-bold tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-[#0066FF] animate-pulse" />
+              <span>// {activeSlide.badge} DIRECTIVE</span>
+            </div>
+
             {/* Main Headline with Sci-Fi Robotic Orbitron Font */}
             <div className="space-y-1">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 font-['Orbitron',sans-serif] leading-[1.15]">
                 {activeSlide.headingLine1} <br />
-                <span className="text-[#0066FF] drop-shadow-[0_2px_12px_rgba(0,102,255,0.25)]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0066FF] via-[#0088FF] to-[#00D2FF] drop-shadow-[0_2px_12px_rgba(0,102,255,0.25)]">
                   {activeSlide.headingHighlight}
                 </span>{' '}
                 {activeSlide.headingLine2}

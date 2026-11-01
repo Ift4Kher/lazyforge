@@ -44,6 +44,27 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-[0_2px_15px_rgba(0,102,255,0.04)] transition-all">
+      {/* Luxury Telemetry Announcement Bar */}
+      <div className="bg-gradient-to-r from-[#070B14] via-[#0A1931] to-[#070B14] text-white border-b border-blue-900/40 py-1.5 px-4 text-xs font-mono">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center space-x-2 text-[11px]">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00D2FF]"></span>
+            </span>
+            <span className="text-slate-300 hidden sm:inline">TELEMETRY ONLINE:</span>
+            <span className="text-cyan-300 font-bold">NATIONWIDE EXPRESS DISPATCH &bull; 64 DISTRICTS COD</span>
+          </div>
+
+          <div className="flex items-center space-x-4 text-[11px]">
+            <span className="text-slate-400 hidden md:inline">MIRPUR DOHS, DHAKA</span>
+            <a href="tel:+8801800529936" className="text-[#38BDF8] hover:text-white transition-colors font-bold">
+              HOTLINE: 1800-LAZYFORGE
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* High-tech top cyber hairline with geometric notches */}
       <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#0066FF] to-transparent opacity-80" />
 
