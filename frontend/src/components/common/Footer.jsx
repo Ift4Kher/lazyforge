@@ -56,21 +56,14 @@ export function Footer() {
           {/* Brand Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 flex items-center justify-center">
+              <Link to="/" className="block py-1" aria-label="LazyForge Technologies">
                 <img
-                  src="/images/lazyforge-icon-mark.png"
-                  alt="LazyForge Technologies"
-                  className="w-full h-full object-contain"
+                  src="/images/lazyforge-logo-white.png"
+                  alt="LazyForge"
+                  className="h-10 w-auto object-contain transition-opacity hover:opacity-90"
                 />
-              </div>
-              <div>
-                <span className="text-lg font-black tracking-wider text-white font-['Orbitron',sans-serif]">
-                  LazyForge
-                </span>
-                <p className="text-[10px] text-[#0066FF] font-mono tracking-widest font-bold uppercase">
-                  Technologies
-                </p>
-              </div>
+                <span className="sr-only">LazyForge Technologies</span>
+              </Link>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed font-medium">
               LazyForge Technologies is Bangladesh’s premier engineering store for intelligent robotics kits, smart microcontrollers, 3D additive designs, and cyber collectibles.

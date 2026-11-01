@@ -67,16 +67,18 @@ export function AdminLayout() {
       <aside className="w-64 bg-white border-r border-brand-border flex flex-col justify-between hidden md:flex">
         <div>
           {/* Logo */}
-          <div className="p-6 border-b border-brand-border flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-brand-softGray border border-brand-accent/40 flex items-center justify-center shadow-sm">
-              <span className="font-extrabold text-sm text-brand-accent">LF</span>
-            </div>
-            <div>
-              <h2 className="text-sm font-extrabold tracking-wide text-brand-graphite">LAZYFORGE</h2>
-              <span className="text-[10px] tracking-wider text-brand-accent uppercase font-bold">
-                Control Hub
-              </span>
-            </div>
+          <div className="p-5 border-b border-brand-border flex items-center justify-between">
+            <Link to="/admin" className="flex items-center" aria-label="LazyForge Admin">
+              <img
+                src="/images/lazyforge-logo.png"
+                alt="LazyForge"
+                className="h-8 w-auto object-contain"
+              />
+              <span className="sr-only">LazyForge</span>
+            </Link>
+            <span className="text-[10px] tracking-wider text-[#0066FF] font-mono uppercase font-bold px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200">
+              Admin
+            </span>
           </div>
 
           {/* Navigation */}

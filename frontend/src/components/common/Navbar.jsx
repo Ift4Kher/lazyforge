@@ -71,7 +71,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 gap-4">
           
-          {/* Brand Logo - Futuristic Cyber Mecha Insignia */}
+          {/* Brand Logo - Official LazyForge Identity */}
           <div className="flex items-center">
             {/* Left Tech Notch Line */}
             <div className="hidden xl:flex items-center space-x-1.5 mr-3 opacity-60">
@@ -79,22 +79,13 @@ export function Navbar() {
               <div className="w-3 h-[1.5px] bg-[#0066FF]" />
             </div>
 
-            <Link to="/" className="flex items-center space-x-2.5 group shrink-0">
-              <div className="w-10 h-10 flex items-center justify-center transition-all group-hover:scale-105">
-                <img
-                  src="/images/lazyforge-icon-mark.png"
-                  alt="LazyForge Technologies"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <div>
-                <div className="text-lg font-black tracking-tight text-slate-900 font-['Orbitron',sans-serif] flex items-center gap-1 group-hover:text-[#0066FF] transition-colors leading-tight">
-                  <span>LazyForge</span>
-                </div>
-                <p className="text-[10px] tracking-wider text-slate-500 font-sans -mt-0.5 font-semibold">
-                  Technologies
-                </p>
-              </div>
+            <Link to="/" className="flex items-center group shrink-0 py-1" aria-label="LazyForge Technologies">
+              <img
+                src="/images/lazyforge-logo.png"
+                alt="LazyForge"
+                className="h-10 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+              <span className="sr-only">LazyForge Technologies</span>
             </Link>
           </div>
 
