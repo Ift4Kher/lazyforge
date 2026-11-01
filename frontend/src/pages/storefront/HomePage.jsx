@@ -52,48 +52,48 @@ export function HomePage() {
 
       {/* Luxury Telemetry Metric Banner (Between Hero and Categories) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl bg-gradient-to-r from-[#0B0F19] via-[#0F172A] to-[#0B0F19] border border-blue-900/50 p-4 sm:p-6 text-white shadow-xl relative overflow-hidden">
+        <div className="rounded-2xl bg-gradient-to-r from-[#0B0F19] via-[#0F172A] to-[#0B0F19] border border-blue-900/50 p-2.5 sm:p-5 lg:p-6 text-white shadow-xl relative overflow-hidden">
           {/* Subtle Cyber Glowing Hairline */}
           <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#0066FF] to-transparent" />
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-800">
-            <div className="flex items-center space-x-3.5 pt-2 sm:pt-0 sm:px-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] flex items-center justify-center shrink-0 shadow-xs">
-                <Truck className="w-5 h-5" />
+          <div className="grid grid-cols-4 gap-1 sm:gap-6 divide-x divide-slate-800/80 items-center">
+            <div className="flex flex-col sm:flex-row items-center text-center sm:text-left space-y-1 sm:space-y-0 sm:space-x-3.5 px-1 sm:px-3">
+              <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] flex items-center justify-center shrink-0 shadow-xs">
+                <Truck className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <div className="text-xs font-mono text-[#38BDF8] font-bold uppercase tracking-wider">64 Districts</div>
-                <div className="text-sm font-bold font-['Orbitron',sans-serif] text-white">Cash on Delivery</div>
+                <div className="text-[7.5px] xs:text-[8.5px] sm:text-xs font-mono text-[#38BDF8] font-bold uppercase tracking-tight sm:tracking-wider leading-tight">64 Districts</div>
+                <div className="text-[8.5px] xs:text-[9.5px] sm:text-sm font-bold font-['Orbitron',sans-serif] text-white leading-tight">Cash on Delivery</div>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:px-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] flex items-center justify-center shrink-0 shadow-xs">
-                <ShieldCheck className="w-5 h-5" />
+            <div className="flex flex-col sm:flex-row items-center text-center sm:text-left space-y-1 sm:space-y-0 sm:space-x-3.5 px-1 sm:px-3">
+              <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] flex items-center justify-center shrink-0 shadow-xs">
+                <ShieldCheck className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <div className="text-xs font-mono text-[#38BDF8] font-bold uppercase tracking-wider">100% Genuine</div>
-                <div className="text-sm font-bold font-['Orbitron',sans-serif] text-white">Bench-Tested Tech</div>
+                <div className="text-[7.5px] xs:text-[8.5px] sm:text-xs font-mono text-[#38BDF8] font-bold uppercase tracking-tight sm:tracking-wider leading-tight">100% Genuine</div>
+                <div className="text-[8.5px] xs:text-[9.5px] sm:text-sm font-bold font-['Orbitron',sans-serif] text-white leading-tight">Bench-Tested Tech</div>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:px-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] flex items-center justify-center shrink-0 shadow-xs">
-                <Box className="w-5 h-5" />
+            <div className="flex flex-col sm:flex-row items-center text-center sm:text-left space-y-1 sm:space-y-0 sm:space-x-3.5 px-1 sm:px-3">
+              <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] flex items-center justify-center shrink-0 shadow-xs">
+                <Box className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <div className="text-xs font-mono text-[#38BDF8] font-bold uppercase tracking-wider">0.05mm Additive</div>
-                <div className="text-sm font-bold font-['Orbitron',sans-serif] text-white">STL & 3MF Slicing</div>
+                <div className="text-[7.5px] xs:text-[8.5px] sm:text-xs font-mono text-[#38BDF8] font-bold uppercase tracking-tight sm:tracking-wider leading-tight">0.05mm Additive</div>
+                <div className="text-[8.5px] xs:text-[9.5px] sm:text-sm font-bold font-['Orbitron',sans-serif] text-white leading-tight">STL & 3MF Slicing</div>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:px-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] flex items-center justify-center shrink-0 shadow-xs">
-                <RotateCcw className="w-5 h-5" />
+            <div className="flex flex-col sm:flex-row items-center text-center sm:text-left space-y-1 sm:space-y-0 sm:space-x-3.5 px-1 sm:px-3">
+              <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] flex items-center justify-center shrink-0 shadow-xs">
+                <RotateCcw className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <div className="text-xs font-mono text-[#38BDF8] font-bold uppercase tracking-wider">7-Day Guarantee</div>
-                <div className="text-sm font-bold font-['Orbitron',sans-serif] text-white">Hassle-Free Returns</div>
+                <div className="text-[7.5px] xs:text-[8.5px] sm:text-xs font-mono text-[#38BDF8] font-bold uppercase tracking-tight sm:tracking-wider leading-tight">7-Day Guarantee</div>
+                <div className="text-[8.5px] xs:text-[9.5px] sm:text-sm font-bold font-['Orbitron',sans-serif] text-white leading-tight">Hassle-Free Returns</div>
               </div>
             </div>
           </div>

@@ -291,10 +291,10 @@ export function Navbar() {
               </span>
             </Link>
 
-            {/* Blue Circular Hamburger Menu Button (Exact match from reference image) */}
+            {/* Blue Circular Hamburger Menu Button (Mobile & Tablet only) */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="w-9 h-9 rounded-full bg-[#0066FF] hover:bg-blue-600 text-white flex items-center justify-center shadow-[0_2px_10px_rgba(0,102,255,0.35)] hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
+              className="lg:hidden w-9 h-9 rounded-full bg-[#0066FF] hover:bg-blue-600 text-white flex items-center justify-center shadow-[0_2px_10px_rgba(0,102,255,0.35)] hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
