@@ -184,8 +184,13 @@ export function ProductListPage() {
           )}
         </nav>
 
-        {/* Hero Banner Card (Exact Replica of Reference Design) */}
-        <div className="relative w-full rounded-2xl bg-gradient-to-r from-slate-50 via-[#F3F7FD] to-blue-50/40 border border-slate-200/80 p-6 sm:p-10 overflow-hidden shadow-xs flex flex-col md:flex-row items-center justify-between gap-8">
+        {/* Hero Banner Card (Robotic Edgy Chamfer Silhouette) */}
+        <div 
+          className="relative w-full bg-gradient-to-r from-slate-50 via-[#F3F7FD] to-blue-50/40 border border-slate-200/80 p-6 sm:p-10 overflow-hidden shadow-xs flex flex-col md:flex-row items-center justify-between gap-8"
+          style={{
+            clipPath: 'polygon(20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0% calc(100% - 20px), 0% 20px)'
+          }}
+        >
           {/* Subtle Ambient Radial Highlight */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0066FF]/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -208,7 +213,10 @@ export function ProductListPage() {
             <div className="pt-2">
               <a
                 href="#products-section"
-                className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-[#0066FF] hover:bg-blue-600 active:scale-98 text-white font-bold text-sm shadow-[0_4px_16px_rgba(0,102,255,0.35)] transition-all cursor-pointer"
+                style={{
+                  clipPath: 'polygon(0% 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0% 100%)'
+                }}
+                className="inline-flex items-center space-x-2 px-6 py-3 bg-[#0066FF] hover:bg-blue-600 active:scale-98 text-white font-bold text-sm shadow-[0_4px_16px_rgba(0,102,255,0.35)] transition-all cursor-pointer"
               >
                 <span>Explore Products</span>
                 <span className="text-base font-bold">→</span>
@@ -222,7 +230,7 @@ export function ProductListPage() {
               <img
                 src="/images/hero-mecha-robots.png"
                 alt="Robotics & AI Hardware"
-                className="w-full h-auto object-contain drop-shadow-2xl"
+                className="w-full h-auto object-contain mix-blend-multiply drop-shadow-xl"
               />
 
               {/* Cursive Handwriting Overlay: "Build · Innovate · Create" */}
@@ -236,15 +244,15 @@ export function ProductListPage() {
           </div>
         </div>
 
-        {/* Horizontal Category Sector Pills Carousel (Exact Replica) */}
-        <div className="flex items-center space-x-3 overflow-x-auto pb-3 pt-1 scrollbar-none">
+        {/* Horizontal Category Sector Pills Carousel (Exact Layout & Shape matching Reference) */}
+        <div className="flex items-center space-x-3 overflow-x-auto pb-2 pt-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {/* All Sectors Active Button */}
           <button
             type="button"
             onClick={() => updateParam('category', '')}
-            className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-xs cursor-pointer shrink-0 ${
+            className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all shadow-xs cursor-pointer shrink-0 ${
               !currentCategory
-                ? 'bg-[#0066FF] text-white shadow-[0_2px_10px_rgba(0,102,255,0.3)]'
+                ? 'bg-[#0066FF] text-white shadow-[0_2px_10px_rgba(0,102,255,0.35)]'
                 : 'bg-white border border-slate-200 text-slate-700 hover:border-[#0066FF] hover:text-[#0066FF]'
             }`}
           >
@@ -266,9 +274,9 @@ export function ProductListPage() {
                 key={sector.slug}
                 type="button"
                 onClick={() => updateParam('category', sector.slug)}
-                className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-xs cursor-pointer shrink-0 ${
+                className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all shadow-xs cursor-pointer shrink-0 ${
                   isActive
-                    ? 'bg-[#0066FF] text-white shadow-[0_2px_10px_rgba(0,102,255,0.3)]'
+                    ? 'bg-[#0066FF] text-white shadow-[0_2px_10px_rgba(0,102,255,0.35)]'
                     : 'bg-white border border-slate-200 text-slate-700 hover:border-[#0066FF] hover:text-[#0066FF]'
                 }`}
               >
@@ -289,7 +297,7 @@ export function ProductListPage() {
           <button
             type="button"
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-            className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-slate-800"
+            className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-slate-800 cursor-pointer"
           >
             <SlidersHorizontal className="w-4 h-4 text-[#0066FF]" />
             <span>Filter Products</span>
@@ -300,9 +308,14 @@ export function ProductListPage() {
         {/* Main 2-Column Section */}
         <div id="products-section" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          {/* Left Column: Filter Sidebar (lg:col-span-3) */}
+          {/* Left Column: Filter Sidebar (lg:col-span-3) - Robotic Edgy Chamfer Silhouette */}
           <aside className={`lg:col-span-3 ${mobileFilterOpen ? 'block' : 'hidden lg:block'} space-y-5`}>
-            <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-6">
+            <div 
+              className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-6"
+              style={{
+                clipPath: 'polygon(14px 0%, calc(100% - 14px) 0%, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0% calc(100% - 14px), 0% 14px)'
+              }}
+            >
               
               {/* Header: Filter Products + Reset All */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -361,11 +374,14 @@ export function ProductListPage() {
                   </div>
                 </div>
 
-                {/* Apply Filter Button */}
+                {/* Apply Filter Button - Robotic Chamfer */}
                 <button
                   type="button"
                   onClick={handlePriceApply}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#0066FF] hover:bg-blue-600 active:scale-98 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-2"
+                  style={{
+                    clipPath: 'polygon(0% 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0% 100%)'
+                  }}
+                  className="w-full py-2.5 px-4 bg-[#0066FF] hover:bg-blue-600 active:scale-98 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-2"
                 >
                   <ShoppingCart className="w-3.5 h-3.5" />
                   <span>Apply Filter</span>

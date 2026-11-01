@@ -43,50 +43,68 @@ export function Navbar() {
     { name: 'Contact', path: '/contact', icon: PhoneCall },
   ];
 
+  const isShopPage = location.pathname === '/products' || location.pathname === '/shop';
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-[0_2px_15px_rgba(0,102,255,0.04)] transition-all">
-      {/* Luxury Telemetry Announcement Bar */}
-      <div className="bg-gradient-to-r from-[#070B14] via-[#0A1931] to-[#070B14] text-white border-b border-blue-900/40 py-1.5 px-4 text-xs font-mono">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2 text-[11px]">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00D2FF]"></span>
-            </span>
-            <span className="text-slate-300 hidden sm:inline">TELEMETRY ONLINE:</span>
-            <span className="text-cyan-300 font-bold">NATIONWIDE EXPRESS DISPATCH &bull; 64 DISTRICTS COD</span>
-          </div>
+      {/* Luxury Telemetry Announcement Bar (Hidden on Shop Page for exact design match) */}
+      {!isShopPage && (
+        <div className="bg-gradient-to-r from-[#070B14] via-[#0A1931] to-[#070B14] text-white border-b border-blue-900/40 py-1.5 px-4 text-xs font-mono">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-[11px]">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00D2FF]"></span>
+              </span>
+              <span className="text-slate-300 hidden sm:inline">TELEMETRY ONLINE:</span>
+              <span className="text-cyan-300 font-bold">NATIONWIDE EXPRESS DISPATCH &bull; 64 DISTRICTS COD</span>
+            </div>
 
-          <div className="flex items-center space-x-4 text-[11px]">
-            <span className="text-slate-400 hidden md:inline">MIRPUR DOHS, DHAKA</span>
-            <a href="tel:+8801800529936" className="text-[#38BDF8] hover:text-white transition-colors font-bold">
-              HOTLINE: 1800-LAZYFORGE
-            </a>
+            <div className="flex items-center space-x-4 text-[11px]">
+              <span className="text-slate-400 hidden md:inline">MIRPUR DOHS, DHAKA</span>
+              <a href="tel:+8801800529936" className="text-[#38BDF8] hover:text-white transition-colors font-bold">
+                HOTLINE: 1800-LAZYFORGE
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* High-tech top cyber hairline with geometric notches */}
-      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#0066FF] to-transparent opacity-80" />
+      {!isShopPage && (
+        <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#0066FF] to-transparent opacity-80" />
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 gap-4">
           
-          {/* Brand Logo - Official LazyForge Identity */}
+          {/* Brand Logo - Gear Robot Icon + LazyForge Technologies matching Reference Image */}
           <div className="flex items-center">
-            {/* Left Tech Notch Line */}
-            <div className="hidden xl:flex items-center space-x-1.5 mr-3 opacity-60">
-              <div className="w-8 h-[1.5px] bg-slate-300" />
-              <div className="w-3 h-[1.5px] bg-[#0066FF]" />
-            </div>
-
-            <Link to="/" className="flex items-center group shrink-0 py-1" aria-label="LazyForge Technologies">
-              <img
-                src="/images/lazyforge-logo.png"
-                alt="LazyForge"
-                className="h-10 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-              <span className="sr-only">LazyForge Technologies</span>
+            <Link to="/" className="flex items-center space-x-2.5 group shrink-0 py-1" aria-label="LazyForge Technologies">
+              <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
+                <svg className="w-10 h-10 text-[#1E293B] group-hover:scale-105 transition-transform" viewBox="0 0 40 40" fill="none">
+                  {/* 8-Tooth Gear Silhouette */}
+                  <path d="M17 3h6v4.2a13 13 0 014.2 1.8l3-3 4.2 4.2-3 3a13 13 0 011.8 4.2H37v6h-4.2a13 13 0 01-1.8 4.2l3 3-4.2 4.2-3-3a13 13 0 01-4.2 1.8V37h-6v-4.2a13 13 0 01-4.2-1.8l-3 3-4.2-4.2 3-3a13 13 0 01-1.8-4.2H3v-6h4.2a13 13 0 011.8-4.2l-3-3 4.2-4.2 3 3a13 13 0 014.2-1.8V3z" fill="#1E293B" />
+                  {/* Inner White Robot Face Capsule */}
+                  <rect x="11" y="11" width="18" height="18" rx="5" fill="#FFFFFF" />
+                  {/* Antenna */}
+                  <circle cx="20" cy="8.5" r="1.5" fill="#0066FF" />
+                  <line x1="20" y1="9.5" x2="20" y2="11.5" stroke="#1E293B" strokeWidth="1.5" />
+                  {/* Blue Eyes */}
+                  <circle cx="15.5" cy="18" r="2.2" fill="#0066FF" />
+                  <circle cx="24.5" cy="18" r="2.2" fill="#0066FF" />
+                  {/* Friendly Smile */}
+                  <path d="M17 22.5c1 1.2 5 1.2 6 0" stroke="#1E293B" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+              </div>
+              <div className="flex flex-col leading-tight">
+                <span className="text-[19px] font-black tracking-tight text-slate-900 group-hover:text-[#0066FF] transition-colors font-sans">
+                  LazyForge
+                </span>
+                <span className="text-[11px] font-bold text-slate-500 tracking-wider">
+                  Technologies
+                </span>
+              </div>
             </Link>
           </div>
 
