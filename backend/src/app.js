@@ -16,9 +16,9 @@ export const app = express();
 app.use(helmetMiddleware);
 app.use(corsMiddleware);
 
-// Body Parsing & Cookies
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Body Parsing & Cookies (increased limit for .stl and .3mf 3D CAD files)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser(env.COOKIE.secret));
 
 // Rate Limiting on API

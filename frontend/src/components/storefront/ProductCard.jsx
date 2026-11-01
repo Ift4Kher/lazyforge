@@ -111,11 +111,11 @@ export function ProductCard({ product }) {
             {/* Price (Electric Blue matching reference image) */}
             <div className="flex items-baseline space-x-1.5 shrink-0">
               <span className="text-base font-black text-[#0066FF]">
-                ৳ {currentPrice.toLocaleString()}
+                ৳{currentPrice.toLocaleString()}
               </span>
               {salePrice !== null && regularPrice > salePrice && (
                 <span className="text-xs text-slate-400 line-through">
-                  ৳ {regularPrice.toLocaleString()}
+                  ৳{regularPrice.toLocaleString()}
                 </span>
               )}
             </div>

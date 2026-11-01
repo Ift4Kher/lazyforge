@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { ThreeMFLoader } from 'three/examples/jsm/loaders/3MFLoader.js';
 import {
   RotateCcw,
   Eye,
@@ -11,6 +13,8 @@ import {
   Sparkles,
   Bot,
   Activity,
+  FileCode,
+  Box,
 } from 'lucide-react';
 
 export function RobotViewer3D({
@@ -29,6 +33,12 @@ export function RobotViewer3D({
   const [webglSupported, setWebglSupported] = useState(true);
   const [loadError, setLoadError] = useState(null);
   const [telemetry, setTelemetry] = useState({ rotX: 0, rotY: 0, zoom: 100 });
+  const [modelStats, setModelStats] = useState({
+    format: 'CAD RIG',
+    triangles: 18450,
+    dimensions: '180 × 140 × 210 mm',
+    source: 'PARAMETRIC TELEMETRY',
+  });
 
   // References to mutable Three.js objects
   const sceneRef = useRef(null);
@@ -93,18 +103,18 @@ export function RobotViewer3D({
     cyanRim.position.set(-4, 3, 2);
     scene.add(cyanRim);
 
-    // Neon Violet Rim Light
-    const violetRim = new THREE.DirectionalLight(0x8b5cf6, 3.2);
-    violetRim.position.set(4, -1, -3);
-    scene.add(violetRim);
+    // Electric Blue Rim Light
+    const blueRim = new THREE.DirectionalLight(0x0066ff, 3.2);
+    blueRim.position.set(4, -1, -3);
+    scene.add(blueRim);
 
     // Center Stage Reactor Glow
-    const reactorLight = new THREE.PointLight(0xa855f7, 4.0, 7);
+    const reactorLight = new THREE.PointLight(0x00d2ff, 4.0, 7);
     reactorLight.position.set(0, 1.1, 0.7);
     scene.add(reactorLight);
 
     // 5. High-Tech Hexagonal Grid Floor
-    const gridHelper = new THREE.GridHelper(16, 32, 0x00f0ff, 0x3b0764);
+    const gridHelper = new THREE.GridHelper(16, 32, 0x00d2ff, 0x071e3d);
     gridHelper.position.y = -1.4;
     scene.add(gridHelper);
 
@@ -150,8 +160,8 @@ export function RobotViewer3D({
     materials.push(visorMat);
 
     const coreReactorMat = new THREE.MeshStandardMaterial({
-      color: 0xc084fc,
-      emissive: 0xa855f7,
+      color: 0x38bdf8,
+      emissive: 0x0066ff,
       emissiveIntensity: 3.0,
       metalness: 0.1,
       roughness: 0.1,
@@ -190,44 +200,163 @@ export function RobotViewer3D({
     const animUpdaters = [];
     animUpdatersRef.current = animUpdaters;
 
-    // Check if custom uploaded GLB/GLTF model
-    const isCustomUrl = modelUrl && (modelUrl.startsWith('http') || modelUrl.startsWith('/uploads/'));
+    // Check if custom uploaded 3D model (STL, 3MF, GLB, GLTF, etc.)
+    const isCustomUrl = Boolean(
+      modelUrl &&
+      (modelUrl.startsWith('http') ||
+       modelUrl.startsWith('/uploads/') ||
+       modelUrl.endsWith('.stl') ||
+       modelUrl.endsWith('.3mf') ||
+       modelUrl.endsWith('.glb') ||
+       modelUrl.endsWith('.gltf'))
+    );
+    const fileExt = (modelUrl || '').split('?')[0].split('.').pop()?.toLowerCase();
 
     if (isCustomUrl) {
-      const loader = new GLTFLoader();
-      loader.load(
-        modelUrl,
-        (gltf) => {
-          const loadedModel = gltf.scene;
-          // Compute bounding box and normalize scale
-          const box = new THREE.Box3().setFromObject(loadedModel);
-          const size = box.getSize(new THREE.Vector3());
-          const maxDim = Math.max(size.x, size.y, size.z) || 1;
-          const scale = 2.4 / maxDim;
-          loadedModel.scale.setScalar(scale);
+      if (fileExt === 'stl') {
+        const loader = new STLLoader();
+        loader.load(
+          modelUrl,
+          (geometry) => {
+            geometry.computeVertexNormals();
+            geometry.computeBoundingBox();
+            const box = geometry.boundingBox;
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            const scale = 2.4 / maxDim;
 
-          const center = box.getCenter(new THREE.Vector3());
-          loadedModel.position.x = -center.x * scale;
-          loadedModel.position.y = -center.y * scale + 0.8;
-          loadedModel.position.z = -center.z * scale;
+            const triCount = geometry.attributes.position ? Math.round(geometry.attributes.position.count / 3) : 0;
+            const dimStr = `${Math.round(size.x * 10)} × ${Math.round(size.y * 10)} × ${Math.round(size.z * 10)} mm`;
+            setModelStats({
+              format: 'STL 3D MESH',
+              triangles: triCount,
+              dimensions: dimStr,
+              source: 'ADMIN STL UPLOAD',
+            });
 
-          loadedModel.traverse((child) => {
-            if (child.isMesh && child.material) {
-              materials.push(child.material);
-              child.castShadow = true;
-            }
-          });
+            // Engineering cyber titanium alloy material with metallic sheen
+            const stlMat = new THREE.MeshStandardMaterial({
+              color: 0x00d2ff,
+              metalness: 0.85,
+              roughness: 0.22,
+            });
+            materials.push(stlMat);
 
-          modelGroup.add(loadedModel);
-          setLoadError(null);
-        },
-        undefined,
-        (err) => {
-          console.warn('Failed to load custom GLB model, falling back to preset:', err.message);
-          setLoadError('Custom 3D model unavailable, rendering CAD proxy.');
-          buildProceduralModel('apex_mascot');
-        }
-      );
+            const mesh = new THREE.Mesh(geometry, stlMat);
+            mesh.scale.setScalar(scale);
+            const center = box.getCenter(new THREE.Vector3());
+            mesh.position.x = -center.x * scale;
+            mesh.position.y = -center.y * scale + 0.8;
+            mesh.position.z = -center.z * scale;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            modelGroup.add(mesh);
+            setLoadError(null);
+          },
+          undefined,
+          (err) => {
+            console.warn('Failed to load custom STL model, falling back to preset:', err.message);
+            setLoadError('Custom STL file unavailable, rendering CAD proxy.');
+            buildProceduralModel('apex_mascot');
+          }
+        );
+      } else if (fileExt === '3mf') {
+        const loader = new ThreeMFLoader();
+        loader.load(
+          modelUrl,
+          (object) => {
+            const box = new THREE.Box3().setFromObject(object);
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            const scale = 2.4 / maxDim;
+            object.scale.setScalar(scale);
+
+            const center = box.getCenter(new THREE.Vector3());
+            object.position.x = -center.x * scale;
+            object.position.y = -center.y * scale + 0.8;
+            object.position.z = -center.z * scale;
+
+            let triCount = 0;
+            object.traverse((child) => {
+              if (child.isMesh) {
+                if (child.geometry?.attributes?.position) {
+                  triCount += Math.round(child.geometry.attributes.position.count / 3);
+                }
+                if (child.material) {
+                  materials.push(child.material);
+                }
+                child.castShadow = true;
+                child.receiveShadow = true;
+              }
+            });
+
+            const dimStr = `${Math.round(size.x * 10)} × ${Math.round(size.y * 10)} × ${Math.round(size.z * 10)} mm`;
+            setModelStats({
+              format: '3MF ADDITIVE CAD',
+              triangles: triCount,
+              dimensions: dimStr,
+              source: 'ADMIN 3MF UPLOAD',
+            });
+
+            modelGroup.add(object);
+            setLoadError(null);
+          },
+          undefined,
+          (err) => {
+            console.warn('Failed to load custom 3MF model, falling back to preset:', err.message);
+            setLoadError('Custom 3MF file unavailable, rendering CAD proxy.');
+            buildProceduralModel('apex_mascot');
+          }
+        );
+      } else {
+        // GLB / GLTF Loader
+        const loader = new GLTFLoader();
+        loader.load(
+          modelUrl,
+          (gltf) => {
+            const loadedModel = gltf.scene;
+            const box = new THREE.Box3().setFromObject(loadedModel);
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            const scale = 2.4 / maxDim;
+            loadedModel.scale.setScalar(scale);
+
+            const center = box.getCenter(new THREE.Vector3());
+            loadedModel.position.x = -center.x * scale;
+            loadedModel.position.y = -center.y * scale + 0.8;
+            loadedModel.position.z = -center.z * scale;
+
+            let triCount = 0;
+            loadedModel.traverse((child) => {
+              if (child.isMesh) {
+                if (child.geometry?.attributes?.position) {
+                  triCount += Math.round(child.geometry.attributes.position.count / 3);
+                }
+                if (child.material) {
+                  materials.push(child.material);
+                }
+                child.castShadow = true;
+              }
+            });
+
+            setModelStats({
+              format: 'GLB 3D RIG',
+              triangles: triCount,
+              dimensions: `${Math.round(size.x * 10)} × ${Math.round(size.y * 10)} × ${Math.round(size.z * 10)} mm`,
+              source: 'ADMIN 3D UPLOAD',
+            });
+
+            modelGroup.add(loadedModel);
+            setLoadError(null);
+          },
+          undefined,
+          (err) => {
+            console.warn('Failed to load custom GLB model, falling back to preset:', err.message);
+            setLoadError('Custom 3D model unavailable, rendering CAD proxy.');
+            buildProceduralModel('apex_mascot');
+          }
+        );
+      }
     } else {
       buildProceduralModel(resolvedType);
     }
@@ -760,6 +889,37 @@ export function RobotViewer3D({
     window.addEventListener('mouseup', onMouseUp);
     domEl.addEventListener('wheel', onWheel, { passive: false });
 
+    // Touch support for mobile devices
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const onTouchStart = (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    };
+    const onTouchMove = (e) => {
+      if (!isDragging || e.touches.length !== 1) return;
+      const deltaX = e.touches[0].clientX - touchStartX;
+      const deltaY = e.touches[0].clientY - touchStartY;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      modelGroup.rotation.y += deltaX * 0.01;
+      modelGroup.rotation.x += deltaY * 0.01;
+      setTelemetry((prev) => ({
+        ...prev,
+        rotX: Math.round((modelGroup.rotation.x * 180) / Math.PI) % 360,
+        rotY: Math.round((modelGroup.rotation.y * 180) / Math.PI) % 360,
+      }));
+    };
+    const onTouchEnd = () => {
+      isDragging = false;
+    };
+    domEl.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd);
+
     // 9. Animation Loop
     let clock = new THREE.Clock();
     let animId;
@@ -802,6 +962,9 @@ export function RobotViewer3D({
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
       domEl.removeEventListener('wheel', onWheel);
+      domEl.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
 
       if (container.contains(domEl)) {
         container.removeChild(domEl);
@@ -856,12 +1019,26 @@ export function RobotViewer3D({
         </div>
       )}
 
-      {/* Floating Header Badge */}
-      <div className="absolute top-4 left-4 flex flex-col gap-1 pointer-events-none z-10">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] backdrop-blur-md shadow-glow-sm">
-          <Bot className="w-3.5 h-3.5 animate-pulse text-[#00D2FF]" />
-          <span>{getModelLabel()}</span>
-        </span>
+      {/* Floating Header Badges */}
+      <div className="absolute top-4 left-4 flex flex-col gap-1.5 pointer-events-none z-10">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] backdrop-blur-md shadow-glow-sm">
+            <Bot className="w-3.5 h-3.5 animate-pulse text-[#00D2FF]" />
+            <span>{getModelLabel()}</span>
+          </span>
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-white/10 border border-white/20 text-white backdrop-blur-md">
+            <FileCode className="w-3 h-3 text-[#00D2FF]" />
+            <span>{modelStats.format}</span>
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] font-mono font-semibold text-slate-300 bg-black/60 border border-white/10 px-2 py-0.5 rounded-md backdrop-blur-xs">
+            {modelStats.triangles > 0 ? `${modelStats.triangles.toLocaleString()} Tris` : 'Procedural Mesh'}
+          </span>
+          <span className="text-[10px] font-mono text-cyan-300 bg-black/60 border border-white/10 px-2 py-0.5 rounded-md backdrop-blur-xs">
+            {modelStats.dimensions}
+          </span>
+        </div>
         {loadError && (
           <span className="text-[10px] font-mono text-amber-400 bg-black/60 px-2 py-0.5 rounded backdrop-blur-xs">
             {loadError}
@@ -871,25 +1048,36 @@ export function RobotViewer3D({
 
       {/* Real-time Telemetry HUD */}
       {showTelemetry && (
-        <div className="absolute bottom-4 left-4 p-3 rounded-2xl bg-black/70 border border-white/10 backdrop-blur-md text-[10px] font-mono text-slate-300 space-y-1 pointer-events-none hidden sm:block z-10 shadow-lg">
-          <div className="flex items-center gap-2 pb-1 border-b border-white/10 text-[#00D2FF] font-bold">
-            <Activity className="w-3 h-3 animate-spin" />
-            <span>LIVE 60 FPS TELEMETRY</span>
+        <div className="absolute bottom-4 left-4 p-3.5 rounded-2xl bg-black/80 border border-white/10 backdrop-blur-md text-[10px] font-mono text-slate-300 space-y-1.5 pointer-events-none hidden sm:block z-10 shadow-2xl min-w-[210px]">
+          <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-[#00D2FF] font-bold">
+            <div className="flex items-center gap-1.5">
+              <Activity className="w-3 h-3 animate-spin" />
+              <span>LIVE 60 FPS CAD HUD</span>
+            </div>
+            <span className="text-[9px] text-emerald-400 font-mono">STABLE</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className="text-slate-400">PITCH:</span>
-            <span className="text-[#00D2FF] font-bold">{telemetry.rotX}&deg;</span>
+            <span className="text-slate-400">FORMAT:</span>
+            <span className="text-white font-bold">{modelStats.format}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className="text-slate-400">YAW:</span>
-            <span className="text-[#00D2FF] font-bold">{telemetry.rotY}&deg;</span>
+            <span className="text-slate-400">POLYGONS:</span>
+            <span className="text-[#00D2FF] font-bold">{modelStats.triangles.toLocaleString()} TRIS</span>
+          </div>
+          <div className="flex justify-between gap-4">
+            <span className="text-slate-400">BOUNDING:</span>
+            <span className="text-white font-bold">{modelStats.dimensions}</span>
+          </div>
+          <div className="flex justify-between gap-4 pt-1 border-t border-white/5">
+            <span className="text-slate-400">PITCH / YAW:</span>
+            <span className="text-[#00D2FF] font-bold">{telemetry.rotX}&deg; / {telemetry.rotY}&deg;</span>
           </div>
           <div className="flex justify-between gap-4">
             <span className="text-slate-400">ZOOM:</span>
             <span className="text-emerald-400 font-bold">{telemetry.zoom}%</span>
           </div>
-          <div className="text-[9px] text-slate-500 pt-0.5">
-            PBR METALLIC &bull; HARDWARE ACCELERATED
+          <div className="text-[9px] text-slate-500 pt-1 border-t border-white/5 truncate">
+            SOURCE: {modelStats.source}
           </div>
         </div>
       )}
@@ -899,10 +1087,10 @@ export function RobotViewer3D({
         <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
           <button
             onClick={() => setAutoRotate(!autoRotate)}
-            className={`p-2.5 rounded-xl border backdrop-blur-md transition-all ${
+            className={`p-2.5 rounded-xl border backdrop-blur-md transition-all cursor-pointer ${
               autoRotate
-                ? 'bg-brand-accent text-white border-brand-accent shadow-glow-sm'
-                : 'bg-black/60 text-slate-300 border-white/10 hover:border-brand-accent'
+                ? 'bg-[#0066FF] text-white border-[#00D2FF] shadow-[0_0_15px_rgba(0,102,255,0.6)]'
+                : 'bg-black/60 text-slate-300 border-white/10 hover:border-[#0066FF] hover:text-white'
             }`}
             title={autoRotate ? 'Pause 360 Rotation' : 'Enable 360 Auto-Rotate'}
           >
@@ -911,20 +1099,20 @@ export function RobotViewer3D({
 
           <button
             onClick={() => setIsWireframe(!isWireframe)}
-            className={`p-2.5 rounded-xl border backdrop-blur-md transition-all ${
+            className={`p-2.5 rounded-xl border backdrop-blur-md transition-all cursor-pointer ${
               isWireframe
-                ? 'bg-brand-accent text-white border-brand-accent shadow-glow-sm'
-                : 'bg-black/60 text-slate-300 border-white/10 hover:border-brand-accent'
+                ? 'bg-[#0066FF] text-white border-[#00D2FF] shadow-[0_0_15px_rgba(0,102,255,0.6)]'
+                : 'bg-black/60 text-slate-300 border-white/10 hover:border-[#0066FF] hover:text-white'
             }`}
-            title="Toggle Wireframe CAD Mode"
+            title="Toggle Wireframe CAD Mode (Inspect Triangle Tessellation)"
           >
             <Layers className="w-4 h-4" />
           </button>
 
           <button
             onClick={handleResetView}
-            className="p-2.5 rounded-xl bg-black/60 border border-white/10 text-slate-300 hover:border-brand-accent hover:text-white backdrop-blur-md transition-all"
-            title="Reset Alignment"
+            className="p-2.5 rounded-xl bg-black/60 border border-white/10 text-slate-300 hover:border-[#0066FF] hover:text-[#00D2FF] backdrop-blur-md transition-all cursor-pointer"
+            title="Reset Camera Alignment"
           >
             <Eye className="w-4 h-4" />
           </button>
@@ -932,8 +1120,8 @@ export function RobotViewer3D({
       )}
 
       {/* Drag & Orbit Prompt */}
-      <div className="absolute bottom-4 right-4 pointer-events-none text-[11px] font-mono text-slate-400 bg-black/50 px-3 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm z-10 hidden sm:block">
-        <span>Click &amp; Drag &bull; Scroll Zoom</span>
+      <div className="absolute bottom-4 right-4 pointer-events-none text-[11px] font-mono text-slate-400 bg-black/60 px-3 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm z-10 hidden sm:block">
+        <span>Click &amp; Drag &bull; Scroll Zoom &bull; Wireframe X-Ray</span>
       </div>
     </div>
   );

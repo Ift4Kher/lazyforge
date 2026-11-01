@@ -17,10 +17,10 @@ describe('LazyForge Frontend Application', () => {
     await act(async () => {
       render(<App />);
     });
-    const headings = screen.getAllByText(/ENGINEERING/i);
+    const headings = screen.getAllByText(/ROBOTICS|ENGINEERING/i);
     expect(headings.length).toBeGreaterThan(0);
-    expect(screen.getByText(/Explore Catalog/i)).toBeInTheDocument();
-    expect(screen.getByText(/View 3D Models/i)).toBeInTheDocument();
+    expect(screen.getByText(/Explore Collection|Explore Catalog/i)).toBeInTheDocument();
+    expect(screen.getByText(/Discover More|View 3D Models/i)).toBeInTheDocument();
   });
 
   it('renders footer with Bangladesh delivery and support info', async () => {

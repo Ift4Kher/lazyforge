@@ -19,6 +19,7 @@ import { fetchProductBySlug } from '../../services/catalogService';
 import { useCart } from '../../context/CartContext';
 import { ProductCard } from '../../components/storefront/ProductCard';
 import { ProductReviewsSection } from '../../components/storefront/ProductReviewsSection';
+import { RobotViewer3D } from '../../components/storefront/RobotViewer3D';
 
 export function ProductDetailPage() {
   const { slug } = useParams();
@@ -32,6 +33,7 @@ export function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addedSuccess, setAddedSuccess] = useState(false);
+  const [viewMode, setViewMode] = useState('image'); // 'image' | '3d'
 
   useEffect(() => {
     setLoading(true);
@@ -153,14 +155,60 @@ export function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Gallery Column */}
           <div className="space-y-4">
+            {/* View Mode Toggle when 3D model exists */}
+            {product.model_3d_url && (
+              <div className="flex items-center justify-between pb-1">
+                <span className="text-xs font-mono font-bold text-gray-500 uppercase tracking-wider">
+                  Viewport Mode
+                </span>
+                <div className="flex items-center p-1 rounded-xl bg-slate-100 border border-brand-border text-xs font-orbitron font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('image')}
+                    className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                      viewMode === 'image'
+                        ? 'bg-white text-brand-graphite shadow-xs'
+                        : 'text-gray-500 hover:text-brand-graphite'
+                    }`}
+                  >
+                    2D PHOTO
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('3d')}
+                    className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                      viewMode === '3d'
+                        ? 'bg-[#0066FF] text-white shadow-xs'
+                        : 'text-gray-500 hover:text-[#0066FF]'
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>3D CAD TELEMETRY</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="relative aspect-square w-full rounded-2xl bg-white border border-brand-border/80 overflow-hidden shadow-xs flex items-center justify-center p-4">
               {/* Sci-fi corner brackets */}
-              <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#0066FF]/60 pointer-events-none" />
-              <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#0066FF]/60 pointer-events-none" />
-              <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#0066FF]/60 pointer-events-none" />
-              <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#0066FF]/60 pointer-events-none" />
+              <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#0066FF]/60 pointer-events-none z-10" />
+              <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#0066FF]/60 pointer-events-none z-10" />
+              <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#0066FF]/60 pointer-events-none z-10" />
+              <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#0066FF]/60 pointer-events-none z-10" />
 
-              {selectedImage ? (
+              {viewMode === '3d' && product.model_3d_url ? (
+                <div className="w-full h-full relative rounded-xl overflow-hidden bg-[#0A0D14]">
+                  <RobotViewer3D
+                    key={product.model_3d_url}
+                    height="100%"
+                    modelType={product.model_3d_url}
+                    modelUrl={product.model_3d_format === 'preset' ? null : product.model_3d_url}
+                    productName={product.name}
+                    showControls={true}
+                    showTelemetry={true}
+                  />
+                </div>
+              ) : selectedImage ? (
                 <img
                   src={selectedImage}
                   alt={product.name}
@@ -170,12 +218,16 @@ export function ProductDetailPage() {
                 <Zap className="w-16 h-16 opacity-30 text-[#0066FF]" />
               )}
 
-              {/* 3D Model Showcase Badge */}
-              {product.model_3d_url && (
-                <div className="absolute top-4 right-4 inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#0066FF]/30 text-xs font-bold font-orbitron text-[#0066FF] shadow-xs">
+              {/* 3D Model Showcase Badge when in 2D image mode */}
+              {product.model_3d_url && viewMode === 'image' && (
+                <button
+                  type="button"
+                  onClick={() => setViewMode('3d')}
+                  className="absolute top-4 right-4 inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#0066FF]/30 text-xs font-bold font-orbitron text-[#0066FF] hover:bg-[#0066FF] hover:text-white transition-all shadow-xs cursor-pointer"
+                >
                   <Layers className="w-3.5 h-3.5" />
                   <span>3D CAD TELEMETRY</span>
-                </div>
+                </button>
               )}
             </div>
 

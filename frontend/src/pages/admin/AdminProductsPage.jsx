@@ -269,17 +269,18 @@ export function AdminProductsPage() {
       const matched = PRESET_OPTIONS.find((opt) => opt.value === p.model_3d_url);
       const label = matched ? matched.label.split(' ')[0] : p.model_3d_url;
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-600 border border-purple-500/30">
-          <Bot className="w-3 h-3 text-brand-accent" />
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#0066FF]/10 text-[#0066FF] border border-[#0066FF]/30">
+          <Bot className="w-3 h-3 text-[#0066FF]" />
           <span>Preset: {label}</span>
         </span>
       );
     }
 
+    const fmt = (p.model_3d_format || (p.model_3d_url?.endsWith('.stl') ? 'stl' : p.model_3d_url?.endsWith('.3mf') ? '3mf' : 'glb')).toUpperCase();
     return (
-      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/10 text-cyan-600 border border-cyan-500/30">
-        <Upload className="w-3 h-3 text-cyan-500" />
-        <span>Custom {p.model_3d_format?.toUpperCase() || 'GLB'}</span>
+      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#00D2FF]/10 text-[#0066FF] border border-[#00D2FF]/30">
+        <Upload className="w-3 h-3 text-[#00D2FF]" />
+        <span>Custom {fmt}</span>
       </span>
     );
   };
@@ -662,18 +663,22 @@ export function AdminProductsPage() {
 
                   {/* Upload 3D File */}
                   <div className="space-y-1">
-                    <label className="font-bold text-brand-graphite">
-                      Option 2: Upload Custom 3D (.glb, .gltf, .stl)
+                    <label className="font-bold text-brand-graphite flex items-center justify-between">
+                      <span>Option 2: Upload 3D Model File (.stl, .3mf, .glb)</span>
+                      <span className="text-[10px] font-mono text-[#0066FF] font-bold">Up to 50MB</span>
                     </label>
                     <div className="relative">
                       <input
                         type="file"
-                        accept=".glb,.gltf,.stl,.obj"
+                        accept=".stl,.3mf,.glb,.gltf,.obj"
                         disabled={isUploading3D}
                         onChange={handleFileUpload}
-                        className="w-full text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-accent file:text-white hover:file:bg-brand-accentHover cursor-pointer"
+                        className="w-full text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#0066FF] file:text-white hover:file:bg-[#0052CC] cursor-pointer"
                       />
                     </div>
+                    <p className="text-[10px] font-mono text-gray-500">
+                      Directly renders .STL and .3MF additive manufacturing meshes in 60 FPS WebGL.
+                    </p>
                   </div>
                 </div>
 
