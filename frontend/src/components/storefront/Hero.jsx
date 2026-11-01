@@ -121,18 +121,21 @@ export function Hero() {
             <div className="flex flex-wrap items-center gap-3.5 pt-2">
               <Link
                 to={activeSlide.primaryLink}
-                className="inline-flex items-center space-x-2.5 px-6 py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-[#0066FF] text-white hover:bg-blue-600 shadow-[0_4px_18px_rgba(0,102,255,0.35)] hover:scale-105 active:scale-95 transition-all group"
+                className="inline-flex items-center space-x-2.5 px-6 py-3 rounded-full font-bold text-xs sm:text-sm bg-[#0066FF] text-white hover:bg-blue-600 shadow-[0_4px_18px_rgba(0,102,255,0.35)] hover:scale-105 active:scale-95 transition-all group"
               >
                 <span>{activeSlide.primaryCta}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
 
+              {/* Chamfered Discover More Button (matching reference screenshot) */}
               <Link
                 to={activeSlide.secondaryLink}
-                className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-white border border-[#0066FF] text-slate-800 hover:bg-blue-50/80 hover:scale-105 active:scale-95 transition-all shadow-sm"
+                className="p-[1.5px] bg-[#0066FF] clip-chamfer-tl-br-12 inline-flex items-center hover:scale-105 active:scale-95 transition-all shadow-xs group"
               >
-                <Play className="w-3.5 h-3.5 text-[#0066FF] fill-[#0066FF]" />
-                <span>{activeSlide.secondaryCta}</span>
+                <div className="w-full h-full bg-white group-hover:bg-blue-50/60 clip-chamfer-tl-br-12 px-6 py-3 flex items-center space-x-2 text-slate-800 text-xs sm:text-sm font-bold transition-colors">
+                  <Play className="w-3.5 h-3.5 text-[#0066FF] fill-[#0066FF]" />
+                  <span>{activeSlide.secondaryCta}</span>
+                </div>
               </Link>
             </div>
 
@@ -141,7 +144,7 @@ export function Hero() {
               <button
                 type="button"
                 onClick={handlePrev}
-                className="w-9 h-9 rounded-full border border-slate-300 bg-white hover:bg-blue-50 hover:border-[#0066FF] hover:text-[#0066FF] text-slate-600 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                className="w-8 h-8 rounded-full border border-blue-200 bg-white hover:border-[#0066FF] hover:bg-blue-50 text-slate-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
                 aria-label="Previous slide"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -150,13 +153,13 @@ export function Hero() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="w-9 h-9 rounded-full border border-slate-300 bg-white hover:bg-blue-50 hover:border-[#0066FF] hover:text-[#0066FF] text-slate-600 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                className="w-8 h-8 rounded-full border border-blue-200 bg-white hover:border-[#0066FF] hover:bg-blue-50 text-slate-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
                 aria-label="Next slide"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
 
-              <span className="font-mono text-xs font-bold text-slate-500 pl-1 tracking-wider">
+              <span className="font-['Orbitron',sans-serif] text-xs font-bold text-slate-800 pl-1 tracking-wider">
                 0{currentSlide} / 0{totalSlides}
               </span>
             </div>

@@ -93,4 +93,27 @@
     height: 1px;
     background: linear-gradient(90deg, #E2E8F0 0%, #0066FF 30%, #00D2FF 50%, #E2E8F0 80%);
   }
+
+  /* Futuristic Cyber Corner Chamfer Shapes */
+  .clip-chamfer-tl-bl-14 {
+    clip-path: polygon(14px 0%, 100% 0%, 100% 100%, 14px 100%, 0% calc(100% - 14px), 0% 14px);
+  }
+  .clip-chamfer-tl-bl-14-inner {
+    clip-path: polygon(13px 0%, 100% 0%, 100% 100%, 13px 100%, 0% calc(100% - 13px), 0% 13px);
+  }
+
+  .clip-chamfer-tl-bl-18 {
+    clip-path: polygon(18px 0%, 100% 0%, 100% 100%, 18px 100%, 0% calc(100% - 18px), 0% 18px);
+  }
+  .clip-chamfer-tl-bl-18-inner {
+    clip-path: polygon(16.5px 0%, 100% 0%, 100% 100%, 16.5px 100%, 0% calc(100% - 16.5px), 0% 16.5px);
+  }
+
+  .clip-chamfer-tl-br-12 {
+    clip-path: polygon(12px 0%, 100% 0%, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0% 100%, 0% 12px);
+  }
+
+  .clip-octagon-btn {
+    clip-path: polygon(7px 0%, calc(100% - 7px) 0%, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0% calc(100% - 7px), 0% 7px);
+  }
 }
