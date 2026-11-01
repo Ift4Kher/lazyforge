@@ -199,14 +199,15 @@ export function ProductListPage() {
           {/* Search Form - Robotic Edgy Shape */}
           <form onSubmit={handleSearchSubmit} className="relative w-full sm:max-w-md group">
             <div className="w-full p-[1.5px] clip-cyber-search bg-slate-200 group-hover:bg-[#0066FF]/60 focus-within:!bg-[#0066FF] transition-all duration-200 shadow-2xs focus-within:shadow-[0_0_15px_rgba(0,102,255,0.25)]">
-              <div className="relative w-full flex items-center bg-slate-50 focus-within:bg-white clip-cyber-search-inner transition-colors">
-                <Search className="w-4 h-4 text-[#0066FF] absolute left-3.5 pointer-events-none" />
+              <div className="relative w-full h-10 flex items-center bg-slate-50 focus-within:bg-white clip-cyber-search-inner transition-colors">
+                <Search className="w-4 h-4 text-[#0066FF] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   placeholder="Search robotic kits, ESP32, sensors, CAD models..."
-                  className="w-full pl-10 pr-10 py-2.5 bg-transparent text-xs text-brand-graphite placeholder-brand-muted focus:outline-none font-medium"
+                  style={{ paddingLeft: '42px', paddingRight: '36px' }}
+                  className="w-full h-full bg-transparent text-xs text-brand-graphite placeholder-brand-muted focus:outline-none font-medium"
                 />
                 {searchInput ? (
                   <button
@@ -215,17 +216,18 @@ export function ProductListPage() {
                       setSearchInput('');
                       updateParam('search', '');
                     }}
-                    className="absolute right-3 text-brand-muted hover:text-brand-graphite"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-graphite cursor-pointer"
+                    aria-label="Clear search"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="absolute right-2 w-6 h-6 clip-octagon-btn bg-slate-200 hover:bg-[#0066FF] text-slate-500 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 hover:text-[#0066FF] font-bold px-1.5 py-0.5 rounded bg-slate-200/50 hover:bg-blue-50 border border-slate-300/40 transition-colors"
                     aria-label="Submit search"
                   >
-                    <Search className="w-3 h-3" />
+                    ↵
                   </button>
                 )}
               </div>

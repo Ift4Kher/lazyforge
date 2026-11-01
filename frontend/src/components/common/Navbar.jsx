@@ -163,22 +163,34 @@ export function Navbar() {
             className="hidden sm:flex items-center flex-1 max-w-xs relative group"
           >
             <div className="w-full p-[1.5px] clip-cyber-search bg-slate-200 group-hover:bg-[#0066FF]/60 focus-within:!bg-[#0066FF] transition-all duration-200 shadow-2xs focus-within:shadow-[0_0_15px_rgba(0,102,255,0.25)]">
-              <div className="relative w-full flex items-center bg-slate-50 focus-within:bg-white clip-cyber-search-inner transition-colors">
-                <Search className="w-3.5 h-3.5 text-slate-400 group-focus-within:text-[#0066FF] absolute left-3 pointer-events-none transition-colors" />
+              <div className="relative w-full h-9 flex items-center bg-slate-50 focus-within:bg-white clip-cyber-search-inner transition-colors">
+                <Search className="w-4 h-4 text-slate-400 group-focus-within:text-[#0066FF] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="w-full pl-8.5 pr-8 py-2 bg-transparent text-xs text-slate-800 placeholder-slate-400 focus:outline-none font-medium"
+                  style={{ paddingLeft: '38px', paddingRight: '32px' }}
+                  className="w-full h-full bg-transparent text-xs text-slate-800 placeholder-slate-400 focus:outline-none font-medium"
                 />
-                <button 
-                  type="submit" 
-                  className="absolute right-1 w-6 h-6 clip-octagon-btn bg-slate-200/80 hover:bg-[#0066FF] text-slate-500 hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-xs"
-                  aria-label="Submit search"
-                >
-                  <Search className="w-3 h-3" />
-                </button>
+                {searchQuery ? (
+                  <button 
+                    type="button" 
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                    aria-label="Clear search"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 hover:text-[#0066FF] font-bold px-1.5 py-0.5 rounded bg-slate-200/50 hover:bg-blue-50 border border-slate-300/40 transition-colors"
+                    aria-label="Submit search"
+                  >
+                    ↵
+                  </button>
+                )}
               </div>
             </div>
           </form>
@@ -266,22 +278,34 @@ export function Navbar() {
           {/* Mobile Search - Robotic Edgy Shape */}
           <form onSubmit={handleSearchSubmit} className="relative pb-2 group">
             <div className="w-full p-[1.5px] clip-cyber-search bg-slate-200 group-hover:bg-[#0066FF]/60 focus-within:!bg-[#0066FF] transition-all duration-200">
-              <div className="relative w-full flex items-center bg-slate-100 focus-within:bg-white clip-cyber-search-inner transition-colors">
-                <Search className="w-3.5 h-3.5 text-slate-400 group-focus-within:text-[#0066FF] absolute left-3 pointer-events-none transition-colors" />
+              <div className="relative w-full h-10 flex items-center bg-slate-100 focus-within:bg-white clip-cyber-search-inner transition-colors">
+                <Search className="w-4 h-4 text-slate-400 group-focus-within:text-[#0066FF] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="w-full pl-8.5 pr-9 py-2.5 bg-transparent text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                  style={{ paddingLeft: '38px', paddingRight: '32px' }}
+                  className="w-full h-full bg-transparent text-xs text-slate-800 placeholder-slate-400 focus:outline-none font-medium"
                 />
-                <button
-                  type="submit"
-                  className="absolute right-1.5 w-6 h-6 clip-octagon-btn bg-[#0066FF] text-white flex items-center justify-center transition-all cursor-pointer"
-                  aria-label="Submit mobile search"
-                >
-                  <Search className="w-3 h-3" />
-                </button>
+                {searchQuery ? (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                    aria-label="Clear mobile search"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 hover:text-[#0066FF] font-bold px-1.5 py-0.5 rounded bg-slate-200/50 hover:bg-blue-50 border border-slate-300/40 transition-colors"
+                    aria-label="Submit mobile search"
+                  >
+                    ↵
+                  </button>
+                )}
               </div>
             </div>
           </form>

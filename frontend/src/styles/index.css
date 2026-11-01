@@ -117,30 +117,30 @@
     clip-path: polygon(7px 0%, calc(100% - 7px) 0%, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0% calc(100% - 7px), 0% 7px);
   }
 
-  /* Robotic Edgy Search Bar (Chamfered Tech Polygon) */
+  /* Robotic Edgy Search Bar (Crisp 7px Chamfered Cyber Polygon) */
   .clip-cyber-search {
     clip-path: polygon(
-      10px 0%,
-      calc(100% - 10px) 0%,
-      100% 10px,
-      100% calc(100% - 10px),
-      calc(100% - 10px) 100%,
-      10px 100%,
-      0% calc(100% - 10px),
-      0% 10px
+      7px 0%,
+      calc(100% - 7px) 0%,
+      100% 7px,
+      100% calc(100% - 7px),
+      calc(100% - 7px) 100%,
+      7px 100%,
+      0% calc(100% - 7px),
+      0% 7px
     );
   }
 
   .clip-cyber-search-inner {
     clip-path: polygon(
-      9px 0%,
-      calc(100% - 9px) 0%,
-      100% 9px,
-      100% calc(100% - 9px),
-      calc(100% - 9px) 100%,
-      9px 100%,
-      0% calc(100% - 9px),
-      0% 9px
+      6px 0%,
+      calc(100% - 6px) 0%,
+      100% 6px,
+      100% calc(100% - 6px),
+      calc(100% - 6px) 100%,
+      6px 100%,
+      0% calc(100% - 6px),
+      0% 6px
     );
   }
 
