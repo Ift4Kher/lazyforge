@@ -584,15 +584,18 @@ export function AdminOrdersPage() {
                   {bdCheck ? (
                     <div className="space-y-3 pt-1">
                       {/* Overall Ratio Bar & Risk Badge */}
-                      <div className="flex items-center justify-between bg-white p-2.5 rounded-lg border border-slate-200/80">
+                      <div className="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-200/80">
                         <div>
                           <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Overall Delivery Ratio</div>
-                          <div className="text-lg font-black font-mono text-[#0066FF] leading-tight">
-                            {bdCheck.success_ratio}%
+                          <div className="text-xl font-black font-mono text-[#0066FF] leading-tight">
+                            {bdCheck.data?.summary?.success_ratio ?? bdCheck.success_ratio}%
+                          </div>
+                          <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                            {bdCheck.data?.summary?.total_parcel ?? bdCheck.total_parcel ?? 0} total parcels analyzed
                           </div>
                         </div>
 
-                        <div className="text-right">
+                        <div className="text-right space-y-1">
                           <span
                             className={`px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide inline-flex items-center gap-1 ${
                               bdCheck.risk_level === 'safe'
@@ -605,10 +608,32 @@ export function AdminOrdersPage() {
                             {bdCheck.risk_level === 'safe' && <ShieldCheck className="w-3 h-3" />}
                             {bdCheck.risk_level === 'medium' && <AlertCircle className="w-3 h-3" />}
                             {bdCheck.risk_level === 'danger' && <ShieldAlert className="w-3 h-3" />}
-                            {bdCheck.risk_level === 'safe' ? 'LOW COD RISK' : bdCheck.risk_level === 'medium' ? 'MODERATE RISK' : 'HIGH RETURN RISK'}
+                            {bdCheck.risk_verdict?.action || (bdCheck.risk_level === 'safe' ? 'OK to ship' : bdCheck.risk_level === 'medium' ? 'Phone confirmation advised' : 'Advance payment required')}
                           </span>
-                          <div className="text-[10px] text-slate-400 font-mono mt-0.5">
-                            Status: {bdCheck.risk_level?.toUpperCase()}
+                          <div className="text-[10px] text-slate-400 font-mono">
+                            Verdict: {bdCheck.risk_verdict?.label || bdCheck.risk_level?.toUpperCase()}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Delivery Parcel Stats Summary Pill Bar */}
+                      <div className="grid grid-cols-3 gap-2 text-center">
+                        <div className="p-2 rounded-lg bg-white border border-slate-200">
+                          <div className="text-[10px] text-slate-500 font-bold uppercase">Total Parcels</div>
+                          <div className="text-sm font-extrabold font-mono text-slate-800">
+                            {bdCheck.data?.summary?.total_parcel ?? bdCheck.total_parcel ?? 0}
+                          </div>
+                        </div>
+                        <div className="p-2 rounded-lg bg-white border border-slate-200">
+                          <div className="text-[10px] text-emerald-600 font-bold uppercase">Delivered</div>
+                          <div className="text-sm font-extrabold font-mono text-emerald-600">
+                            {bdCheck.data?.summary?.success_parcel ?? bdCheck.success_parcel ?? 0}
+                          </div>
+                        </div>
+                        <div className="p-2 rounded-lg bg-white border border-slate-200">
+                          <div className="text-[10px] text-rose-600 font-bold uppercase">Cancelled</div>
+                          <div className="text-sm font-extrabold font-mono text-rose-600">
+                            {bdCheck.data?.summary?.cancelled_parcel ?? bdCheck.cancelled_parcel ?? 0}
                           </div>
                         </div>
                       </div>
@@ -617,34 +642,65 @@ export function AdminOrdersPage() {
                       <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
                         <div
                           className={`h-full transition-all duration-500 rounded-full ${
-                            bdCheck.success_ratio >= 80
+                            (bdCheck.data?.summary?.success_ratio ?? bdCheck.success_ratio) >= 80
                               ? 'bg-emerald-500'
-                              : bdCheck.success_ratio >= 60
+                              : (bdCheck.data?.summary?.success_ratio ?? bdCheck.success_ratio) >= 60
                               ? 'bg-amber-500'
                               : 'bg-rose-500'
                           }`}
-                          style={{ width: `${Math.min(100, Math.max(0, bdCheck.success_ratio))}%` }}
+                          style={{ width: `${Math.min(100, Math.max(0, bdCheck.data?.summary?.success_ratio ?? bdCheck.success_ratio))}%` }}
                         />
                       </div>
 
-                      {/* Verdict Message */}
-                      <div className="p-2.5 rounded-lg bg-blue-50/70 border border-blue-100 text-slate-700 text-[11px] leading-relaxed">
-                        <span className="font-semibold text-slate-900 mr-1">Telemetry Analysis:</span>
-                        {bdCheck.risk_verdict?.message || 'Customer delivery telemetry analyzed across verified courier logs.'}
+                      {/* Verdict Message & Reasons */}
+                      <div className="p-2.5 rounded-lg bg-blue-50/70 border border-blue-100 text-slate-700 text-[11px] leading-relaxed space-y-1">
+                        <div>
+                          <span className="font-semibold text-slate-900 mr-1">Telemetry Analysis:</span>
+                          {bdCheck.risk_verdict?.message || 'Customer delivery telemetry analyzed across verified courier logs.'}
+                        </div>
+                        {Array.isArray(bdCheck.risk_verdict?.reasons) && bdCheck.risk_verdict.reasons.length > 0 && (
+                          <div className="pt-1 flex flex-wrap gap-1">
+                            {bdCheck.risk_verdict.reasons.map((reason, idx) => (
+                              <span key={idx} className="inline-block px-2 py-0.5 rounded bg-blue-100/80 text-blue-800 text-[10px] font-medium">
+                                • {reason}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
-                      {/* Courier Breakdown Grid */}
-                      {bdCheck.data && Object.keys(bdCheck.data).length > 0 && (
-                        <div className="grid grid-cols-3 gap-2 text-center pt-1">
-                          {Object.entries(bdCheck.data).map(([key, c]) => (
-                            <div key={key} className="p-2 rounded-lg bg-white border border-slate-200">
-                              <div className="font-bold text-slate-800 text-[11px] truncate">{c.name || key}</div>
-                              <div className="text-[10px] font-mono font-bold text-[#0066FF] mt-0.5">{c.success_ratio}%</div>
-                              <div className="text-[9px] text-slate-400 mt-0.5">
-                                <span className="text-emerald-600 font-bold">{c.success_parcel || 0}</span> / <span className="text-rose-600">{c.cancelled_parcel || 0}</span>
-                              </div>
-                            </div>
-                          ))}
+                      {/* Courier Breakdown Grid (Excluding summary) */}
+                      {bdCheck.data && Object.keys(bdCheck.data).filter((k) => k !== 'summary').length > 0 && (
+                        <div className="space-y-1.5 pt-1">
+                          <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                            Verified Couriers Breakdown
+                          </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                            {Object.entries(bdCheck.data)
+                              .filter(([key]) => key !== 'summary')
+                              .map(([key, c]) => (
+                                <div key={key} className="p-2 rounded-lg bg-white border border-slate-200 flex flex-col justify-between">
+                                  <div>
+                                    {c.logo ? (
+                                      <img
+                                        src={c.logo}
+                                        alt={c.name || key}
+                                        className="h-4 max-w-[70px] object-contain mx-auto mb-1"
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                      />
+                                    ) : null}
+                                    <div className="font-bold text-slate-800 text-[11px] truncate">{c.name || key}</div>
+                                  </div>
+                                  <div className="mt-1">
+                                    <div className="text-[11px] font-mono font-black text-[#0066FF]">{c.success_ratio}%</div>
+                                    <div className="text-[9px] text-slate-500 mt-0.5">
+                                      <span className="text-emerald-600 font-bold">{c.success_parcel || 0}</span> / <span className="text-rose-600">{c.cancelled_parcel || 0}</span>
+                                      <span className="text-slate-400 text-[8px] block">({c.total_parcel || 0} total)</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                          </div>
                         </div>
                       )}
 
