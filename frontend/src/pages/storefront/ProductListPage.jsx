@@ -163,7 +163,7 @@ export function ProductListPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]/80 py-6 sm:py-8">
+    <div className="min-h-screen bg-[#F0F4FA] py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Breadcrumb: Home > Shop */}

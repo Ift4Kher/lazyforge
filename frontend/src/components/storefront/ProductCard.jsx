@@ -55,7 +55,7 @@ export function ProductCard({ product }) {
       
       {/* Outer Border Layer with 45-degree Robotic Chamfered Corners */}
       <div 
-        className="p-[1.5px] h-full w-full bg-slate-200/90 group-hover:bg-[#0066FF] transition-colors duration-300 flex flex-col justify-between shadow-2xs"
+        className="p-[2px] h-full w-full bg-[#B2C3DA] group-hover:bg-[#0066FF] transition-colors duration-200 flex flex-col justify-between"
         style={{
           clipPath: 'polygon(14px 0%, calc(100% - 14px) 0%, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0% calc(100% - 14px), 0% 14px)'
         }}
@@ -64,7 +64,7 @@ export function ProductCard({ product }) {
         <div 
           className="bg-white flex flex-col justify-between h-full w-full relative overflow-hidden"
           style={{
-            clipPath: 'polygon(13px 0%, calc(100% - 13px) 0%, 100% 13px, 100% calc(100% - 13px), calc(100% - 13px) 100%, 13px 100%, 0% calc(100% - 13px), 0% 13px)'
+            clipPath: 'polygon(11px 0%, calc(100% - 11px) 0%, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0% calc(100% - 11px), 0% 11px)'
           }}
         >
           {/* Bottom-Left Cyber Triangle Facet (Signature Robotic Edgy Detail) */}
