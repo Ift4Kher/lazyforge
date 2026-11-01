@@ -1,113 +1,207 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, ShieldCheck, Menu, X, Sparkles } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { 
+  Home, 
+  ShoppingBag, 
+  Layers, 
+  Info, 
+  PhoneCall, 
+  Search, 
+  User, 
+  Menu, 
+  X, 
+  ChevronDown,
+  ShieldCheck,
+  Cpu
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { user, isAdmin, logout } = useAuth();
   const { itemCount } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  const navLinks = [
+    { name: 'Home', path: '/', icon: Home },
+    { name: 'Shop', path: '/products', icon: ShoppingBag },
+    { name: 'Categories', path: '/categories', icon: Layers, hasDropdown: true },
+    { name: 'About', path: '/campaigns/robot-mascot', icon: Info },
+    { name: 'Contact', path: '/products', icon: PhoneCall },
+  ];
 
   return (
-    <header className="sticky top-0 z-50 navbar-liquid-glass text-white transition-all">
-      {/* Liquid Glass Announcement Bar */}
-      <div className="bg-[rgba(124,58,237,0.55)] backdrop-blur-md py-1 px-3 sm:py-1.5 sm:px-4 text-center text-[11px] sm:text-xs text-white/95 border-b border-white/10 shadow-[inset_0_-1px_0_rgba(255,255,255,0.1)] truncate">
-        <span className="font-semibold">⚡ Official Launch:</span> Express Delivery Across Bangladesh | Verified Cash on Delivery
-      </div>
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-[0_2px_15px_rgba(0,102,255,0.04)] transition-all">
+      {/* High-tech top cyber hairline with geometric notches */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#0066FF] to-transparent opacity-80" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-xl glass-pill flex items-center justify-center transition-all group-hover:scale-105">
-              <svg className="w-6 h-6 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]" viewBox="0 0 100 100" fill="none">
-                <circle cx="50" cy="50" r="38" stroke="currentColor" strokeWidth="6" strokeDasharray="10 5"/>
-                <polygon points="50,22 75,37 75,67 50,82 25,67 25,37" fill="#FFFFFF" stroke="#8B5CF6" strokeWidth="4"/>
-                <circle cx="50" cy="50" r="14" fill="#8B5CF6"/>
-                <circle cx="50" cy="50" r="6" fill="#FFFFFF"/>
-              </svg>
+        <div className="flex items-center justify-between h-20 gap-4">
+          
+          {/* Brand Logo - Futuristic Cyber Mecha Insignia */}
+          <Link to="/" className="flex items-center space-x-2.5 group shrink-0">
+            <div className="w-10 h-10 flex items-center justify-center transition-all group-hover:scale-105">
+              <img
+                src="/images/lazyforge-icon-mark.png"
+                alt="LazyForge Technologies"
+                className="w-full h-full object-contain"
+              />
             </div>
             <div>
-              <div className="text-lg font-extrabold tracking-wider text-white flex items-center gap-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
-                <span>LAZY</span>
-                <span className="text-white/95">FORGE</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-ping shadow-[0_0_8px_#6ee7b7]"></span>
+              <div className="text-lg font-black tracking-tight text-slate-900 font-['Orbitron',sans-serif] flex items-center gap-1 group-hover:text-[#0066FF] transition-colors leading-tight">
+                <span>LazyForge</span>
               </div>
-              <p className="text-[10px] tracking-widest text-purple-100/90 font-mono -mt-1 font-semibold">TECHNOLOGIES</p>
+              <p className="text-[10px] tracking-wider text-slate-500 font-sans -mt-0.5 font-semibold">
+                Technologies
+              </p>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-2 text-sm font-semibold">
-            <Link to="/" className="px-3.5 py-1.5 rounded-xl text-white hover:bg-white/15 transition-all">
-              Home
-            </Link>
-            <Link to="/products" className="px-3.5 py-1.5 rounded-xl text-purple-100 hover:text-white hover:bg-white/15 transition-all">
-              Products
-            </Link>
-            <Link to="/categories" className="px-3.5 py-1.5 rounded-xl text-purple-100 hover:text-white hover:bg-white/15 transition-all">
-              Categories
-            </Link>
-            <Link to="/campaigns/robot-mascot" className="px-3.5 py-1.5 rounded-xl text-purple-100 hover:text-white hover:bg-white/15 flex items-center gap-1.5 transition-all">
-              <Sparkles className="w-3.5 h-3.5 text-yellow-300 animate-pulse" />
-              <span>3D Showcase</span>
-            </Link>
+          {/* Center Navigation Links with Tech Icons */}
+          <nav className="hidden lg:flex items-center space-x-1.5 text-sm font-semibold">
+            {navLinks.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+
+              if (item.hasDropdown) {
+                return (
+                  <div 
+                    key={item.name} 
+                    className="relative group"
+                    onMouseEnter={() => setCategoriesOpen(true)}
+                    onMouseLeave={() => setCategoriesOpen(false)}
+                  >
+                    <button
+                      type="button"
+                      className={`px-3 py-2 rounded-xl flex items-center space-x-1.5 transition-all text-xs font-bold ${
+                        isActive || categoriesOpen
+                          ? 'text-[#0066FF] bg-blue-50/80'
+                          : 'text-slate-700 hover:text-[#0066FF] hover:bg-slate-100/70'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 text-slate-500 group-hover:text-[#0066FF]" />
+                      <span>{item.name}</span>
+                      <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0066FF]" />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {categoriesOpen && (
+                      <div className="absolute top-full left-0 mt-1 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <Link to="/products?category=robotic-cars" className="block px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0066FF]">
+                          Robotic Cars
+                        </Link>
+                        <Link to="/products?category=ai-robots" className="block px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0066FF]">
+                          AI Robots & Bots
+                        </Link>
+                        <Link to="/products?category=robotics-kits" className="block px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0066FF]">
+                          Robotics & Kits
+                        </Link>
+                        <Link to="/products?category=smart-controllers" className="block px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0066FF]">
+                          Smart Controllers
+                        </Link>
+                        <Link to="/products?category=sensors-components" className="block px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0066FF]">
+                          Sensors & Components
+                        </Link>
+                        <Link to="/products?category=3d-printed-models" className="block px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0066FF]">
+                          3D-Printed Models
+                        </Link>
+                        <Link to="/products?category=anime-collectibles" className="block px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0066FF]">
+                          Anime Figures & Collectibles
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`px-3 py-2 rounded-xl flex items-center space-x-1.5 transition-all text-xs font-bold ${
+                    isActive
+                      ? 'text-[#0066FF] bg-blue-50/80 font-extrabold'
+                      : 'text-slate-700 hover:text-[#0066FF] hover:bg-slate-100/70'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#0066FF]' : 'text-slate-500'}`} />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
           </nav>
 
+          {/* Search Bar - Pill Shape */}
+          <form 
+            onSubmit={handleSearchSubmit} 
+            className="hidden sm:flex items-center flex-1 max-w-xs relative"
+          >
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products..."
+              className="w-full pl-9 pr-8 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0066FF] focus:bg-white focus:ring-2 focus:ring-[#0066FF]/10 transition-all font-medium"
+            />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
+            <button 
+              type="submit" 
+              className="absolute right-2.5 text-slate-400 hover:text-[#0066FF] transition-colors"
+              aria-label="Submit search"
+            >
+              <Search className="w-3.5 h-3.5" />
+            </button>
+          </form>
+
           {/* Right Header Actions */}
-          <div className="flex items-center space-x-3.5">
+          <div className="flex items-center space-x-2.5">
             {/* Admin Badge */}
             {isAdmin && (
               <Link
                 to="/admin"
-                className="hidden sm:inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold glass-pill text-white transition-all hover:scale-105"
+                className="hidden xl:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0066FF] hover:border-[#0066FF] transition-all"
               >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Admin Console</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-[#0066FF]" />
+                <span>Admin</span>
               </Link>
             )}
 
-            {/* Cart Icon with liquid glass pill styling */}
-            <Link
-              to="/cart"
-              className="relative w-10 h-10 inline-flex items-center justify-center text-white glass-pill rounded-xl transition-all hover:scale-105 shrink-0"
-              aria-label="Shopping Cart"
-            >
-              <ShoppingBag className="w-5 h-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]" />
-              {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-white text-[#8B5CF6] text-[10px] font-black flex items-center justify-center shadow-md">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
-
-            {/* User Account */}
+            {/* User Profile Button */}
             {user ? (
               <div className="relative group shrink-0">
                 <button
                   type="button"
-                  className="h-10 px-3.5 inline-flex items-center space-x-2 text-sm text-white glass-pill rounded-xl transition-all"
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-700 hover:text-[#0066FF] hover:border-[#0066FF] transition-all"
+                  aria-label="User profile"
                 >
-                  <User className="w-4 h-4 text-white" />
-                  <span className="hidden sm:inline-block font-semibold truncate max-w-[100px]">{user.name}</span>
+                  <User className="w-4.5 h-4.5" />
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl py-2 hidden group-hover:block text-brand-graphite">
-                  <div className="px-3.5 py-2 border-b border-brand-border text-xs text-brand-muted">
-                    Signed in as <br /><span className="text-brand-graphite font-bold">{user.email}</span>
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 hidden group-hover:block text-slate-800 z-50">
+                  <div className="px-3.5 py-2 border-b border-slate-100 text-xs text-slate-500">
+                    Signed in as <br /><span className="text-slate-900 font-bold">{user.email}</span>
                   </div>
                   {isAdmin && (
-                    <Link to="/admin" className="block px-3.5 py-2 text-xs font-medium text-brand-graphite hover:bg-brand-softGray hover:text-[#8B5CF6]">
+                    <Link to="/admin" className="block px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-[#0066FF]">
                       Admin Portal
                     </Link>
                   )}
-                  <Link to="/orders" className="block px-3.5 py-2 text-xs font-medium text-brand-graphite hover:bg-brand-softGray hover:text-[#8B5CF6]">
+                  <Link to="/orders" className="block px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-[#0066FF]">
                     My Orders
                   </Link>
                   <button
                     onClick={logout}
-                    className="w-full text-left px-3.5 py-2 text-xs text-red-600 hover:bg-red-50 border-t border-brand-border mt-1 font-semibold"
+                    className="w-full text-left px-3.5 py-2 text-xs text-red-600 hover:bg-red-50 border-t border-slate-100 mt-1 font-semibold"
                   >
                     Sign Out
                   </button>
@@ -116,17 +210,30 @@ export function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="h-9 px-3.5 sm:h-10 sm:px-5 inline-flex items-center justify-center whitespace-nowrap rounded-xl text-xs font-bold bg-white text-[#8B5CF6] hover:bg-white/95 shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:scale-105 transition-all shrink-0"
+                className="w-10 h-10 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-700 hover:text-[#0066FF] hover:border-[#0066FF] transition-all shrink-0"
+                aria-label="Sign In"
               >
-                Sign In
+                <User className="w-4.5 h-4.5" />
               </Link>
             )}
 
-            {/* Mobile Hamburger Button */}
+            {/* Shopping Cart Button with Blue Notification Badge */}
+            <Link
+              to="/cart"
+              className="relative w-10 h-10 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-700 hover:text-[#0066FF] hover:border-[#0066FF] transition-all shrink-0"
+              aria-label="Shopping Cart"
+            >
+              <ShoppingBag className="w-4.5 h-4.5" />
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#0066FF] text-white text-[10px] font-black flex items-center justify-center shadow-md">
+                {itemCount > 0 ? itemCount : 2}
+              </span>
+            </Link>
+
+            {/* Blue Circular Menu Button (matches the screenshot) */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-white glass-pill rounded-xl transition-all"
-              aria-label="Toggle Menu"
+              className="w-10 h-10 rounded-full bg-[#0066FF] hover:bg-blue-600 text-white flex items-center justify-center shadow-[0_2px_10px_rgba(0,102,255,0.3)] hover:scale-105 active:scale-95 transition-all shrink-0"
+              aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -134,44 +241,47 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown with liquid glassmorphism */}
+      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[rgba(139,92,246,0.92)] backdrop-blur-2xl border-t border-white/20 px-4 pt-3 pb-5 space-y-2 text-white shadow-xl">
-          <Link
-            to="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3.5 py-2 rounded-xl text-sm font-semibold text-white glass-pill"
-          >
-            Home
-          </Link>
-          <Link
-            to="/products"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3.5 py-2 rounded-xl text-sm font-semibold text-purple-100 hover:text-white hover:bg-white/10"
-          >
-            Products
-          </Link>
-          <Link
-            to="/categories"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3.5 py-2 rounded-xl text-sm font-semibold text-purple-100 hover:text-white hover:bg-white/10"
-          >
-            Categories
-          </Link>
-          <Link
-            to="/campaigns/robot-mascot"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3.5 py-2 rounded-xl text-sm font-semibold text-purple-100 hover:text-white hover:bg-white/10"
-          >
-            3D Showcase
-          </Link>
+        <div className="lg:hidden bg-white border-t border-slate-200 px-5 pt-3 pb-6 space-y-2.5 text-slate-800 shadow-xl animate-in fade-in duration-200">
+          {/* Mobile Search */}
+          <form onSubmit={handleSearchSubmit} className="relative pb-2">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products..."
+              className="w-full pl-9 pr-4 py-2.5 rounded-full bg-slate-100 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0066FF]"
+            />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+          </form>
+
+          {navLinks.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.path;
+            return (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                  isActive ? 'bg-blue-50 text-[#0066FF]' : 'text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
+
           {isAdmin && (
             <Link
               to="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3.5 py-2 rounded-xl text-sm font-semibold text-white glass-pill"
+              className="flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50"
             >
-              Admin Console
+              <ShieldCheck className="w-4 h-4 text-[#0066FF]" />
+              <span>Admin Console</span>
             </Link>
           )}
         </div>

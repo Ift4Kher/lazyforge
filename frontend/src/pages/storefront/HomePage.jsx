@@ -53,101 +53,49 @@ export function HomePage() {
   };
 
   return (
-    <div className="space-y-20 pb-20 bg-white">
-      {/* Hero Section with Fullscreen Clear Video */}
+    <div className="space-y-14 sm:space-y-16 pb-20 bg-white">
+      {/* Robotic Futuristic Hero Section */}
       <Hero />
 
-      {/* Featured Categories */}
+      {/* Futuristic 7-Category Horizontal Shelf */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
-          <div>
-            <span className="text-xs font-mono uppercase tracking-wider text-[#8B5CF6] font-bold">
-              Hardware Lab Discovery
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-graphite mt-1">
-              Curated Engineering Categories
-            </h2>
-          </div>
-          <Link
-            to="/products"
-            className="mt-3 sm:mt-0 text-xs font-bold text-[#8B5CF6] hover:text-[#7C3AED] flex items-center gap-1 group"
-          >
-            <span>Browse Full Catalog</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
-          {categories.slice(0, 4).map((cat) => {
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+          {categories.slice(0, 7).map((cat) => {
             const categoryImageMap = {
-              'robotics-kits': 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
-              'smart-controllers': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
-              '3d-printed-models': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-              'anime-collectibles': 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
-              'electronic-accessories': 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
+              'robotic-cars': '/images/cat-1-robotic-cars.png',
+              'ai-robots': '/images/cat-2-ai-robots.png',
+              'robotics-kits': '/images/cat-3-robotics-kits.png',
+              'smart-controllers': '/images/cat-4-smart-controllers.png',
+              'sensors-components': '/images/cat-5-sensors-components.png',
+              '3d-printed-models': '/images/cat-6-3d-models.png',
+              'anime-collectibles': '/images/cat-7-anime-figures.png',
             };
-            const imageUrl = categoryImageMap[cat.slug] || cat.image_url || 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80';
+            const imageUrl = categoryImageMap[cat.slug] || cat.image_url || '/images/cat-2-ai-robots.png';
 
             return (
               <Link
                 key={cat.id || cat.slug}
                 to={`/products?category=${cat.slug}`}
-                className="group relative aspect-[9/12.8] min-h-[365px] rounded-[32px] overflow-hidden border-[6px] border-white ring-1 ring-slate-900/5 shadow-[0_16px_38px_rgba(0,0,0,0.07)] hover:shadow-[0_24px_50px_rgba(139,92,246,0.18)] hover:-translate-y-1.5 transition-all duration-500 flex flex-col justify-end bg-[#F1F3F5]"
+                className="group relative rounded-2xl bg-white border border-slate-200/90 hover:border-[#0066FF] hover:shadow-[0_8px_24px_rgba(0,102,255,0.12)] p-3.5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 overflow-hidden"
               >
-                {/* Full-Bleed Background Image */}
-                <img
-                  src={imageUrl}
-                  alt={cat.name}
-                  className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out z-0"
-                  loading="lazy"
-                />
+                {/* Image Area */}
+                <div className="relative aspect-square w-full flex items-center justify-center p-1 overflow-hidden mb-2">
+                  <img
+                    src={imageUrl}
+                    alt={cat.name}
+                    className="w-full h-full object-contain object-center group-hover:scale-108 transition-transform duration-500 ease-out"
+                    loading="lazy"
+                  />
+                </div>
 
-                {/* Subtle Frosted Glass Bottom Overlay (Full image shines through) */}
-                <div className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-white/95 via-white/80 to-transparent backdrop-blur-[6px] z-10 pointer-events-none transition-all group-hover:from-white/98 group-hover:via-white/85" />
+                {/* Bottom Row: Title + Arrow Circle Button */}
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-1.5">
+                  <h3 className="text-xs font-bold text-slate-800 group-hover:text-[#0066FF] transition-colors line-clamp-2 leading-tight">
+                    {cat.name}
+                  </h3>
 
-                {/* Floating Content Over Frosted Glass */}
-                <div className="relative z-20 p-4 sm:p-4.5 space-y-2">
-                  {/* Category Name + Green Verified Badge */}
-                  <div>
-                    <div className="flex items-center space-x-1.5">
-                      <h3 className="text-base font-bold text-[#111827] group-hover:text-[#8B5CF6] transition-colors tracking-tight">
-                        {cat.name}
-                      </h3>
-                      {/* Green Verified Scalloped Badge */}
-                      <span className="w-4 h-4 rounded-full bg-[#15803D] flex items-center justify-center text-white shrink-0 shadow-xs ring-1 ring-white/60">
-                        <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      </span>
-                    </div>
-
-                    {/* Subtitle / Description */}
-                    <p className="text-xs text-[#4B5563] mt-0.5 leading-relaxed line-clamp-2 font-normal">
-                      {cat.description}
-                    </p>
-                  </div>
-
-                  {/* Bottom Stats & Follow/Explore+ Pill Button */}
-                  <div className="pt-1 flex items-center justify-between">
-                    {/* Stats on Left */}
-                    <div className="flex items-center space-x-2.5 text-xs text-[#64748B]">
-                      <div className="flex items-center space-x-1">
-                        <User className="w-3.5 h-3.5 text-[#64748B]" />
-                        <span className="font-semibold text-[#1E293B]">
-                          {cat.slug === 'robotics-kits' ? '312' : cat.slug === 'smart-controllers' ? '428' : cat.slug === '3d-printed-models' ? '195' : '264'}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <CheckSquare className="w-3.5 h-3.5 text-[#64748B]" />
-                        <span className="font-semibold text-[#1E293B]">{cat.product_count || 48}</span>
-                      </div>
-                    </div>
-
-                    {/* White Pill Button on Right (Learn More) */}
-                    <div className="px-3.5 py-1.5 rounded-full bg-white text-[#111827] group-hover:bg-[#8B5CF6] group-hover:text-white group-hover:border-[#8B5CF6] text-xs font-semibold shadow-[0_3px_10px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center space-x-1.5 transition-all duration-300">
-                      <span>Learn More</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                    </div>
+                  <div className="w-6 h-6 rounded-full border border-slate-300 text-slate-500 group-hover:border-[#0066FF] group-hover:text-[#0066FF] group-hover:bg-blue-50 flex items-center justify-center shrink-0 transition-colors">
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </div>
               </Link>
@@ -156,39 +104,43 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Featured Products Shelf */}
+      {/* Featured Products Section (Exact Reference Header & 4 Product Cards Grid) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
+        {/* Header matching reference image: // TRENDING NOW and Featured Products */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 pb-2 border-b border-slate-100">
           <div>
-            <span className="text-xs font-mono uppercase tracking-wider text-[#8B5CF6] font-bold">
-              Bangladesh's Top Picks
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-graphite mt-1">
-              Featured Hardware & Robotics
+            <div className="flex items-center space-x-1.5 text-xs font-mono font-bold tracking-wider text-[#0066FF] uppercase">
+              <span className="text-sm font-black">//</span>
+              <span>TRENDING NOW</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-['Orbitron',sans-serif] tracking-tight mt-1">
+              Featured Products
             </h2>
           </div>
+
           <Link
             to="/products"
-            className="mt-3 sm:mt-0 text-xs font-bold text-[#8B5CF6] hover:text-[#7C3AED] flex items-center gap-1 group"
+            className="mt-3 sm:mt-0 text-sm font-bold text-[#0066FF] hover:text-blue-700 flex items-center gap-1.5 group transition-colors"
           >
-            <span>View All ({featuredProducts.length}+)</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            <span>View All Products</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
+        {/* 4 Product Cards in a Row */}
         {loadingProducts ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="aspect-[9/12.6] min-h-[350px] rounded-[30px] border-[6px] border-white bg-slate-100 animate-pulse p-4 flex flex-col justify-end space-y-3">
-                <div className="h-4 bg-slate-200 rounded w-3/4"></div>
-                <div className="h-3 bg-slate-200 rounded w-1/2"></div>
-                <div className="h-7 bg-slate-200 rounded-full w-24 self-end"></div>
+              <div key={i} className="aspect-[4/5] rounded-2xl border border-slate-200 bg-slate-50 animate-pulse p-4 flex flex-col justify-between">
+                <div className="h-4 bg-slate-200 rounded w-1/3"></div>
+                <div className="h-32 bg-slate-200 rounded w-full"></div>
+                <div className="h-5 bg-slate-200 rounded w-2/3"></div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.slice(0, 8).map((product) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+            {featuredProducts.slice(0, 4).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

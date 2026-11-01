@@ -1,139 +1,168 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
 
 export function Hero() {
   const { hero } = useSettings();
-  const videoRef = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(1);
+  const totalSlides = 3;
 
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth < 768;
-    }
-    return false;
-  });
+  const slidesData = [
+    {
+      id: 1,
+      badge: 'ROBOTICS & AI',
+      headingLine1: 'THE FUTURE OF',
+      headingHighlight: 'ROBOTICS',
+      headingLine2: 'IS HERE',
+      subtitle: 'Discover intelligent robotic systems, AI-powered bots, and innovative technology for a smarter tomorrow.',
+      primaryCta: 'Explore Collection',
+      primaryLink: '/products',
+      secondaryCta: 'Discover More',
+      secondaryLink: '/campaigns/robot-mascot',
+      image: '/images/hero-mecha-showcase.png',
+    },
+    {
+      id: 2,
+      badge: 'AUTONOMOUS SYSTEMS',
+      headingLine1: 'NEXT-GEN',
+      headingHighlight: 'INTELLIGENCE',
+      headingLine2: 'UNLEASHED',
+      subtitle: 'Engineered for research labs, DIY developers, and high-precision automation across Bangladesh.',
+      primaryCta: 'View Robotics Kits',
+      primaryLink: '/products?category=robotics-kits',
+      secondaryCta: 'Explore 3D Viewer',
+      secondaryLink: '/campaigns/robot-mascot',
+      image: '/images/hero-mecha-showcase.png',
+    },
+    {
+      id: 3,
+      badge: 'SMART HARDWARE',
+      headingLine1: 'PRECISION',
+      headingHighlight: 'ENGINEERING',
+      headingLine2: '& CONTROL',
+      subtitle: 'Explore high-torque servo platforms, advanced microcontrollers, and plug-and-play AI modules.',
+      primaryCta: 'Browse Hardware',
+      primaryLink: '/products?category=smart-controllers',
+      secondaryCta: 'Order In Stock',
+      secondaryLink: '/products',
+      image: '/images/hero-mecha-showcase.png',
+    },
+  ];
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const activeSlide = slidesData[currentSlide - 1];
 
-  const heroData = hero || {
-    mediaType: 'video',
-    videoUrl: '/uploads/hero-video2.mp4',
-    mobileVideoUrl: '/uploads/hero-video1.mp4',
-    posterUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1920&q=80',
-    heading: 'ENGINEERING TOMORROW’S TECH TODAY',
-    subtitle: 'Premium robotics, 3D-printed innovations, and next-gen electronic gadgets engineered for Bangladesh tech enthusiasts.',
-    primaryCtaText: 'Explore Catalog',
-    primaryCtaLink: '/products',
-    secondaryCtaText: 'View 3D Models',
-    secondaryCtaLink: '/campaigns/robot-mascot',
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev === 1 ? totalSlides : prev - 1));
   };
 
-  const mobileVideoUrl = heroData.mobileVideoUrl || '/uploads/hero-video1.mp4';
-  const desktopVideoUrl = heroData.videoUrl || '/uploads/hero-video2.mp4';
-  const activeVideoSrc = isMobile ? mobileVideoUrl : desktopVideoUrl;
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = true;
-      videoRef.current.defaultMuted = true;
-      videoRef.current.playsInline = true;
-      try {
-        const playPromise = videoRef.current.play();
-        if (playPromise !== undefined && typeof playPromise.then === 'function') {
-          playPromise.catch((err) => {
-            console.warn('Autoplay prevented by browser:', err);
-          });
-        }
-      } catch (err) {
-        console.warn('Play error:', err);
-      }
-    }
-  }, [activeVideoSrc]);
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev === totalSlides ? 1 : prev + 1));
+  };
 
   return (
-    <section className="relative overflow-hidden bg-black min-h-screen min-h-[100dvh] w-full flex items-center border-b border-brand-border">
-      {/* Full-Screen Edge-to-Edge Autoplaying Video: Mobile uses hero-video1.mp4, PC uses hero-video2.mp4 */}
-      <video
-        key={activeVideoSrc}
-        ref={videoRef}
-        src={activeVideoSrc}
-        poster={heroData.posterUrl}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-cover object-center z-0"
-        style={{
-          filter: 'none',
-          WebkitFilter: 'none',
-        }}
-      >
-        <source src={mobileVideoUrl} media="(max-width: 767px)" type="video/mp4" />
-        <source src={desktopVideoUrl} media="(min-width: 768px)" type="video/mp4" />
-      </video>
+    <section className="relative overflow-hidden bg-white border-b border-slate-100 py-6 lg:py-12">
+      {/* Sci-Fi Decorative Grid & Tech Accent Lines */}
+      <div className="absolute inset-0 cyber-grid-light opacity-80 pointer-events-none" />
 
-      {/* Floating Content Over Fullscreen Video with Brand Violet & Clean White Styling */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-24 w-full">
-        <div className="max-w-xl space-y-4 sm:space-y-5">
-          {/* Brand Badge */}
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-brand-accent/30 shadow-md">
-            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-accent" />
-            <span className="text-[11px] sm:text-xs font-mono tracking-wider text-brand-accent uppercase font-bold">
-              Bangladesh's Leading Robotics Lab
-            </span>
-          </div>
+      {/* Top Left Angular Tech Markings */}
+      <div className="absolute top-4 left-6 hidden sm:flex items-center space-x-1.5 opacity-60">
+        <div className="w-12 h-[2px] bg-slate-300" />
+        <div className="w-3 h-[2px] bg-[#0066FF]" />
+      </div>
 
-          {/* Main Heading */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
-            {heroData.heading.split(' ')[0]}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-indigo-200 to-sky-200">
-              {heroData.heading.split(' ').slice(1, 3).join(' ')}
-            </span>{' '}
-            {heroData.heading.split(' ').slice(3).join(' ')}
-          </h1>
+      {/* Top Right Cyber Diagonal Slashes */}
+      <div className="absolute top-4 right-8 flex items-center space-x-1 text-[#0066FF] font-black tracking-widest text-sm opacity-90 select-none pointer-events-none">
+        <span className="skew-x-[-20deg]">/</span>
+        <span className="skew-x-[-20deg]">/</span>
+        <span className="skew-x-[-20deg]">/</span>
+        <div className="w-8 h-[2px] bg-[#0066FF] ml-1" />
+      </div>
 
-          {/* Supporting Description */}
-          <p className="text-sm sm:text-base lg:text-lg text-slate-100 leading-relaxed max-w-lg drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] font-medium">
-            {heroData.subtitle}
-          </p>
-
-          {/* Call to Actions */}
-          <div className="flex flex-wrap gap-3 sm:gap-4 pt-1 sm:pt-2">
-            <Link
-              to={heroData.primaryCtaLink}
-              className="inline-flex items-center space-x-2 px-5 py-3 sm:px-7 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-brand-accent text-white hover:bg-brand-accentHover shadow-glow-sm hover:scale-105 transition-all group"
-            >
-              <span>{heroData.primaryCtaText}</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              to={heroData.secondaryCtaLink}
-              className="inline-flex items-center space-x-2 px-5 py-3 sm:px-7 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-white/95 backdrop-blur-md border border-white text-brand-graphite hover:text-brand-accent hover:border-brand-accent hover:scale-105 transition-all shadow-md"
-            >
-              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-accent" />
-              <span>{heroData.secondaryCtaText}</span>
-            </Link>
-          </div>
-
-          {/* Trust and Delivery Assurance */}
-          <div className="pt-1 sm:pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4 text-xs font-semibold">
-            <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/60 text-brand-graphite shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-              <span>In Stock & Ready to Dispatch</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/60 text-brand-graphite shadow-sm">
-              <ShieldCheck className="w-4 h-4 text-brand-accent" />
-              <span>Cash on Delivery (All 64 Districts)</span>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          
+          {/* Left Column: Robotic Mecha Figures Display */}
+          <div className="lg:col-span-7 relative order-2 lg:order-1 flex flex-col justify-center">
+            
+            {/* Mecha Showcase Hero Graphic - Seamless Blend */}
+            <div className="relative overflow-hidden group">
+              <img
+                src={activeSlide.image}
+                alt="LazyForge Robotics Mecha"
+                className="w-full h-auto object-contain object-left group-hover:scale-[1.01] transition-transform duration-700 ease-out"
+                loading="eager"
+              />
             </div>
           </div>
+
+          {/* Right Column: High-Tech Typography & CTAs */}
+          <div className="lg:col-span-5 order-1 lg:order-2 space-y-6">
+            
+            {/* Main Headline with Sci-Fi Robotic Orbitron Font */}
+            <div className="space-y-1">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 font-['Orbitron',sans-serif] leading-[1.15]">
+                {activeSlide.headingLine1} <br />
+                <span className="text-[#0066FF] drop-shadow-[0_2px_12px_rgba(0,102,255,0.25)]">
+                  {activeSlide.headingHighlight}
+                </span>{' '}
+                {activeSlide.headingLine2}
+              </h1>
+            </div>
+
+            {/* Subtitle with Vertical Accent Bar */}
+            <div className="border-l-4 border-[#0066FF] pl-4 py-0.5">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
+                {activeSlide.subtitle}
+              </p>
+            </div>
+
+            {/* CTA Buttons Row */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+              <Link
+                to={activeSlide.primaryLink}
+                className="inline-flex items-center space-x-2.5 px-6 py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-[#0066FF] text-white hover:bg-blue-600 shadow-[0_4px_18px_rgba(0,102,255,0.35)] hover:scale-105 active:scale-95 transition-all group"
+              >
+                <span>{activeSlide.primaryCta}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+
+              <Link
+                to={activeSlide.secondaryLink}
+                className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-white border border-[#0066FF] text-slate-800 hover:bg-blue-50/80 hover:scale-105 active:scale-95 transition-all shadow-sm"
+              >
+                <Play className="w-3.5 h-3.5 text-[#0066FF] fill-[#0066FF]" />
+                <span>{activeSlide.secondaryCta}</span>
+              </Link>
+            </div>
+
+            {/* Slide Pagination & Carousel Navigation Controls (bottom right) */}
+            <div className="pt-4 flex items-center justify-end space-x-3 select-none">
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="w-9 h-9 rounded-full border border-slate-300 bg-white hover:bg-blue-50 hover:border-[#0066FF] hover:text-[#0066FF] text-slate-600 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleNext}
+                className="w-9 h-9 rounded-full border border-slate-300 bg-white hover:bg-blue-50 hover:border-[#0066FF] hover:text-[#0066FF] text-slate-600 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+
+              <span className="font-mono text-xs font-bold text-slate-500 pl-1 tracking-wider">
+                0{currentSlide} / 0{totalSlides}
+              </span>
+            </div>
+
+          </div>
+
         </div>
       </div>
     </section>
