@@ -43,116 +43,143 @@ export function ProductCard({ product }) {
   const reviewsCount = product.reviews_count || (8 + ((product.id || 1) * 3) % 15);
 
   return (
-    <div className="group relative rounded-2xl bg-white border-2 border-slate-300 hover:border-[#0066FF] shadow-[0_4px_20px_rgba(0,102,255,0.08),0_0_0_1px_rgba(0,102,255,0.08)] hover:shadow-[0_16px_40px_rgba(0,102,255,0.22)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+    <div className="group relative filter drop-shadow-[0_4px_16px_rgba(0,102,255,0.08)] hover:drop-shadow-[0_12px_28px_rgba(0,102,255,0.22)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full">
       
-      {/* Top Cyber Accent Hairline */}
-      <div className="h-[2.5px] w-full bg-gradient-to-r from-transparent via-[#0066FF] to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
-
-      {/* Corner CAD Tech Markings - Crisp & Visible */}
-      <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t-2 border-r-2 border-[#0066FF] rounded-tr-xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b-2 border-l-2 border-[#0066FF] rounded-bl-xl pointer-events-none" />
-
-      <div className="p-4 flex flex-col justify-between h-full space-y-3">
-        
-        {/* Top Badges Row */}
-        <div className="flex items-center justify-between z-10">
-          {discountPercent > 0 ? (
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-gradient-to-r from-[#0066FF] to-blue-600 text-white shadow-xs tracking-wider">
-              -{discountPercent}% OFF
-            </span>
-          ) : (
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-100 text-slate-600">
-              NEW UNIT
-            </span>
-          )}
-
-          <div className="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-emerald-600 bg-white/95 border border-emerald-300/80 shadow-2xs backdrop-blur-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>In Stock</span>
-          </div>
-        </div>
-
-        {/* Product Image Area with Radial Glow Pedestal */}
-        <Link 
-          to={`/products/${product.slug}`}
-          className="relative aspect-[4/3] w-full flex items-center justify-center p-3 rounded-xl bg-gradient-to-b from-[#F0F5FF]/80 via-slate-50/50 to-white overflow-hidden group/img my-1 block border border-slate-100/80"
+      {/* Outer Border Layer with 45-degree Chamfered Corners */}
+      <div 
+        className="p-[1.5px] h-full w-full bg-blue-400/80 group-hover:bg-[#0066FF] transition-colors duration-300 flex flex-col justify-between"
+        style={{
+          clipPath: 'polygon(16px 0%, calc(100% - 16px) 0%, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0% calc(100% - 16px), 0% 16px)'
+        }}
+      >
+        {/* Inner Card Body with matching Chamfered Silhouette */}
+        <div 
+          className="bg-white flex flex-col justify-between h-full w-full relative overflow-hidden"
+          style={{
+            clipPath: 'polygon(15px 0%, calc(100% - 15px) 0%, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 15px), 0% 15px)'
+          }}
         >
-          {/* Subtle Cyber Radar Aura */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,102,255,0.08)_0%,transparent_70%)] pointer-events-none" />
-
-          <img
-            src={imageUrl}
-            alt={product.name}
-            className="w-full h-full object-contain object-center group-hover/img:scale-108 transition-transform duration-500 ease-out drop-shadow-md relative z-10"
-            loading="lazy"
+          {/* Bottom-Left Tech Triangle Facet (matches reference image) */}
+          <div 
+            className="absolute bottom-0 left-0 w-8 h-8 pointer-events-none z-10 bg-gradient-to-tr from-blue-100/90 via-blue-50/50 to-transparent"
+            style={{
+              clipPath: 'polygon(0% 100%, 18px 100%, 0% calc(100% - 18px))'
+            }}
           />
-        </Link>
 
-        {/* Content Area */}
-        <div className="space-y-1.5 pt-1">
-          {/* Category Tag */}
-          <span className="text-[10px] font-mono font-bold text-[#0066FF] uppercase tracking-wider block">
-            {product.category_name || 'Robotics & AI'}
-          </span>
+          <div className="flex flex-col justify-between h-full">
+            
+            {/* Product Image Area with Floating Badges matching reference image */}
+            <div className="relative w-full aspect-[4/3] bg-gradient-to-b from-[#F2F7FF]/90 via-slate-50/50 to-white overflow-hidden group/img border-b border-slate-100/90">
+              
+              {/* Subtle Cyber Radar Aura */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,102,255,0.08)_0%,transparent_70%)] pointer-events-none" />
 
-          {/* Product Title */}
-          <Link to={`/products/${product.slug}`} className="block">
-            <h3 className="text-sm font-bold text-slate-900 group-hover:text-[#0066FF] font-['Orbitron',sans-serif] transition-colors line-clamp-1 leading-snug tracking-tight">
-              {product.name}
-            </h3>
-          </Link>
+              {/* Floating Top-Left Badge (-13% OFF) */}
+              <div className="absolute top-2.5 left-2.5 z-20">
+                {discountPercent > 0 ? (
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#0066FF] text-white shadow-xs tracking-wide">
+                    -{discountPercent}% OFF
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#0066FF] text-white shadow-xs tracking-wide">
+                    NEW
+                  </span>
+                )}
+              </div>
 
-          {/* Rating & Reviews */}
-          <div className="flex items-center space-x-3 text-xs text-slate-500 pt-0.5">
-            <div className="flex items-center space-x-1">
-              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-              <span className="font-bold text-slate-700 font-mono">{ratingVal}</span>
+              {/* Floating Top-Right Badge (● In Stock) */}
+              <div className="absolute top-2.5 right-2.5 z-20">
+                <div className="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-emerald-700 bg-white border border-emerald-300 shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>In Stock</span>
+                </div>
+              </div>
+
+              {/* Product Image */}
+              <Link 
+                to={`/products/${product.slug}`}
+                className="w-full h-full flex items-center justify-center p-3 relative z-10"
+              >
+                <img
+                  src={imageUrl}
+                  alt={product.name}
+                  className="w-full h-full object-contain object-center group-hover/img:scale-108 transition-transform duration-500 ease-out drop-shadow-md"
+                  loading="lazy"
+                />
+              </Link>
             </div>
-            <div className="flex items-center space-x-1">
-              <MessageSquare className="w-3.5 h-3.5 text-[#0066FF]" />
-              <span className="font-bold text-slate-600 font-mono">{reviewsCount}</span>
-            </div>
-          </div>
 
-          {/* Price & Action Buttons */}
-          <div className="pt-3 flex items-center justify-between gap-2 border-t border-slate-100/90 mt-2">
-            {/* Price (Electric Blue matching luxury theme) */}
-            <div className="flex items-baseline space-x-1.5 shrink-0">
-              <span className="text-base sm:text-lg font-black text-[#0066FF] font-mono">
-                ৳{currentPrice.toLocaleString()}
+            {/* Content Area */}
+            <div className="p-3.5 space-y-1.5">
+              {/* Product Title */}
+              <Link to={`/products/${product.slug}`} className="block">
+                <h3 className="text-[15px] font-bold text-slate-900 group-hover:text-[#0066FF] transition-colors line-clamp-1 leading-snug tracking-tight">
+                  {product.name}
+                </h3>
+              </Link>
+
+              {/* Category Subtitle */}
+              <span className="text-xs text-slate-500 font-medium block">
+                {product.category_name || 'Robotics & AI'}
               </span>
-              {salePrice !== null && regularPrice > salePrice && (
-                <span className="text-xs text-slate-400 line-through font-mono">
-                  ৳{regularPrice.toLocaleString()}
-                </span>
-              )}
-            </div>
 
-            {/* Action Buttons: Add to Cart + Wishlist Heart */}
-            <div className="flex items-center space-x-1.5 shrink-0">
-              <button
-                type="button"
-                onClick={handleQuickAdd}
-                disabled={!inStock}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#0066FF] text-white hover:bg-blue-600 text-xs font-bold shadow-[0_2px_10px_rgba(0,102,255,0.3)] hover:shadow-[0_4px_16px_rgba(0,102,255,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
-                title={inStock ? 'Add to Cart' : 'Out of Stock'}
-              >
-                <ShoppingCart className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Add</span>
-              </button>
+              {/* Rating & Reviews */}
+              <div className="flex items-center space-x-3 text-xs text-slate-700 pt-0.5">
+                <div className="flex items-center space-x-1">
+                  <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                  <span className="font-bold text-slate-800">{ratingVal}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <MessageSquare className="w-3.5 h-3.5 text-[#0066FF]" />
+                  <span className="font-bold text-slate-800">{reviewsCount}</span>
+                </div>
+              </div>
 
-              <button
-                type="button"
-                onClick={toggleWishlist}
-                className={`w-8 h-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
-                  isWishlisted 
-                    ? 'border-red-300 bg-red-50 text-red-500 shadow-xs' 
-                    : 'border-slate-200 text-slate-400 hover:text-[#0066FF] hover:border-[#0066FF] hover:bg-blue-50/50 bg-white'
-                }`}
-                title="Add to Wishlist"
-              >
-                <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}`} />
-              </button>
+              {/* Price & Action Buttons Row */}
+              <div className="pt-2 flex items-center justify-between gap-1.5 mt-1">
+                {/* Price */}
+                <div className="flex items-baseline space-x-1 shrink-0">
+                  <span className="text-base font-bold text-[#0066FF] font-mono">
+                    ৳{currentPrice.toLocaleString()}
+                  </span>
+                  {salePrice !== null && regularPrice > salePrice && (
+                    <span className="text-[11px] text-slate-400 line-through font-mono">
+                      ৳{regularPrice.toLocaleString()}
+                    </span>
+                  )}
+                </div>
+
+                {/* Action Buttons: Stylized Add to Cart + Wishlist Heart */}
+                <div className="flex items-center space-x-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleQuickAdd}
+                    disabled={!inStock}
+                    className="relative inline-flex items-center space-x-1 px-2.5 py-1.5 bg-gradient-to-r from-[#0066FF] via-[#0060F0] to-[#0048D0] hover:from-[#0052CC] hover:to-[#0038B0] text-white text-[11px] font-bold transition-all shadow-[0_2px_8px_rgba(0,102,255,0.3)] hover:shadow-[0_4px_14px_rgba(0,102,255,0.45)] active:scale-95 cursor-pointer disabled:opacity-50 rounded-l-full rounded-r-md"
+                    style={{
+                      clipPath: 'polygon(0% 0%, calc(100% - 7px) 0%, 100% 7px, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0% 100%)'
+                    }}
+                    title={inStock ? 'Add to Cart' : 'Out of Stock'}
+                  >
+                    <ShoppingCart className="w-3 h-3" />
+                    <span>Add to Cart</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={toggleWishlist}
+                    className={`w-8 h-8 rounded-lg border transition-all cursor-pointer flex items-center justify-center shrink-0 ${
+                      isWishlisted 
+                        ? 'border-red-300 bg-red-50 text-red-500 shadow-xs' 
+                        : 'border-blue-200/90 text-slate-700 hover:text-[#0066FF] hover:border-[#0066FF] hover:bg-blue-50/50 bg-white shadow-2xs'
+                    }`}
+                    title="Add to Wishlist"
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-slate-800'}`} />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
