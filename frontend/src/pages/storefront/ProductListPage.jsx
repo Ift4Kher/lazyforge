@@ -184,63 +184,35 @@ export function ProductListPage() {
           )}
         </nav>
 
-        {/* Hero Banner Card (Robotic Edgy Chamfer Silhouette) */}
+        {/* Hero Banner Card with Exact Background Image matching Reference Design */}
         <div 
-          className="relative w-full bg-gradient-to-r from-slate-50 via-[#F3F7FD] to-blue-50/40 border border-slate-200/80 p-6 sm:p-10 overflow-hidden shadow-xs flex flex-col md:flex-row items-center justify-between gap-8"
+          className="relative w-full border border-slate-200/90 overflow-hidden shadow-xs bg-[#EEF2F8]"
           style={{
-            clipPath: 'polygon(20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0% calc(100% - 20px), 0% 20px)'
+            clipPath: 'polygon(16px 0%, calc(100% - 16px) 0%, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0% calc(100% - 16px), 0% 16px)'
           }}
         >
-          {/* Subtle Ambient Radial Highlight */}
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0066FF]/5 rounded-full blur-3xl pointer-events-none" />
+          {/* Exact Hero Banner Image with Robot, Workshop, Typography & Handwriting */}
+          <div className="relative w-full aspect-[970/178] min-h-[178px] overflow-hidden">
+            <img 
+              src="/images/hero-shop-banner-2x.png"
+              alt="Robotics, Electronics & 3D Hardware — LazyForge Technologies"
+              className="w-full h-full object-cover object-center select-none"
+              draggable="false"
+            />
 
-          {/* Left Text Content */}
-          <div className="max-w-xl space-y-4 z-10 text-left">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50/90 border border-amber-200 text-amber-800 text-xs font-semibold shadow-2xs">
-              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-              <span>Premium Robotics Store</span>
-            </div>
+            {/* Semantic Headings for Screen Readers and SEO */}
+            <h1 className="sr-only">Robotics, Electronics &amp; 3D Hardware — LazyForge Technologies</h1>
+            <p className="sr-only">Explore high-quality robotics models, electronics components, and innovative hardware for your next project.</p>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.12]">
-              Robotics, Electronics &amp; <br />
-              3D Hardware
-            </h1>
-
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-lg">
-              Explore high-quality robotics models, electronics components, and innovative hardware for your next project.
-            </p>
-
-            <div className="pt-2">
-              <a
-                href="#products-section"
-                style={{
-                  clipPath: 'polygon(0% 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0% 100%)'
-                }}
-                className="inline-flex items-center space-x-2 px-6 py-3 bg-[#0066FF] hover:bg-blue-600 active:scale-98 text-white font-bold text-sm shadow-[0_4px_16px_rgba(0,102,255,0.35)] transition-all cursor-pointer"
-              >
-                <span>Explore Products</span>
-                <span className="text-base font-bold">→</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Right Image with Script Text */}
-          <div className="relative w-full md:w-1/2 flex items-center justify-center md:justify-end z-10">
-            <div className="relative max-w-lg w-full">
-              <img
-                src="/images/hero-mecha-robots.png"
-                alt="Robotics & AI Hardware"
-                className="w-full h-auto object-contain mix-blend-multiply drop-shadow-xl"
-              />
-
-              {/* Cursive Handwriting Overlay: "Build · Innovate · Create" */}
-              <div
-                className="absolute -top-3 right-4 sm:right-8 text-[#0066FF] text-2xl sm:text-3xl md:text-4xl font-bold tracking-wide select-none drop-shadow-sm pointer-events-none transform -rotate-3"
-                style={{ fontFamily: "'Caveat', cursive, sans-serif" }}
-              >
-                Build &middot; Innovate &middot; Create
-              </div>
-            </div>
+            {/* Interactive 'Explore Products →' Button Hotspot Overlay */}
+            <a
+              href="#products-section"
+              className="absolute left-[2.6%] bottom-[9.5%] w-[12.5%] min-w-[116px] max-w-[155px] h-[17.5%] min-h-[28px] max-h-[38px] rounded-full bg-[#0066FF] hover:bg-blue-600 active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center justify-center space-x-1.5 shadow-[0_4px_14px_rgba(0,102,255,0.45)] transition-all cursor-pointer group"
+              aria-label="Explore Products"
+            >
+              <span className="font-medium text-[11px] sm:text-xs tracking-tight">Explore Products</span>
+              <span className="text-xs transition-transform group-hover:translate-x-0.5 font-bold">→</span>
+            </a>
           </div>
         </div>
 
