@@ -196,28 +196,40 @@ export function ProductListPage() {
 
         {/* Search & Top Action Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-brand-border/80 shadow-xs">
-          {/* Search Form */}
-          <form onSubmit={handleSearchSubmit} className="relative w-full sm:max-w-md">
-            <Search className="w-4 h-4 text-[#0066FF] absolute left-3.5 top-3.5" />
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search robotic kits, ESP32, sensors, CAD models..."
-              className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-50/70 border border-brand-border focus:border-[#0066FF] focus:bg-white text-xs text-brand-graphite placeholder-brand-muted focus:outline-none transition-all"
-            />
-            {searchInput && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchInput('');
-                  updateParam('search', '');
-                }}
-                className="absolute right-3 top-3 text-brand-muted hover:text-brand-graphite"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+          {/* Search Form - Robotic Edgy Shape */}
+          <form onSubmit={handleSearchSubmit} className="relative w-full sm:max-w-md group">
+            <div className="w-full p-[1.5px] clip-cyber-search bg-slate-200 group-hover:bg-[#0066FF]/60 focus-within:!bg-[#0066FF] transition-all duration-200 shadow-2xs focus-within:shadow-[0_0_15px_rgba(0,102,255,0.25)]">
+              <div className="relative w-full flex items-center bg-slate-50 focus-within:bg-white clip-cyber-search-inner transition-colors">
+                <Search className="w-4 h-4 text-[#0066FF] absolute left-3.5 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search robotic kits, ESP32, sensors, CAD models..."
+                  className="w-full pl-10 pr-10 py-2.5 bg-transparent text-xs text-brand-graphite placeholder-brand-muted focus:outline-none font-medium"
+                />
+                {searchInput ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchInput('');
+                      updateParam('search', '');
+                    }}
+                    className="absolute right-3 text-brand-muted hover:text-brand-graphite"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="absolute right-2 w-6 h-6 clip-octagon-btn bg-slate-200 hover:bg-[#0066FF] text-slate-500 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+                    aria-label="Submit search"
+                  >
+                    <Search className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            </div>
           </form>
 
           {/* Sort & Mobile Filter Toggle */}

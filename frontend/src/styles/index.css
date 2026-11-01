@@ -116,4 +116,55 @@
   .clip-octagon-btn {
     clip-path: polygon(7px 0%, calc(100% - 7px) 0%, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0% calc(100% - 7px), 0% 7px);
   }
+
+  /* Robotic Edgy Search Bar (Chamfered Tech Polygon) */
+  .clip-cyber-search {
+    clip-path: polygon(
+      10px 0%,
+      calc(100% - 10px) 0%,
+      100% 10px,
+      100% calc(100% - 10px),
+      calc(100% - 10px) 100%,
+      10px 100%,
+      0% calc(100% - 10px),
+      0% 10px
+    );
+  }
+
+  .clip-cyber-search-inner {
+    clip-path: polygon(
+      9px 0%,
+      calc(100% - 9px) 0%,
+      100% 9px,
+      100% calc(100% - 9px),
+      calc(100% - 9px) 100%,
+      9px 100%,
+      0% calc(100% - 9px),
+      0% 9px
+    );
+  }
+
+  /* Robotic Asymmetric Chamfered Bar (Top-Left & Bottom-Right cuts) */
+  .clip-cyber-chamfer {
+    clip-path: polygon(
+      12px 0%,
+      100% 0%,
+      100% calc(100% - 12px),
+      calc(100% - 12px) 100%,
+      0% 100%,
+      0% 12px
+    );
+  }
+
+  .clip-cyber-chamfer-inner {
+    clip-path: polygon(
+      11px 0%,
+      100% 0%,
+      100% calc(100% - 11px),
+      calc(100% - 11px) 100%,
+      0% 100%,
+      0% 11px
+    );
+  }
 }
+
