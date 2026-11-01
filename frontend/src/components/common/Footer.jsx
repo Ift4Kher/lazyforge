@@ -105,11 +105,11 @@ export function Footer() {
               Customer Care
             </h4>
             <ul className="space-y-2.5 text-xs text-slate-400 font-medium">
-              <li><Link to="/orders/track" className="hover:text-[#0066FF] transition-colors">Track My Order</Link></li>
-              <li><Link to="/shipping-policy" className="hover:text-[#0066FF] transition-colors">Shipping & Delivery Rates</Link></li>
-              <li><Link to="/return-refund" className="hover:text-[#0066FF] transition-colors">Return & Refund Policy</Link></li>
-              <li><Link to="/terms" className="hover:text-[#0066FF] transition-colors">Terms of Service</Link></li>
-              <li><Link to="/privacy" className="hover:text-[#0066FF] transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/about" className="hover:text-[#0066FF] transition-colors">About LazyForge Lab</Link></li>
+              <li><Link to="/contact" className="hover:text-[#0066FF] transition-colors">Contact & Telemetry Desk</Link></li>
+              <li><Link to="/orders" className="hover:text-[#0066FF] transition-colors">Track My Order</Link></li>
+              <li><Link to="/products" className="hover:text-[#0066FF] transition-colors">Robotics Catalog</Link></li>
+              <li><Link to="/privacy" className="hover:text-[#0066FF] transition-colors">Privacy & Warranty Terms</Link></li>
             </ul>
           </div>
 

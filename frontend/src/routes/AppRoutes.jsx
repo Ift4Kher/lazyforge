@@ -17,6 +17,8 @@ import { ProductListPage } from '../pages/storefront/ProductListPage';
 import { ProductDetailPage } from '../pages/storefront/ProductDetailPage';
 import { RobotMascotPage } from '../pages/storefront/RobotMascotPage';
 import { CampaignLandingPage } from '../pages/storefront/CampaignLandingPage';
+import { AboutPage } from '../pages/storefront/AboutPage';
+import { ContactPage } from '../pages/storefront/ContactPage';
 import { CartPage } from '../pages/storefront/CartPage';
 import { CheckoutPage } from '../pages/storefront/CheckoutPage';
 import { OrderConfirmationPage } from '../pages/storefront/OrderConfirmationPage';
@@ -62,6 +64,9 @@ export function AppRoutes() {
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/products/:slug" element={<ProductDetailPage />} />
         <Route path="/categories" element={<ProductListPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/campaigns/robot-mascot" element={<RobotMascotPage />} />
         <Route path="/campaigns/:slug" element={<CampaignLandingPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />

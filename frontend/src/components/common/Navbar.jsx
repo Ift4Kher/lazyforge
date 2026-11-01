@@ -38,8 +38,8 @@ export function Navbar() {
     { name: 'Home', path: '/', icon: Home },
     { name: 'Shop', path: '/products', icon: ShoppingBag },
     { name: 'Categories', path: '/categories', icon: Layers, hasDropdown: true },
-    { name: 'About', path: '/campaigns/robot-mascot', icon: Info },
-    { name: 'Contact', path: '/products', icon: PhoneCall },
+    { name: 'About', path: '/about', icon: Info },
+    { name: 'Contact', path: '/contact', icon: PhoneCall },
   ];
 
   return (
