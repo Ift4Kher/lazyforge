@@ -43,7 +43,9 @@ export function ProductDetailPage() {
     fetchProductBySlug(slug)
       .then((data) => {
         setProduct(data);
-        if (data.images && data.images.length > 0) {
+        if (data.slug === 'smart-humanoid-robot') {
+          setSelectedImage('/images/prod-1-smart-humanoid-front.jpg');
+        } else if (data.images && data.images.length > 0) {
           const firstImg = typeof data.images[0] === 'string' ? data.images[0] : (data.images[0].image_url || data.images[0].url);
           setSelectedImage(firstImg);
         } else if (data.primary_image || data.image_url) {
@@ -134,6 +136,10 @@ export function ProductDetailPage() {
 
   // Collect 2 normal product images for the Photos view
   const getNormalImages = () => {
+    if (product.slug === 'smart-humanoid-robot') {
+      return ['/images/prod-1-smart-humanoid-front.jpg', '/images/prod-1-smart-humanoid-side.jpg'];
+    }
+
     const list = [];
     if (product.images && product.images.length > 0) {
       product.images.forEach((img) => {
@@ -150,128 +156,123 @@ export function ProductDetailPage() {
 
     if (list.length === 1) {
       const p1 = list[0];
-      if (p1.includes('prod-1-smart-humanoid')) {
-        list.push(p1.includes('bot') ? '/images/prod-1-smart-humanoid.png' : '/images/prod-1-smart-humanoid-bot.png');
-      } else if (p1.includes('prod-2-robotic-car')) {
-        list.push('/images/prod-robotic-car-pro.png');
-      } else if (p1.includes('prod-3-robotics')) {
+      if (p1.includes('robotic-car')) {
+        list.push('/images/robotic-cars.jpg');
+      } else if (p1.includes('robotics')) {
         list.push('/images/prod-3-robotics-kit.png');
-      } else if (p1.includes('prod-4')) {
+      } else if (p1.includes('controller')) {
         list.push('/images/prod-4-controller-board.png');
       } else {
         list.push(p1);
       }
     }
-    return list.length >= 2 ? list.slice(0, 2) : (list.length > 0 ? list : ['/images/prod-1-smart-humanoid-bot.png', '/images/prod-1-smart-humanoid.png']);
+    return list.length >= 2 ? list.slice(0, 2) : (list.length > 0 ? list : ['/images/prod-1-smart-humanoid-front.jpg', '/images/prod-1-smart-humanoid-side.jpg']);
   };
 
   const normalImages = getNormalImages();
 
   return (
-    <div className="bg-[#0f1118] text-slate-100 min-h-screen py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="bg-white min-h-screen py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center space-x-2 text-xs font-mono text-slate-400">
-          <Link to="/" className="hover:text-[#FF7A00] transition-colors">Home</Link>
+        <nav className="flex items-center space-x-2 text-xs font-mono text-brand-muted">
+          <Link to="/" className="hover:text-[#0066FF] transition-colors">Home</Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <Link to="/products" className="hover:text-[#FF7A00] transition-colors">Catalog</Link>
+          <Link to="/products" className="hover:text-[#0066FF] transition-colors">Catalog</Link>
           {product.category_name && (
             <>
               <ChevronRight className="w-3.5 h-3.5" />
-              <Link to={`/products?category=${product.category_slug}`} className="hover:text-[#FF7A00] transition-colors">
+              <Link to={`/products?category=${product.category_slug}`} className="hover:text-[#0066FF] transition-colors">
                 {product.category_name}
               </Link>
             </>
           )}
           <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-white font-bold truncate max-w-[200px]">
+          <span className="text-brand-graphite font-bold truncate max-w-[200px]">
             {product.name}
           </span>
         </nav>
 
         {/* Product Hero Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-          {/* Gallery Column matching Reference Mockup */}
-          <div className="space-y-3">
-            {/* Top View Mode Tabs: [3D view] and [Photos] */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setViewMode('3d')}
-                className={`px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all cursor-pointer ${
-                  viewMode === '3d'
-                    ? 'border border-[#FF7A00] text-[#FF7A00] bg-transparent'
-                    : 'border border-slate-700 text-slate-300 bg-transparent hover:text-white hover:border-slate-500'
-                }`}
-              >
-                3D view
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('photos')}
-                className={`px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all cursor-pointer ${
-                  viewMode === 'photos'
-                    ? 'border border-[#FF7A00] text-[#FF7A00] bg-transparent'
-                    : 'border border-slate-700 text-slate-300 bg-transparent hover:text-white hover:border-slate-500'
-                }`}
-              >
-                Photos
-              </button>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Gallery Column */}
+          <div className="space-y-4">
+            {/* Viewport Mode Toggle */}
+            <div className="flex items-center justify-between pb-1">
+              <span className="text-xs font-mono font-bold text-gray-500 uppercase tracking-wider">
+                Viewport Mode
+              </span>
+              <div className="flex items-center p-1 rounded-xl bg-slate-100 border border-brand-border text-xs font-orbitron font-bold">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('3d')}
+                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                    viewMode === '3d'
+                      ? 'bg-[#0066FF] text-white shadow-xs'
+                      : 'text-gray-500 hover:text-[#0066FF]'
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>3D VIEW</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('photos')}
+                  className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                    viewMode === 'photos'
+                      ? 'bg-white text-brand-graphite shadow-xs'
+                      : 'text-gray-500 hover:text-brand-graphite'
+                  }`}
+                >
+                  PHOTOS (2 VIEWS)
+                </button>
+              </div>
             </div>
 
-            {/* Main Viewport Container */}
-            <div className="relative aspect-square w-full rounded-2xl bg-[#232530] border border-slate-700/80 overflow-hidden shadow-2xl flex items-center justify-center">
+            {/* Viewport Container with Sci-Fi Corner Brackets */}
+            <div className="relative aspect-square w-full rounded-2xl bg-white border border-brand-border/80 overflow-hidden shadow-xs flex items-center justify-center p-4">
+              {/* Sci-fi corner brackets */}
+              <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#0066FF]/60 pointer-events-none z-10" />
+              <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#0066FF]/60 pointer-events-none z-10" />
+              <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#0066FF]/60 pointer-events-none z-10" />
+              <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#0066FF]/60 pointer-events-none z-10" />
+
               {viewMode === '3d' ? (
-                <div className="w-full h-full relative">
+                <div className="w-full h-full relative rounded-xl overflow-hidden bg-[#0A0D14]">
                   <RobotViewer3D
                     key={product.model_3d_url || 'voxel_robot'}
                     height="100%"
                     modelType={product.model_3d_url || 'voxel_robot'}
                     modelUrl={product.model_3d_format === 'preset' ? null : product.model_3d_url}
                     productName={product.name}
-                    showControls={false}
-                    showTelemetry={false}
+                    showControls={true}
+                    showTelemetry={true}
                     showBottomBar={true}
                   />
                 </div>
               ) : (
-                /* Photos Mode with 2 Normal Product Images */
-                <div className="w-full h-full flex flex-col justify-between p-5 relative bg-[#232530]">
-                  <div className="flex-1 flex items-center justify-center p-2">
-                    <img
-                      src={selectedImage || normalImages[0]}
-                      alt={product.name}
-                      className="max-h-[360px] max-w-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)] transition-all duration-300"
-                    />
-                  </div>
+                <img
+                  src={selectedImage || normalImages[0]}
+                  alt={product.name}
+                  className="w-full h-full object-contain transition-all duration-300"
+                />
+              )}
 
-                  {/* 2 Normal Product Image Selectors at the bottom */}
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-700/80 z-10">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-slate-400">Photos (2 Views):</span>
-                      {normalImages.slice(0, 2).map((imgUrl, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setSelectedImage(imgUrl)}
-                          className={`px-3 py-1 rounded-md text-xs font-medium transition-all cursor-pointer ${
-                            (selectedImage || normalImages[0]) === imgUrl
-                              ? 'border border-[#FF7A00] text-[#FF7A00] bg-[#FF7A00]/10'
-                              : 'border border-slate-700 text-slate-300 bg-[#1E2028] hover:border-slate-500 hover:text-white'
-                          }`}
-                        >
-                          View {idx + 1}
-                        </button>
-                      ))}
-                    </div>
-                    <span className="text-[10px] font-mono text-slate-500">2 Normal Product Images</span>
-                  </div>
-                </div>
+              {/* Quick 3D View badge when in photos mode */}
+              {viewMode === 'photos' && (
+                <button
+                  type="button"
+                  onClick={() => setViewMode('3d')}
+                  className="absolute top-4 right-4 inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#0066FF]/30 text-xs font-bold font-orbitron text-[#0066FF] hover:bg-[#0066FF] hover:text-white transition-all shadow-xs cursor-pointer z-10"
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>3D VIEW</span>
+                </button>
               )}
             </div>
 
             {/* 2 Normal Product Images Thumbnail Row */}
-            <div className="flex items-center gap-3 pt-1">
+            <div className="flex items-center space-x-3 overflow-x-auto pb-2 scrollbar-none">
               {normalImages.slice(0, 2).map((imgUrl, idx) => (
                 <button
                   key={idx}
@@ -280,12 +281,12 @@ export function ProductDetailPage() {
                     setSelectedImage(imgUrl);
                     setViewMode('photos');
                   }}
-                  className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 bg-[#232530] p-1.5 flex items-center justify-center cursor-pointer ${
+                  className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 bg-white p-1 cursor-pointer ${
                     viewMode === 'photos' && (selectedImage || normalImages[0]) === imgUrl
-                      ? 'border-[#FF7A00] ring-2 ring-[#FF7A00]/40'
-                      : 'border-slate-700/80 opacity-70 hover:opacity-100 hover:border-slate-500'
+                      ? 'border-[#0066FF] ring-2 ring-[#0066FF]/20'
+                      : 'border-brand-border opacity-70 hover:opacity-100 hover:border-slate-400'
                   }`}
-                  title={`Switch to Photo ${idx + 1}`}
+                  title={`Normal Photo ${idx + 1}`}
                 >
                   <img src={imgUrl} alt={`Product Angle ${idx + 1}`} className="w-full h-full object-contain" />
                 </button>
@@ -293,28 +294,28 @@ export function ProductDetailPage() {
             </div>
           </div>
 
-          {/* Product Purchase Column */}
+          {/* Product Purchase Column (Original Clean Light UI) */}
           <div className="space-y-6">
             <div>
               {product.category_name && (
                 <Link
                   to={`/products?category=${product.category_slug}`}
-                  className="text-xs font-mono font-bold text-[#FF7A00] uppercase tracking-wider block mb-2"
+                  className="text-xs font-mono font-bold text-[#0066FF] uppercase tracking-wider block mb-2"
                 >
                   {product.category_name}
                 </Link>
               )}
-              <h1 className="text-2xl sm:text-3xl font-black font-orbitron text-white leading-tight tracking-wide">
+              <h1 className="text-2xl sm:text-3xl font-black font-orbitron text-brand-graphite leading-tight tracking-wide">
                 {product.name}
               </h1>
-              <div className="flex items-center space-x-4 mt-2.5 text-xs text-slate-400 font-mono">
-                <span>SKU: <span className="font-bold text-slate-200">{selectedVariant?.sku || product.sku}</span></span>
+              <div className="flex items-center space-x-4 mt-2.5 text-xs text-brand-muted font-mono">
+                <span>SKU: <span className="font-bold text-brand-graphite">{selectedVariant?.sku || product.sku}</span></span>
                 <span>•</span>
                 {isOutOfStock ? (
-                  <span className="text-red-400 font-bold">Out of Stock</span>
+                  <span className="text-red-600 font-bold">Out of Stock</span>
                 ) : (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-emerald-700 font-bold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span>In Stock ({currentStock} units verified)</span>
                   </span>
                 )}
@@ -322,34 +323,34 @@ export function ProductDetailPage() {
             </div>
 
             {/* Price Presentation */}
-            <div className="p-4 rounded-2xl bg-[#181a24] border border-slate-800 shadow-lg flex items-baseline justify-between">
+            <div className="p-4 rounded-2xl bg-white border border-brand-border/80 shadow-xs flex items-baseline justify-between">
               <div>
-                <span className="text-xs text-slate-400 block font-mono font-semibold mb-1">UNIT PRICE:</span>
+                <span className="text-xs text-brand-muted block font-mono font-semibold mb-1">UNIT PRICE:</span>
                 <div className="flex items-baseline space-x-3">
-                  <span className="text-3xl font-black font-orbitron text-[#FF7A00]">
+                  <span className="text-3xl font-black font-orbitron text-[#0066FF]">
                     ৳{unitPrice.toLocaleString()}
                   </span>
                   {product.sale_price !== null && Number(product.regular_price) > Number(product.sale_price) && (
-                    <span className="text-sm font-orbitron text-slate-500 line-through">
+                    <span className="text-sm font-orbitron text-brand-muted line-through">
                       ৳{Number(product.regular_price).toLocaleString()}
                     </span>
                   )}
                 </div>
               </div>
-              <span className="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-3 py-1 rounded-full font-mono">
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-mono">
                 COD Available
               </span>
             </div>
 
             {/* Short Description */}
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-brand-muted leading-relaxed">
               {product.short_description}
             </p>
 
             {/* Variant Selector */}
             {product.variants && product.variants.length > 0 && (
               <div className="space-y-3 pt-2">
-                <label className="text-xs font-bold text-slate-200 uppercase tracking-wider block font-mono">
+                <label className="text-xs font-bold text-brand-graphite uppercase tracking-wider block font-mono">
                   Select Configuration / Edition:
                 </label>
                 <div className="flex flex-wrap gap-2.5">
@@ -367,15 +368,15 @@ export function ProductDetailPage() {
                         }}
                         className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all border text-left flex flex-col cursor-pointer ${
                           isSelected
-                            ? 'bg-[#FF7A00] text-white border-[#FFA028] shadow-md shadow-[#FF7A00]/20'
+                            ? 'bg-[#0066FF] text-white border-[#0066FF] shadow-xs'
                             : isVariantOutOfStock
-                            ? 'bg-[#181a24] border-slate-800 text-slate-600 opacity-50 cursor-not-allowed'
-                            : 'bg-[#181a24] border-slate-700 text-slate-200 hover:border-[#FF7A00]'
+                            ? 'bg-slate-50 border-brand-border text-brand-muted opacity-50 cursor-not-allowed'
+                            : 'bg-white border-brand-border text-brand-graphite hover:border-[#0066FF]'
                         }`}
                       >
                         <span>{v.variant_name}</span>
                         {v.price_adjustment !== '0.00' && Number(v.price_adjustment) !== 0 && (
-                          <span className={`text-[10px] mt-0.5 ${isSelected ? 'text-amber-100' : 'text-slate-400'}`}>
+                          <span className={`text-[10px] mt-0.5 ${isSelected ? 'text-blue-100' : 'text-brand-muted'}`}>
                             {Number(v.price_adjustment) > 0 ? `+৳${v.price_adjustment}` : `-৳${Math.abs(v.price_adjustment)}`}
                           </span>
                         )}
@@ -389,30 +390,30 @@ export function ProductDetailPage() {
             {/* Quantity Stepper & Actions */}
             <div className="space-y-3 pt-2">
               <div className="flex items-center space-x-4">
-                <span className="text-xs font-bold text-slate-200 uppercase font-mono">QUANTITY:</span>
-                <div className="flex items-center rounded-xl border border-slate-700 bg-[#181a24] overflow-hidden shadow-xs">
+                <span className="text-xs font-bold text-brand-graphite uppercase font-mono">QUANTITY:</span>
+                <div className="flex items-center rounded-xl border border-brand-border bg-white overflow-hidden shadow-xs">
                   <button
                     type="button"
                     disabled={quantity <= 1 || isOutOfStock}
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="p-2 text-slate-200 hover:bg-[#202330] disabled:opacity-40 cursor-pointer"
+                    className="p-2 text-brand-graphite hover:bg-slate-50 disabled:opacity-40 cursor-pointer"
                   >
                     <Minus className="w-3.5 h-3.5" />
                   </button>
-                  <span className="w-12 text-center text-sm font-bold font-mono text-white">
+                  <span className="w-12 text-center text-sm font-bold font-mono text-brand-graphite">
                     {quantity}
                   </span>
                   <button
                     type="button"
                     disabled={quantity >= currentStock || isOutOfStock}
                     onClick={() => setQuantity((q) => Math.min(currentStock, q + 1))}
-                    className="p-2 text-slate-200 hover:bg-[#202330] disabled:opacity-40 cursor-pointer"
+                    className="p-2 text-brand-graphite hover:bg-slate-50 disabled:opacity-40 cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <div className="text-xs font-mono text-slate-400">
-                  SUBTOTAL: <span className="font-bold text-[#FF7A00] font-orbitron">৳{totalPrice.toLocaleString()}</span>
+                <div className="text-xs font-mono text-brand-muted">
+                  SUBTOTAL: <span className="font-bold text-[#0066FF] font-orbitron">৳{totalPrice.toLocaleString()}</span>
                 </div>
               </div>
 
@@ -422,7 +423,7 @@ export function ProductDetailPage() {
                   type="button"
                   disabled={isOutOfStock}
                   onClick={handleAddToCart}
-                  className="w-full py-3.5 px-6 rounded-xl text-xs font-bold font-orbitron tracking-wider bg-[#FF7A00] text-white hover:bg-[#E65100] shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-xl text-xs font-bold font-orbitron tracking-wider bg-[#0066FF] text-white hover:bg-[#0052CC] shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2 cursor-pointer"
                 >
                   <ShoppingBag className="w-4 h-4" />
                   <span>{addedSuccess ? 'ADDED TO CART!' : 'ADD TO CART'}</span>
@@ -432,32 +433,32 @@ export function ProductDetailPage() {
                   type="button"
                   disabled={isOutOfStock}
                   onClick={handleBuyNow}
-                  className="w-full py-3.5 px-6 rounded-xl text-xs font-bold font-orbitron tracking-wider bg-[#0066FF] text-white hover:bg-[#0052CC] shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-xl text-xs font-bold font-orbitron tracking-wider bg-brand-graphite text-white hover:bg-black shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center space-x-2 cursor-pointer"
                 >
-                  <Zap className="w-4 h-4 text-cyan-300" />
+                  <Zap className="w-4 h-4 text-cyan-400" />
                   <span>BUY NOW (COD)</span>
                 </button>
               </div>
 
               {addedSuccess && (
-                <div className="p-3 rounded-xl bg-emerald-950/80 border border-emerald-700 text-xs font-semibold text-emerald-300 text-center animate-fade-in font-mono">
-                  ✓ Successfully added to cart! <Link to="/cart" className="underline font-bold ml-1 text-emerald-200">View Cart &amp; Checkout</Link>
+                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800 text-center animate-fade-in font-mono">
+                  ✓ Successfully added to cart! <Link to="/cart" className="underline font-bold ml-1">View Cart &amp; Checkout</Link>
                 </div>
               )}
             </div>
 
             {/* Trust Assurances */}
-            <div className="pt-4 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300">
-              <div className="flex items-center space-x-2 p-3 rounded-xl bg-[#181a24] border border-slate-800 shadow-sm">
-                <Truck className="w-4 h-4 text-[#FF7A00] shrink-0" />
+            <div className="pt-4 border-t border-brand-border/80 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-brand-muted">
+              <div className="flex items-center space-x-2 p-3 rounded-xl bg-white border border-brand-border/80 shadow-xs">
+                <Truck className="w-4 h-4 text-[#0066FF] shrink-0" />
                 <span>64 Districts Delivery</span>
               </div>
-              <div className="flex items-center space-x-2 p-3 rounded-xl bg-[#181a24] border border-slate-800 shadow-sm">
-                <ShieldCheck className="w-4 h-4 text-[#FF7A00] shrink-0" />
+              <div className="flex items-center space-x-2 p-3 rounded-xl bg-white border border-brand-border/80 shadow-xs">
+                <ShieldCheck className="w-4 h-4 text-[#0066FF] shrink-0" />
                 <span>100% Genuine Hardware</span>
               </div>
-              <div className="flex items-center space-x-2 p-3 rounded-xl bg-[#181a24] border border-slate-800 shadow-sm">
-                <RotateCcw className="w-4 h-4 text-[#FF7A00] shrink-0" />
+              <div className="flex items-center space-x-2 p-3 rounded-xl bg-white border border-brand-border/80 shadow-xs">
+                <RotateCcw className="w-4 h-4 text-[#0066FF] shrink-0" />
                 <span>7 Days Replacement</span>
               </div>
             </div>
@@ -465,12 +466,12 @@ export function ProductDetailPage() {
         </div>
 
         {/* Detailed Description & Specifications */}
-        <div className="pt-8 border-t border-slate-800 space-y-8">
+        <div className="pt-8 border-t border-brand-border/80 space-y-8">
           <div>
-            <h2 className="text-xl font-black font-orbitron text-white mb-4 tracking-wide">
+            <h2 className="text-xl font-black font-orbitron text-brand-graphite mb-4 tracking-wide">
               ENGINEERING DETAILS &amp; OVERVIEW
             </h2>
-            <div className="prose prose-invert prose-sm max-w-none text-slate-300 leading-relaxed space-y-4">
+            <div className="prose prose-sm max-w-none text-brand-muted leading-relaxed space-y-4">
               <p>{product.description}</p>
             </div>
           </div>
@@ -478,21 +479,21 @@ export function ProductDetailPage() {
           {/* Technical Specifications Table */}
           {Object.keys(specifications).length > 0 && (
             <div>
-              <h2 className="text-xl font-black font-orbitron text-white mb-4 flex items-center gap-2 tracking-wide">
-                <Sparkles className="w-5 h-5 text-[#FF7A00]" />
+              <h2 className="text-xl font-black font-orbitron text-brand-graphite mb-4 flex items-center gap-2 tracking-wide">
+                <Sparkles className="w-5 h-5 text-[#0066FF]" />
                 <span>TECHNICAL SPECIFICATIONS</span>
               </h2>
-              <div className="rounded-2xl border border-slate-800 overflow-hidden bg-[#181a24] shadow-sm">
-                <div className="divide-y divide-slate-800">
+              <div className="rounded-2xl border border-brand-border overflow-hidden bg-white shadow-xs">
+                <div className="divide-y divide-brand-border">
                   {Object.entries(specifications).map(([key, value], idx) => (
                     <div
                       key={key}
                       className={`grid grid-cols-1 sm:grid-cols-3 px-6 py-3.5 text-xs ${
-                        idx % 2 === 0 ? 'bg-[#181a24]' : 'bg-[#1e202c]'
+                        idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/70'
                       }`}
                     >
-                      <span className="font-bold font-mono text-slate-200">{key}</span>
-                      <span className="sm:col-span-2 text-slate-400 font-mono">{String(value)}</span>
+                      <span className="font-bold font-mono text-brand-graphite">{key}</span>
+                      <span className="sm:col-span-2 text-brand-muted font-mono">{String(value)}</span>
                     </div>
                   ))}
                 </div>
