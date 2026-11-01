@@ -24,6 +24,7 @@ import { RobotViewer3D } from '../../components/storefront/RobotViewer3D';
 
 const PRESET_OPTIONS = [
   { value: '', label: 'None (Standard 2D Listing)' },
+  { value: 'voxel_robot', label: 'Voxel Companion Robot (Featured Reference CAD)' },
   { value: 'apex_mascot', label: 'Apex-01 Cyber Mascot Companion' },
   { value: 'spider_bot', label: 'ESP32 12-DOF Quadruped Spider Robot' },
   { value: 'robotic_arm', label: '4-DOF Metal Industrial Robotic Arm' },
@@ -661,11 +662,16 @@ export function AdminProductsPage() {
                     </select>
                   </div>
 
-                  {/* Upload 3D File */}
+                  {/* Upload STL 3D File */}
                   <div className="space-y-1">
                     <label className="font-bold text-brand-graphite flex items-center justify-between">
-                      <span>Option 2: Upload 3D Model File (.stl, .3mf, .glb)</span>
-                      <span className="text-[10px] font-mono text-[#0066FF] font-bold">Up to 50MB</span>
+                      <span className="flex items-center gap-1.5">
+                        <Upload className="w-4 h-4 text-[#FF7A00]" />
+                        <span>Upload Product STL File (.stl)</span>
+                      </span>
+                      <span className="text-[10px] font-mono text-[#FF7A00] bg-[#FF7A00]/10 px-2 py-0.5 rounded font-bold">
+                        STL / 3MF / GLB (Up to 50MB)
+                      </span>
                     </label>
                     <div className="relative">
                       <input
@@ -673,11 +679,11 @@ export function AdminProductsPage() {
                         accept=".stl,.3mf,.glb,.gltf,.obj"
                         disabled={isUploading3D}
                         onChange={handleFileUpload}
-                        className="w-full text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#0066FF] file:text-white hover:file:bg-[#0052CC] cursor-pointer"
+                        className="w-full text-xs file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#FF7A00] file:text-white hover:file:bg-[#E65100] cursor-pointer border border-brand-border rounded-xl p-1 bg-white"
                       />
                     </div>
                     <p className="text-[10px] font-mono text-gray-500">
-                      Directly renders .STL and .3MF additive manufacturing meshes in 60 FPS WebGL.
+                      Upload .STL CAD models directly from your 3D slicer or CAD software to render real-time interactive 3D on the product page.
                     </p>
                   </div>
                 </div>

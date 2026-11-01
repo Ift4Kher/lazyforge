@@ -20,25 +20,71 @@ import {
 export function RobotViewer3D({
   className = '',
   height = '500px',
-  modelType = 'apex_mascot',
+  modelType = 'voxel_robot',
   modelUrl = null,
   productName = '',
-  autoRotate: autoRotateProp = true,
-  showControls = true,
-  showTelemetry = true,
+  autoRotate: autoRotateProp = false,
+  showControls = false,
+  showTelemetry = false,
+  showBottomBar = true,
+  initialColor = 'white',
+  onColorChange = null,
 }) {
   const mountRef = useRef(null);
+  const containerRef = useRef(null);
+  const cameraRef = useRef(null);
+  const primaryArmorMatRef = useRef(null);
+  const [currentColor, setCurrentColor] = useState(initialColor);
   const [isWireframe, setIsWireframe] = useState(false);
   const [autoRotate, setAutoRotate] = useState(autoRotateProp);
   const [webglSupported, setWebglSupported] = useState(true);
   const [loadError, setLoadError] = useState(null);
   const [telemetry, setTelemetry] = useState({ rotX: 0, rotY: 0, zoom: 100 });
   const [modelStats, setModelStats] = useState({
-    format: 'CAD RIG',
-    triangles: 18450,
-    dimensions: '180 × 140 × 210 mm',
-    source: 'PARAMETRIC TELEMETRY',
+    format: 'VOXEL RIG',
+    triangles: 140,
+    dimensions: '140 × 90 × 260 mm',
+    source: 'PARAMETRIC 3D CAD',
   });
+
+  const COLOR_PALETTES = {
+    copper: { color: 0xeb6b2c, metalness: 0.85, roughness: 0.2 },
+    white: { color: 0xd6d9e0, metalness: 0.2, roughness: 0.25 },
+    dark: { color: 0x22252e, metalness: 0.88, roughness: 0.3 },
+    gold: { color: 0xf59e0b, metalness: 0.95, roughness: 0.18 },
+  };
+
+  const handleColorSelect = (colorKey) => {
+    setCurrentColor(colorKey);
+    if (onColorChange) onColorChange(colorKey);
+    const pal = COLOR_PALETTES[colorKey] || COLOR_PALETTES.white;
+    if (primaryArmorMatRef.current) {
+      primaryArmorMatRef.current.color.setHex(pal.color);
+      primaryArmorMatRef.current.metalness = pal.metalness;
+      primaryArmorMatRef.current.roughness = pal.roughness;
+      primaryArmorMatRef.current.needsUpdate = true;
+    }
+  };
+
+  const handleResetView = () => {
+    if (modelGroupRef.current) {
+      modelGroupRef.current.rotation.set(0, -0.3, 0);
+    }
+    if (cameraRef.current) {
+      cameraRef.current.position.set(0, 1.4, 5.2);
+      cameraRef.current.lookAt(0, 0.9, 0);
+    }
+  };
+
+  const handleToggleFullscreen = () => {
+    const el = containerRef.current || mountRef.current?.parentElement;
+    if (!el) return;
+    if (!document.fullscreenElement) {
+      el.requestFullscreen().catch((err) => console.warn('Fullscreen error:', err));
+    } else {
+      document.exitFullscreen().catch((err) => console.warn('Exit fullscreen error:', err));
+    }
+  };
 
   // References to mutable Three.js objects
   const sceneRef = useRef(null);
@@ -47,7 +93,7 @@ export function RobotViewer3D({
   const materialsRef = useRef([]);
 
   // Resolve actual model identifier
-  const resolvedType = (modelType || modelUrl || 'apex_mascot').toLowerCase();
+  const resolvedType = (modelType || modelUrl || 'voxel_robot').toLowerCase();
 
   useEffect(() => {
     setAutoRotate(autoRotateProp);
@@ -60,15 +106,16 @@ export function RobotViewer3D({
     const width = container.clientWidth || 600;
     const heightPx = container.clientHeight || parseInt(height, 10) || 500;
 
-    // 1. Scene
+    // 1. Scene with dark aesthetic matching reference mockup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0d14);
+    scene.background = new THREE.Color(0x232530);
     sceneRef.current = scene;
 
     // 2. Camera: Centered and positioned for high-resolution inspection
     const camera = new THREE.PerspectiveCamera(45, width / heightPx, 0.1, 100);
     camera.position.set(0, 1.4, 5.2);
     camera.lookAt(0, 0.9, 0);
+    cameraRef.current = camera;
 
     // 3. Renderer with graceful fallback if WebGL is unavailable (e.g. test environments)
     let renderer;
@@ -86,35 +133,35 @@ export function RobotViewer3D({
     }
 
     // 4. Studio Sci-Fi Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambientLight);
 
-    const frontLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    const frontLight = new THREE.DirectionalLight(0xffffff, 2.2);
     frontLight.position.set(0, 3, 5);
     scene.add(frontLight);
 
-    const topKeyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    const topKeyLight = new THREE.DirectionalLight(0xffffff, 1.6);
     topKeyLight.position.set(4, 7, 3);
     topKeyLight.castShadow = true;
     scene.add(topKeyLight);
 
-    // Cyberpunk Cyan Fill Light
-    const cyanRim = new THREE.DirectionalLight(0x00f0ff, 2.8);
-    cyanRim.position.set(-4, 3, 2);
-    scene.add(cyanRim);
+    // Warm Orange / Copper Accent Light
+    const orangeRim = new THREE.DirectionalLight(0xff7a00, 2.2);
+    orangeRim.position.set(-4, 3, 2);
+    scene.add(orangeRim);
 
     // Electric Blue Rim Light
-    const blueRim = new THREE.DirectionalLight(0x0066ff, 3.2);
+    const blueRim = new THREE.DirectionalLight(0x0066ff, 2.5);
     blueRim.position.set(4, -1, -3);
     scene.add(blueRim);
 
     // Center Stage Reactor Glow
-    const reactorLight = new THREE.PointLight(0x00d2ff, 4.0, 7);
+    const reactorLight = new THREE.PointLight(0xffaa33, 2.5, 7);
     reactorLight.position.set(0, 1.1, 0.7);
     scene.add(reactorLight);
 
-    // 5. High-Tech Hexagonal Grid Floor
-    const gridHelper = new THREE.GridHelper(16, 32, 0x00d2ff, 0x071e3d);
+    // 5. High-Tech Grid Floor
+    const gridHelper = new THREE.GridHelper(16, 32, 0x3e4458, 0x2b303e);
     gridHelper.position.y = -1.4;
     scene.add(gridHelper);
 
@@ -122,12 +169,31 @@ export function RobotViewer3D({
     const materials = [];
     materialsRef.current = materials;
 
+    const currentPal = COLOR_PALETTES[currentColor] || COLOR_PALETTES.white;
+
     const whiteArmorMat = new THREE.MeshStandardMaterial({
-      color: 0xf8fafc,
-      metalness: 0.15,
-      roughness: 0.2,
+      color: currentPal.color,
+      metalness: currentPal.metalness,
+      roughness: currentPal.roughness,
     });
     materials.push(whiteArmorMat);
+    primaryArmorMatRef.current = whiteArmorMat;
+
+    const voxelOrangeMat = new THREE.MeshStandardMaterial({
+      color: 0xffa028,
+      emissive: 0xff7a00,
+      emissiveIntensity: 1.8,
+      metalness: 0.1,
+      roughness: 0.2,
+    });
+    materials.push(voxelOrangeMat);
+
+    const voxelDarkMat = new THREE.MeshStandardMaterial({
+      color: 0x181a20,
+      metalness: 0.4,
+      roughness: 0.5,
+    });
+    materials.push(voxelDarkMat);
 
     const darkChassisMat = new THREE.MeshStandardMaterial({
       color: 0x161926,
@@ -234,12 +300,13 @@ export function RobotViewer3D({
               source: 'ADMIN STL UPLOAD',
             });
 
-            // Engineering cyber titanium alloy material with metallic sheen
+            // Engineering material dynamically responsive to color swatches
             const stlMat = new THREE.MeshStandardMaterial({
-              color: 0x00d2ff,
-              metalness: 0.85,
-              roughness: 0.22,
+              color: currentPal.color,
+              metalness: currentPal.metalness,
+              roughness: currentPal.roughness,
             });
+            primaryArmorMatRef.current = stlMat;
             materials.push(stlMat);
 
             const mesh = new THREE.Mesh(geometry, stlMat);
@@ -371,9 +438,93 @@ export function RobotViewer3D({
         buildEsp32BoardModel();
       } else if (type.includes('drone') || type.includes('dragon') || type.includes('gimbal')) {
         buildMechDroneModel();
-      } else {
+      } else if (type.includes('apex_mascot') && !type.includes('voxel')) {
         buildApexMascotModel();
+      } else {
+        buildVoxelRobotModel();
       }
+    }
+
+    // --- VARIANT: Reference Voxel Robot (Matching Exact Reference Mockup) ---
+    function buildVoxelRobotModel() {
+      // 1. Torso (Main light gray cuboid body)
+      const torsoGeo = new THREE.BoxGeometry(1.35, 1.55, 0.95);
+      const torso = new THREE.Mesh(torsoGeo, whiteArmorMat);
+      torso.position.set(0, 0.45, 0);
+      torso.castShadow = true;
+      torso.receiveShadow = true;
+      modelGroup.add(torso);
+
+      // Chest plate (Orange glowing rectangular badge on torso front)
+      const chestBadgeGeo = new THREE.BoxGeometry(0.65, 0.42, 0.08);
+      const chestBadge = new THREE.Mesh(chestBadgeGeo, voxelOrangeMat);
+      chestBadge.position.set(0, 0.55, 0.50);
+      modelGroup.add(chestBadge);
+
+      // 2. Head (Main light gray cuboid head)
+      const headGeo = new THREE.BoxGeometry(1.25, 1.05, 1.0);
+      const head = new THREE.Mesh(headGeo, whiteArmorMat);
+      head.position.set(0, 1.80, 0);
+      head.castShadow = true;
+      head.receiveShadow = true;
+      modelGroup.add(head);
+
+      // Left Eye (Orange rectangular box)
+      const eyeGeo = new THREE.BoxGeometry(0.18, 0.18, 0.04);
+      const leftEye = new THREE.Mesh(eyeGeo, voxelOrangeMat);
+      leftEye.position.set(-0.32, 1.85, 0.52);
+      modelGroup.add(leftEye);
+
+      // Right Eye (Orange rectangular box)
+      const rightEye = new THREE.Mesh(eyeGeo, voxelOrangeMat);
+      rightEye.position.set(0.32, 1.85, 0.52);
+      modelGroup.add(rightEye);
+
+      // Top Antenna Stalk (dark thin vertical rod)
+      const stalkGeo = new THREE.BoxGeometry(0.08, 0.45, 0.08);
+      const stalk = new THREE.Mesh(stalkGeo, voxelDarkMat);
+      stalk.position.set(0, 2.55, 0);
+      modelGroup.add(stalk);
+
+      // Top Antenna Tip (Orange cube)
+      const tipGeo = new THREE.BoxGeometry(0.22, 0.22, 0.22);
+      const tip = new THREE.Mesh(tipGeo, voxelOrangeMat);
+      tip.position.set(0, 2.82, 0);
+      modelGroup.add(tip);
+
+      // 3. Arms (Dark charcoal cuboids on sides)
+      const armGeo = new THREE.BoxGeometry(0.36, 1.35, 0.48);
+      const leftArm = new THREE.Mesh(armGeo, voxelDarkMat);
+      leftArm.position.set(-0.90, 0.35, 0);
+      leftArm.castShadow = true;
+      modelGroup.add(leftArm);
+
+      const rightArm = new THREE.Mesh(armGeo, voxelDarkMat);
+      rightArm.position.set(0.90, 0.35, 0);
+      rightArm.castShadow = true;
+      modelGroup.add(rightArm);
+
+      // 4. Legs (Dark charcoal cuboids at bottom)
+      const legGeo = new THREE.BoxGeometry(0.42, 0.95, 0.52);
+      const leftLeg = new THREE.Mesh(legGeo, voxelDarkMat);
+      leftLeg.position.set(-0.32, -0.80, 0);
+      leftLeg.castShadow = true;
+      modelGroup.add(leftLeg);
+
+      const rightLeg = new THREE.Mesh(legGeo, voxelDarkMat);
+      rightLeg.position.set(0.32, -0.80, 0);
+      rightLeg.castShadow = true;
+      modelGroup.add(rightLeg);
+
+      // Default model orientation to match the reference 3D perspective angle
+      modelGroup.rotation.set(0.05, -0.42, 0);
+
+      setModelStats({
+        format: 'VOXEL RIG',
+        triangles: 140,
+        dimensions: '140 × 90 × 260 mm',
+        source: 'VOXEL CAD RIG',
+      });
     }
 
     // --- VARIANT A: Apex-01 Autonomous Mascot ---
@@ -980,34 +1131,29 @@ export function RobotViewer3D({
     });
   }, [isWireframe]);
 
-  const handleResetView = () => {
-    if (modelGroupRef.current) {
-      modelGroupRef.current.rotation.set(0, -0.3, 0);
-    }
-  };
-
   const getModelLabel = () => {
     if (productName) return productName.toUpperCase();
     if (resolvedType.includes('spider')) return 'ESP32 12-DOF SPIDER ROBOT';
     if (resolvedType.includes('arm')) return '4-DOF INDUSTRIAL ROBOTIC ARM';
     if (resolvedType.includes('esp32')) return 'ESP32-WROOM-32D DEV BOARD';
     if (resolvedType.includes('drone')) return 'HEXA-ROTOR DRONE SWARM CAD';
-    return 'LAZYFORGE APEX-01 (ACTIVE CAD RIG)';
+    return 'VOXEL COMPANION ROBOT';
   };
 
   return (
     <div
-      className={`relative rounded-3xl overflow-hidden bg-[#0A0D14] border border-[#0066FF]/30 shadow-2xl ${className}`}
+      ref={containerRef}
+      className={`relative rounded-2xl overflow-hidden bg-[#232530] border border-slate-700/80 shadow-2xl flex flex-col justify-between ${className}`}
     >
       {/* WebGL Canvas Container or Fallback */}
       {webglSupported ? (
-        <div ref={mountRef} style={{ height }} className="w-full cursor-grab active:cursor-grabbing" />
+        <div ref={mountRef} style={{ height }} className="w-full flex-1 cursor-grab active:cursor-grabbing" />
       ) : (
         <div
           style={{ height }}
-          className="w-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-[#0F111A] to-[#0B1528]"
+          className="w-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-[#1F222C] to-[#161820]"
         >
-          <div className="w-20 h-20 rounded-2xl bg-[#0066FF]/20 border border-[#0066FF]/40 flex items-center justify-center text-[#00D2FF] mb-4 animate-pulse">
+          <div className="w-20 h-20 rounded-2xl bg-[#FF7A00]/10 border border-[#FF7A00]/30 flex items-center justify-center text-[#FF7A00] mb-4 animate-pulse">
             <Cpu className="w-10 h-10" />
           </div>
           <h4 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
@@ -1022,12 +1168,12 @@ export function RobotViewer3D({
       {/* Floating Header Badges */}
       <div className="absolute top-4 left-4 flex flex-col gap-1.5 pointer-events-none z-10">
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#00D2FF] backdrop-blur-md shadow-glow-sm">
-            <Bot className="w-3.5 h-3.5 animate-pulse text-[#00D2FF]" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-[#FF7A00]/20 border border-[#FF7A00]/40 text-[#FFA028] backdrop-blur-md shadow-glow-sm">
+            <Bot className="w-3.5 h-3.5 animate-pulse text-[#FFA028]" />
             <span>{getModelLabel()}</span>
           </span>
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-white/10 border border-white/20 text-white backdrop-blur-md">
-            <FileCode className="w-3 h-3 text-[#00D2FF]" />
+            <FileCode className="w-3 h-3 text-[#FFA028]" />
             <span>{modelStats.format}</span>
           </span>
         </div>
@@ -1035,7 +1181,7 @@ export function RobotViewer3D({
           <span className="text-[10px] font-mono font-semibold text-slate-300 bg-black/60 border border-white/10 px-2 py-0.5 rounded-md backdrop-blur-xs">
             {modelStats.triangles > 0 ? `${modelStats.triangles.toLocaleString()} Tris` : 'Procedural Mesh'}
           </span>
-          <span className="text-[10px] font-mono text-cyan-300 bg-black/60 border border-white/10 px-2 py-0.5 rounded-md backdrop-blur-xs">
+          <span className="text-[10px] font-mono text-amber-300 bg-black/60 border border-white/10 px-2 py-0.5 rounded-md backdrop-blur-xs">
             {modelStats.dimensions}
           </span>
         </div>
@@ -1048,8 +1194,8 @@ export function RobotViewer3D({
 
       {/* Real-time Telemetry HUD */}
       {showTelemetry && (
-        <div className="absolute bottom-4 left-4 p-3.5 rounded-2xl bg-black/80 border border-white/10 backdrop-blur-md text-[10px] font-mono text-slate-300 space-y-1.5 pointer-events-none hidden sm:block z-10 shadow-2xl min-w-[210px]">
-          <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-[#00D2FF] font-bold">
+        <div className="absolute bottom-16 left-4 p-3.5 rounded-2xl bg-black/80 border border-white/10 backdrop-blur-md text-[10px] font-mono text-slate-300 space-y-1.5 pointer-events-none hidden sm:block z-10 shadow-2xl min-w-[210px]">
+          <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-[#FFA028] font-bold">
             <div className="flex items-center gap-1.5">
               <Activity className="w-3 h-3 animate-spin" />
               <span>LIVE 60 FPS CAD HUD</span>
@@ -1062,7 +1208,7 @@ export function RobotViewer3D({
           </div>
           <div className="flex justify-between gap-4">
             <span className="text-slate-400">POLYGONS:</span>
-            <span className="text-[#00D2FF] font-bold">{modelStats.triangles.toLocaleString()} TRIS</span>
+            <span className="text-[#FFA028] font-bold">{modelStats.triangles.toLocaleString()} TRIS</span>
           </div>
           <div className="flex justify-between gap-4">
             <span className="text-slate-400">BOUNDING:</span>
@@ -1070,7 +1216,7 @@ export function RobotViewer3D({
           </div>
           <div className="flex justify-between gap-4 pt-1 border-t border-white/5">
             <span className="text-slate-400">PITCH / YAW:</span>
-            <span className="text-[#00D2FF] font-bold">{telemetry.rotX}&deg; / {telemetry.rotY}&deg;</span>
+            <span className="text-[#FFA028] font-bold">{telemetry.rotX}&deg; / {telemetry.rotY}&deg;</span>
           </div>
           <div className="flex justify-between gap-4">
             <span className="text-slate-400">ZOOM:</span>
@@ -1086,11 +1232,12 @@ export function RobotViewer3D({
       {showControls && (
         <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
           <button
+            type="button"
             onClick={() => setAutoRotate(!autoRotate)}
             className={`p-2.5 rounded-xl border backdrop-blur-md transition-all cursor-pointer ${
               autoRotate
-                ? 'bg-[#0066FF] text-white border-[#00D2FF] shadow-[0_0_15px_rgba(0,102,255,0.6)]'
-                : 'bg-black/60 text-slate-300 border-white/10 hover:border-[#0066FF] hover:text-white'
+                ? 'bg-[#FF7A00] text-white border-[#FFA028] shadow-[0_0_15px_rgba(255,122,0,0.6)]'
+                : 'bg-black/60 text-slate-300 border-white/10 hover:border-[#FF7A00] hover:text-white'
             }`}
             title={autoRotate ? 'Pause 360 Rotation' : 'Enable 360 Auto-Rotate'}
           >
@@ -1098,31 +1245,98 @@ export function RobotViewer3D({
           </button>
 
           <button
+            type="button"
             onClick={() => setIsWireframe(!isWireframe)}
             className={`p-2.5 rounded-xl border backdrop-blur-md transition-all cursor-pointer ${
               isWireframe
-                ? 'bg-[#0066FF] text-white border-[#00D2FF] shadow-[0_0_15px_rgba(0,102,255,0.6)]'
-                : 'bg-black/60 text-slate-300 border-white/10 hover:border-[#0066FF] hover:text-white'
+                ? 'bg-[#FF7A00] text-white border-[#FFA028] shadow-[0_0_15px_rgba(255,122,0,0.6)]'
+                : 'bg-black/60 text-slate-300 border-white/10 hover:border-[#FF7A00] hover:text-white'
             }`}
-            title="Toggle Wireframe CAD Mode (Inspect Triangle Tessellation)"
+            title="Toggle Wireframe CAD Mode"
           >
             <Layers className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={handleResetView}
-            className="p-2.5 rounded-xl bg-black/60 border border-white/10 text-slate-300 hover:border-[#0066FF] hover:text-[#00D2FF] backdrop-blur-md transition-all cursor-pointer"
-            title="Reset Camera Alignment"
-          >
-            <Eye className="w-4 h-4" />
           </button>
         </div>
       )}
 
-      {/* Drag & Orbit Prompt */}
-      <div className="absolute bottom-4 right-4 pointer-events-none text-[11px] font-mono text-slate-400 bg-black/60 px-3 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm z-10 hidden sm:block">
-        <span>Click &amp; Drag &bull; Scroll Zoom &bull; Wireframe X-Ray</span>
-      </div>
+      {/* Bottom Control Bar matching Reference Mockup exactly */}
+      {showBottomBar && (
+        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-auto">
+          {/* Left Controls: Reset view & Fullscreen */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleResetView}
+              className="px-3.5 py-1.5 rounded-md bg-[#1E2028]/95 hover:bg-[#2A2C38] text-slate-200 border border-slate-700 text-xs font-medium backdrop-blur-md transition-all shadow-sm flex items-center gap-1.5 cursor-pointer hover:border-slate-500"
+              title="Reset View"
+            >
+              <span>Reset view</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleToggleFullscreen}
+              className="px-3.5 py-1.5 rounded-md bg-[#1E2028]/95 hover:bg-[#2A2C38] text-slate-200 border border-slate-700 text-xs font-medium backdrop-blur-md transition-all shadow-sm flex items-center gap-1.5 cursor-pointer hover:border-slate-500"
+              title="Fullscreen"
+            >
+              <span>Fullscreen</span>
+            </button>
+          </div>
+
+          {/* Right Color Swatches */}
+          <div className="flex items-center gap-2.5">
+            {/* 1. Copper / Orange gradient circle */}
+            <button
+              type="button"
+              onClick={() => handleColorSelect('copper')}
+              className={`w-6 h-6 rounded-full transition-all cursor-pointer relative ${
+                currentColor === 'copper'
+                  ? 'ring-2 ring-white scale-110 shadow-[0_0_10px_rgba(255,122,0,0.9)]'
+                  : 'hover:scale-110 opacity-90'
+              }`}
+              style={{
+                background: 'conic-gradient(from 180deg at 50% 50%, #FF8C38 0deg, #E65100 180deg, #FFA726 360deg)',
+              }}
+              title="Copper / Orange Finish"
+            />
+
+            {/* 2. White / Silver circle */}
+            <button
+              type="button"
+              onClick={() => handleColorSelect('white')}
+              className={`w-6 h-6 rounded-full bg-[#E5E7EB] transition-all cursor-pointer relative ${
+                currentColor === 'white'
+                  ? 'ring-2 ring-[#FF7A00] scale-110 shadow-[0_0_10px_rgba(255,255,255,0.8)]'
+                  : 'hover:scale-110 opacity-90'
+              }`}
+              title="White / Silver Armor"
+            />
+
+            {/* 3. Dark Charcoal circle */}
+            <button
+              type="button"
+              onClick={() => handleColorSelect('dark')}
+              className={`w-6 h-6 rounded-full bg-[#374151] transition-all cursor-pointer relative ${
+                currentColor === 'dark'
+                  ? 'ring-2 ring-[#FF7A00] scale-110 shadow-[0_0_10px_rgba(0,0,0,0.8)]'
+                  : 'hover:scale-110 opacity-90'
+              }`}
+              title="Dark Stealth Charcoal"
+            />
+
+            {/* 4. Gold / Yellow circle */}
+            <button
+              type="button"
+              onClick={() => handleColorSelect('gold')}
+              className={`w-6 h-6 rounded-full bg-[#EAB308] transition-all cursor-pointer relative ${
+                currentColor === 'gold'
+                  ? 'ring-2 ring-white scale-110 shadow-[0_0_10px_rgba(234,179,8,0.9)]'
+                  : 'hover:scale-110 opacity-90'
+              }`}
+              title="Gold Cyber Finish"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
